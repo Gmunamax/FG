@@ -43,4 +43,4 @@ dev files for GL (OpenGL) should be provided by your graphics card driver or by 
 
 
 
-*#MadeByGMX*
+*#MadeByGmunamax*
