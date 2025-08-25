@@ -1,11 +1,13 @@
 #pragma once
-#include "../../structures/point.hpp"
-#include <GL/gl.h>
+#include "structures/point.hpp"
+#include <GL/glew.h>
 
-struct Location{
+struct Geometry3d{
+	using PointType = Point3d;
 protected:
-	Point3d position;
-	Point3d rotation;
+	PointType position;
+	PointType rotation;
+	PointType scale;
 
 	void ProceedPosition(){
 		glTranslated(position.x,position.y,position.z);
@@ -20,16 +22,22 @@ protected:
 	}
 
 public:
-	Point3d& GetPosition(){
+	PointType& GetPosition(){
 		return position;
 	}
-	void SetPosition(Point3d newposition){
+	void SetPosition(PointType newposition){
 		position = newposition;
 	}
-	Point3d& GetRotation(){
+	PointType& GetRotation(){
 		return rotation;
 	}
-	void SetRotation(Point3d newrotation){
+	void SetRotation(PointType newrotation){
 		rotation = newrotation;
+	}
+	PointType& GetScale(){
+		return scale;
+	}
+	void SetScale(PointType newscale){
+		scale = newscale;
 	}
 };

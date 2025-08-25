@@ -3,13 +3,15 @@
 #include <iostream>
 #include <vector>
 #include "../../structures/point.hpp"
+#include "../../config.hpp"
 
 class Buffer3d{
 	GLsizei size;
 	
-	GLuint buf;
+	GLuint buf = 0;
 	bool free = true;
 
+	#ifdef DEBUG
 	void Log(short& axiscount, GLenum& elemdatatype, void*& array, long long& arraysize, long long& arrayelemcount){
 		std::cout << '\n' << '\n';
 		std::cout << arraysize << '\n';
@@ -21,13 +23,17 @@ class Buffer3d{
 		std::cout << arrayelemcount/axiscount << '\n';
 		std::cout << '\n';
 	}
+	#endif
 
 	void Bufdata(short axiscount, GLenum elemdatatype, void* array, long long arraysize, long long arrayelemcount){
 		glBufferData(GL_ARRAY_BUFFER, arraysize, array, GL_STATIC_DRAW);
 		glVertexAttribPointer(0, axiscount, elemdatatype, GL_FALSE, arraysize/arrayelemcount*axiscount, 0);
 		size = arrayelemcount/axiscount;
 		free = false;
+
+		#ifdef DEBUG
 		Log(axiscount,elemdatatype,array,arraysize,arrayelemcount);
+		#endif
 	}
 
 public:
@@ -36,10 +42,8 @@ public:
 
 	void buffer(std::vector<Point3d>& data){
 		glGenBuffers(1,&buf);
-		std::cout << ":" << buf << '\n';
 		glBindBuffer(GL_ARRAY_BUFFER,buf);
 
-		std::cout << sizeof(Point3d)*data.size() << "/" << sizeof(Point3d) << '*' << data.size() << '\n';
 		Bufdata(3, GL_DOUBLE, data.data(), sizeof( Point3d )*data.size(), data.size()*3);
 		glEnableVertexAttribArray(0);
 	}
@@ -52,6 +56,9 @@ public:
 	~Buffer3d(){
 		if(not free)
 			glDeleteBuffers(1,&buf);
+		
+		#ifdef DEBUG
 		std::cout << "Some buffer: Bye!" << '\n';
+		#endif
 	}
 };

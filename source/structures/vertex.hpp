@@ -4,6 +4,7 @@
 #include "color.hpp"
 
 using Vertex3i = Point3i;
+
 class Vertex3d{
 	Point3d position;
 	Color3i color;

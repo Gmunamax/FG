@@ -1,12 +1,10 @@
 #pragma once
-#include "properties/position.hpp"
-#include "../structures/geometry.hpp"
+#include "properties/geometry.hpp"
+#include "structures/geometry.hpp"
 #include "model/model.hpp"
-#include "../models/cube.hpp"
-#include <vector>
-#include <GL/gl.h>
+#include <GL/glew.h>
 
-class Camera: public Location{
+class Camera: public Geometry3d{
 	enum CameraType{
 		CAMERA_FRUSTUM, /* Perspective */
 		CAMERA_ORTHO, 	/* Orthogonal */
@@ -26,8 +24,6 @@ class Camera: public Location{
 	Color3f backgroundcolor = {0,0,0};
 
 	Geometry2i viewportgeom;
-
-	std::vector<void(*)()> under;
 	
 	void PresentFrustum(){
 		ProceedRotation();
@@ -114,16 +110,16 @@ public:
 			glOrtho(-aspectratio,aspectratio,-zoom,zoom, nearz,farz);
 		cameratype = CAMERA_UI;
 	}
-	bool TestCollide(Model3d& object){
-		for(short i = 0; i < 6; i++){
-			for(auto v : Cube::cubea[i].GetVertexes()){
-				if(object.IsCollide( position + (v.GetPosition() * Point3d{safezonesize,safezonesize,safezonesize}))){
-					return true;
-				};
-			}
-		}
-		return false;
-	}
+	// bool TestCollide(Model3d& object){
+	// 	for(short i = 0; i < 6; i++){
+	// 		for(auto v : Cube::cubea[i].GetVertexes()){
+	// 			if(object.IsCollide( position + (v.GetPosition() * Point3d{safezonesize,safezonesize,safezonesize}))){
+	// 				return true;
+	// 			};
+	// 		}
+	// 	}
+	// 	return false;
+	// }
 
 	void StartDrawing(){
 
@@ -143,7 +139,3 @@ public:
 		}
 	}
 };
-
-namespace States{
-	Camera* currentcamera;
-}

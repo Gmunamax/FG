@@ -1,16 +1,18 @@
 #pragma once
-struct Point3i{
-	int x;
-	int y;
-	int z;
-};
+
+using Point2i = SDL_Point;
 
 struct Point2d {
 	double x;
 	double y;
 };
 
-using Point2i = SDL_Point;
+
+struct Point3i{
+	int x;
+	int y;
+	int z;
+};
 
 struct Point3d{
 	double x;

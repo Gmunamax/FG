@@ -57,7 +57,7 @@ namespace Floor{
 			changecolorh = !changecolorh;
 		}
 
-		std::cout << "Floor last point:\n" << result.at(result.size()-1).x << ",\n" << result.at(result.size()-1).y << ",\n" << result.at(result.size()-1).z << "\n\n";
+		// std::cout << "Floor last point:\n" << result.at(result.size()-1).x << ",\n" << result.at(result.size()-1).y << ",\n" << result.at(result.size()-1).z << "\n\n";
 
 		return result;
 

@@ -1,13 +1,13 @@
 #pragma once
-//#include <GL/gl.h>
 #include <GL/glew.h>
 #include "../../structures/point.hpp"
 #include "../../structures/vertex.hpp"
-#include "../properties/position.hpp"
+#include "objects/properties/geometry.hpp"
 #include "buffer.hpp"
+#include "../../config.hpp"
 
 
-class Model3d: public Location, public Buffer3d{
+class Model3d: public Geometry3d, public Buffer3d{
 
 	Point3d scale = {1,1,1};
 
@@ -47,47 +47,14 @@ public:
 
 
 	Model3d() {
+		#ifdef DEBUG
 		std::cout << "Some model: Hi!" << '\n';
+		#endif
 	}
 
 	void Load(std::vector<Point3d> points){
 		buffer(points);
 	}
-
-	// Point3d& GetPosition(){
-	// 	return position;
-	// }
-	// void SetPosition(Point3d newposition){
-	// 	position = newposition;
-	// 	needupdate = true;
-	// }
-	// void SetPosition(char axis, double value){
-	// 	if(axis == 'x'){
-	// 		position.x = value;
-	// 	}
-	// 	else if(axis == 'y'){
-	// 		position.y = value;
-	// 	}
-	// 	else if(axis == 'z'){
-	// 		position.z = value;
-	// 	}
-	// }
-
-	// Point3d& GetRotation(){
-	// 	return rotation;
-	// }
-	// void SetRotation(Point3d newrotation){
-	// 	rotation = newrotation;
-	// 	needupdate = true;
-	// }
-
-	// Point3d& GetScale(){
-	// 	return scale;
-	// }
-	// void SetScale(Point3d newscale){
-	// 	scale = newscale;
-	// 	needupdate = true;
-	// }
 
 	bool IsCollide(Point3d obj){
 		if(cancollide){

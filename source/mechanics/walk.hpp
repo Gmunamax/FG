@@ -1,10 +1,9 @@
 #pragma once
-#include "structures/point.hpp"
-#include "objects/camera.hpp"
-#include "states.hpp"
+#include <SDL2/SDL.h>
 #include <iostream>
 #include <math.h>
-#include "events.hpp"
+#include "structures/point.hpp"
+#include "objects/camera.hpp"
 
 //Why nobody didn't add this value to default definitions
 #define degtorad 0.017453293
@@ -20,89 +19,13 @@ namespace States{
 	bool walkd = false;
 	SDL_KeyCode rightkey;
 
-	bool rtup = false;
-	SDL_KeyCode lookupkey;
-	bool rtdown = false;
-	SDL_KeyCode lookdownkey;
-	bool rtleft = false;
-	SDL_KeyCode lookleftkey;
-	bool rtright = false;
-	SDL_KeyCode lookrightkey;
-
 	bool walkslide = false;
 	double friction = 0;
 	double startpower = 2;
 	bool move2d = true;
 	bool walkmoving = false;
-	bool lookmoving = false;
+	
 	float speed = 0.1;
-}
-
-void lookAround(){
-	using namespace States;
-
-	if(currentcamera == nullptr){
-		std::cout << "No active camera" << "\n";
-		return;
-	}
-
-	bool newval;
-	bool changeflags = false;
-	if(currentevent.type == SDL_KEYDOWN){
-		changeflags = true;
-		newval = true;
-	}
-	else if(currentevent.type == SDL_KEYUP){
-		changeflags = true;
-		newval = false;
-	}
-
-	if(changeflags){
-		if(currentevent.key.keysym.sym == lookupkey)
-			rtup = newval;
-		else if(currentevent.key.keysym.sym == lookdownkey)
-			rtdown = newval;
-		else if(currentevent.key.keysym.sym == lookleftkey)
-			rtleft = newval;
-		else if(currentevent.key.keysym.sym == lookrightkey)
-			rtright = newval;
-
-		if(rtup or rtdown or rtleft or rtright)
-			lookmoving = true;
-		else
-			lookmoving = false;
-	}
-
-	Point3d& rotation = currentcamera->GetRotation();
-
-	if(lookmoving){
-
-		if(rtup){
-			rotation.x--;
-			if(rotation.x < -180)
-				rotation.x = -180;
-		}
-		if(rtdown){			
-			rotation.x++;
-			if(rotation.x > 0)
-			 	rotation.x = 0;
-
-		}
-		if(rtleft){
-			rotation.z--;
-			if(rotation.z < -180)
-				rotation.z = 179;
-		}
-		if(rtright){
-			rotation.z++;
-			if(rotation.z > 180)
-				rotation.z = -179;
-		}
-
-		needupdate = true;
-		//std::cout << "{\n\t" << rotation.x << "\n\t" << rotation.y << "\n\t" << rotation.z << "\n" << "}";
-	}
-
 }
 
 Point3d MakeStep(){
@@ -140,8 +63,6 @@ Point3d MakeStep(){
 
 		realspeed = speed;
 	}
-
-	//TODO: разобрать управление всем по хедерам, намеспейсам, чтобы было модульно и основной цикл был чистенький.
 
 	keyspressed+= walkw;
 	keyspressed+= walks;
