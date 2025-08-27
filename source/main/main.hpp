@@ -17,6 +17,8 @@ void mainCycle(){
 
 		ProceedEvents();
 
+		Window::DrawAll();
+
 		if(vsync) SDL_Delay((1.0/75)*1000);
 	}
 	
@@ -27,12 +29,4 @@ void mainCycle(){
 void init(){
 	using namespace States;
 	SDL_Init(SDL_INIT_EVERYTHING);
-	//Window::Init();
-
-	//Window win; /* before initializing glew we must create an opengl context */
-	//win.copied = true;
-
-	
-
-	//return win; 
 }

@@ -1,11 +1,11 @@
 #pragma once
 #include <SDL2/SDL.h>
 #include <vector>
-#include <map>
-//#include "windowBackend.hpp"
 #include "scenes/scene.hpp"
 #include "various/loging.hpp"
 #include "main/events.hpp"
+#include "data/windowScene.hpp"
+#include "data/windowPosition.hpp"
 
 int GetSystemRefreshRate(){
 	SDL_DisplayMode a;
@@ -13,21 +13,157 @@ int GetSystemRefreshRate(){
 	return a.refresh_rate;
 }
 
-//TODO: Clear this class
-class Window{
+// //TODO: Clear THIS class
+// class WindowData: virtual public WindowUpdating{
 
-	static inline std::vector<Window*> allwindows;
-	std::vector<Window*>::size_type vectorpos;
+// 	using PointType = Point2i;
+// 	bool needresize = true;
 
-	float frametime;
-	Uint32 frameskip = 0;
-	
+
+// 	std::string title;
+// 	Uint32 windowflags = SDL_WINDOW_OPENGL;
+// 	PointType position;
+// 	PointType size;
+// 	PointType minimumsize;
+
+// 	SDL_WindowFlags fullscreenmode = SDL_WINDOW_FULLSCREEN_DESKTOP;
+
+// protected:
+
+// 	WindowData(){}
+
+// 	void Resize(){
+// 		if(needresize){
+// 			GetScene()->cam.Resize({0,0,size.x,size.y});
+// 			Update();
+// 		}
+// 	}
+
+// public:
+// 	void SetTitle(std::string newtitle){
+// 		title = newtitle;
+// 	}
+// 	void SetWindowFlags(Uint32 flags){
+// 		windowflags = windowflags | flags;
+// 	}
+
+// 	PointType& GetPosition(){
+// 		return position;
+// 	}
+// 	void SetPosition(PointType newposition){
+// 		position = newposition;
+// 	}
+
+// 	PointType& GetSize(){
+// 		return size;
+// 	}
+// 	void SetSize(PointType newscale){
+// 		size = newscale;
+// 		needresize = true;
+// 	}
+
+// 	void SetMinimumSize(PointType newminimumsize){
+// 		minimumsize = newminimumsize;
+// 	}
+
+// 	void EnterFullscreen(){
+// 		SDL_SetWindowFullscreen(win,fullscreenmode);
+// 	}
+// 	void ExitFullscreen(){
+// 		SDL_SetWindowFullscreen(win,0);
+// 	}
+
+// 	void Open(){
+// 		win = SDL_CreateWindow(title.c_str(), position.x, position.y, size.x, size.y, windowflags);
+// 		SDL_SetWindowMinimumSize(win, minimumsize.x, minimumsize.y);
+// 		ApplyScene(win);
+// 		glcon = SDL_GL_CreateContext(win);
+// 		InitBackend();
+// 	}
+// 	void Close(){
+// 		SDL_GL_DeleteContext(glcon);
+// 		SDL_DestroyWindow(win);
+// 	}
+
+// 	~WindowData(){
+// 		Close();
+// 	}
+// };
+
+class WindowSize: virtual public WindowScene{
+	using PointType = Point2i;
+
+	PointType size {0,0};
+	bool needupdate = false;
+
+protected:
+	void Apply(){
+		if(needupdate){
+			SDL_SetWindowSize(SDL_GL_GetCurrentWindow(), size.x, size.y);
+			Resize(size);
+			needupdate = false;
+		}
+
+	}
+
+	void Resize(PointType newsize){
+		size = newsize;
+		GetScene()->cam.Resize({0,0,newsize.x,newsize.y});
+		Update();
+	}
+
+public:
+	void SetSize(PointType newsize){
+		size = newsize;
+		needupdate = true;
+	}
+	PointType GetSize(){
+		return size;
+	}
+};
+
+class WindowFlags{
+	Uint32 flags = SDL_WINDOW_OPENGL;
+
+public:
+	void SetFlags(Uint32 newflags){
+		flags = SDL_WINDOW_OPENGL | newflags;
+	}
+	Uint32 GetFlags(){
+		return flags;
+	}
+};
+
+class WindowTitle{
 	std::string title;
-	Uint32 windowflags = SDL_WINDOW_OPENGL;
-	SDL_WindowFlags fullscreenmode = SDL_WINDOW_FULLSCREEN_DESKTOP;
+	bool needupdate = true;
 
-	SDL_Window* win;
+protected:
+	void Apply(){
+		if(needupdate){
+			SDL_SetWindowTitle(SDL_GL_GetCurrentWindow(),title.c_str());
+			needupdate = false;
+		}
+	}
+
+public:
+	void SetTitle(std::string newtitle){
+		title = newtitle;
+	}
+	std::string GetTitle(){
+		return title;
+	}
+};
+
+
+
+class WindowBase: public WindowPosition, public WindowFlags, public WindowTitle, public WindowSize{
+	friend class Window;
+	static inline const char* windowdataname = "Scene";
+
 	SDL_GLContext glcon;
+	SDL_Window* win;
+	bool opened = false;
 
 	void InitBackend(){
 		GLenum glewres = glewInit();
@@ -43,114 +179,72 @@ class Window{
 		glDepthRange(0.5,100);
 	}
 
-	void Draw(){
-		if(frameskip <= 0){
-			if(needupdate){
-				std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
+protected:
+	static WindowBase* GetWindowFromID(Uint32 id){
+		return static_cast<WindowBase*>(SDL_GetWindowData(SDL_GetWindowFromID(id), windowdataname));
+	}
 
-				scene->Drawing();
-				SDL_GL_SwapWindow(win);
-				needupdate = false;
-
-				std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
-
-				auto t = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1);
-				frameskip = t.count()/frametime;
-
-				frameskip--; /* to avoid false positives */
-			}
+	void Apply(){
+		if(opened){
+			WindowTitle::Apply();
+			WindowSize::Apply();
 		}
-		else{
-			FastLog("Frameskip: " + std::string{(char)frameskip} + " left\n");
-			frameskip--;
-		}
-	}
-
-	using PointType = Point2i;
-
-	PointType position;
-	PointType size;
-
-	Scene* scene;
-
-	bool needresize = true;
-	bool needupdate = true;
-
-public:
-	static inline const char* windowdataname = "Window";
-
-	PointType& GetPosition(){
-		return position;
-	}
-	void SetPosition(PointType newposition){
-		position = newposition;
-	}
-
-	PointType& GetSize(){
-		return size;
-	}
-	void SetSize(PointType newscale){
-		size = newscale;
-		needresize = true;
-	}
-	void SetMinimumSize(Point2i newminsize){
-		SDL_SetWindowMinimumSize(win,newminsize.x,newminsize.y);
-	}
-
-	void SetWindowFlags(Uint32 flags){
-		windowflags = windowflags | flags;
 	}
 
 	void Select(){
-		SDL_GL_MakeCurrent(win,glcon);
+		if(opened){
+			SDL_GL_MakeCurrent(win,glcon);
+			if(SDL_GL_GetCurrentWindow() != win){
+				Log(SDL_GetError());
+			};
+		}
 	}
 
-	void Close(){
-		SDL_GL_DeleteContext(glcon);
-		SDL_DestroyWindow(win);
-	}
+public:
 	void Open(){
-		win = SDL_CreateWindow(title.c_str(), position.x, position.y, size.x, size.y, windowflags);
-		SDL_SetWindowData(win,windowdataname,this);
-		glcon = SDL_GL_CreateContext(win);
-		InitBackend();
+		if(not opened){
+			win = SDL_CreateWindow(GetTitle().c_str(),GetPosition().x,GetPosition().y,GetSize().x,GetSize().y,GetFlags());
+			glcon = SDL_GL_CreateContext(win);
+			InitBackend();
+			SDL_SetWindowData(SDL_GL_GetCurrentWindow(),windowdataname,this);
+			opened = true;
+		}
 	}
-
-	void SetFPS(short fps){
-		frametime = 1.0/fps*1000;
+	void Close(){
+		if(opened){
+			SDL_DestroyWindow(win);
+			SDL_GL_DeleteContext(glcon);
+			opened = false;
+		}
 	}
+};
 
-	Window(){
+class Window: public WindowBase{
+
+	static inline std::vector<Window*> allwindows;
+	std::vector<Window*>::size_type vectorpos;
+
+	void AddSelf(){
 		allwindows.push_back(this);
 		vectorpos = allwindows.size() - 1;
-		Select();
+	}
+
+	void RemoveSelf(){
+		allwindows.erase(allwindows.begin() + vectorpos);
+	}
+
+public:
+
+	Window(){
+		AddSelf();
 	}
 	~Window(){
+		RemoveSelf();
 		Close();
-		allwindows.erase(allwindows.begin() + vectorpos);
-		scene->Closing();
-		scene->Delete();
 	}
 
-	
-	void EnterFullscreen(){
-		SDL_SetWindowFullscreen(win,fullscreenmode);
-	}
-	void ExitFullscreen(){
-		SDL_SetWindowFullscreen(win,0);
-	}
-
-	void SetTitle(std::string newtitle){
-		title = newtitle;
-	}
-
-	void SetScene(Scene* newscene){	
-		scene = newscene;
+	void Load(){
 		scene->Loading(this);
-	}
-
-	void Update(){
-		needupdate = true;
 	}
 
 	static void CloseAll(){
@@ -159,28 +253,34 @@ public:
 		}
 	}
 
-	static void ProceedEvent(SDL_Event event){
+	static void UpdateAll(SDL_Event event){
 		switch(event.type){
 
 		case SDL_KEYDOWN:
-
-			static_cast<Window*>(SDL_GetWindowData(SDL_GetWindowFromID(event.key.windowID), Window::windowdataname))->scene->KeyPressed(event.key);
+			GetWindowFromID(event.key.windowID)->EventKeyPressed(event.key);
 			break;
-			
+
+		case SDL_KEYUP:	
+			GetWindowFromID(event.key.windowID)->EventKeyReleased(event.key);
+			break;
+
 		case SDL_WINDOWEVENT:
-				
-			static_cast<Window*>(SDL_GetWindowData(SDL_GetWindowFromID(event.window.windowID), Window::windowdataname))->scene->KeyReleased(event.key);
-			break;
 
-		}
+			switch(event.window.event){
 
-		for(Window* w : allwindows){
-			w->scene->Cycle();
-			w->Select();
-			if(w->needresize){
-				w->scene->cam.Resize({0,0,w->size.x,w->size.y});
-				w->Update();
+			case SDL_WINDOWEVENT_RESIZED:
+				GetWindowFromID(event.window.windowID)->Resize({event.window.data1,event.window.data2});
+				break;
 			}
+			break;
+		}
+	}
+	static void DrawAll(){
+		for(Window* w : allwindows){
+			w->Select();
+			w->GetScene()->Cycle();
+			w->Apply();
+
 			w->Draw();
 		}
 	}

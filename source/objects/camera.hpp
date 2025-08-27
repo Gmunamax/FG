@@ -57,8 +57,8 @@ public:
 	}
 
 	void Resize(Geometry2i newviewport){
-		SetViewportSize(newviewport);
 		SetAspectRatio((double)newviewport.w/(double)newviewport.h);
+		SetViewportSize(newviewport);
 		switch (cameratype) {
 		case CAMERA_FRUSTUM:
 			SetFrustum();
@@ -91,10 +91,11 @@ public:
 		if(aspectratioforheight)
 			glFrustum(-zoom,zoom, zoom*aspectratio,zoom*aspectratio, nearz,farz);
 		else
-			glFrustum(-aspectratio,aspectratio,-zoom,zoom, nearz,farz);
+			glFrustum(-zoom*aspectratio,zoom*aspectratio,-zoom,zoom, nearz,farz);
 		cameratype = CAMERA_FRUSTUM;
 	}
 	void SetOrtho(){
+		glLoadIdentity();
 		glDepthFunc(GL_LESS);
 		if(aspectratioforheight)
 			glOrtho(-zoom,zoom, zoom*aspectratio,zoom*aspectratio, nearz,farz);
@@ -103,6 +104,7 @@ public:
 		cameratype = CAMERA_ORTHO;
 	}
 	void SetUI(){
+		glLoadIdentity();
 		glDepthFunc(GL_GEQUAL);
 		if(aspectratioforheight)
 			glOrtho(-zoom,zoom, zoom*aspectratio,zoom*aspectratio, nearz,farz);

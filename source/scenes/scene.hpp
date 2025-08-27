@@ -4,25 +4,22 @@
 
 class Window;
 
-class Scene{
-	friend class WindowScene;
-	friend class Window;
+struct Scene{
 
-protected:
-	Window* win;
 	Camera cam;
 
 	virtual void Loading(Window* window) {
 		win = window;
 	};
-	virtual void Placing() {};
+	//virtual void Placing() {};
 	virtual void Drawing() {};
-	virtual void KeyPressed(SDL_KeyboardEvent) {};
-	virtual void KeyReleased(SDL_KeyboardEvent) {};
+	virtual void KeyPressed(SDL_KeyboardEvent&) {};
+	virtual void KeyReleased(SDL_KeyboardEvent&) {};
 	virtual void Cycle() {};
-	virtual void Closing() {};
 
-	virtual void Delete() = 0;
+	virtual void Deleting() = 0;
 
+protected:
+	Window* win;
 	Scene() {};
 };

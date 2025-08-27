@@ -24,6 +24,6 @@ void ProceedEvents(){
 	using namespace States;
 
 	if(PollEvent()){
-		Window::ProceedEvent(currentevent);
+		Window::UpdateAll(currentevent);
 	}
 }

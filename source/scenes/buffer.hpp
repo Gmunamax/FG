@@ -1,13 +1,13 @@
 #include <iostream>
 #include <vector>
-#include "structures/point.hpp"
 #include "objects/model/model.hpp"
 #include "objects/camera.hpp"
 #include "models/cube.hpp"
+#include "scene.hpp"
 // #include "mechanics/walk.hpp"
 // #include "mechanics/camRotation.hpp"
 
-namespace BufferTests{
+class Scene2: public Scene{
 	std::vector<Point3d> vv2 = {
 		{-0.9,1,-1},
 		{1,1,-1},
@@ -19,14 +19,14 @@ namespace BufferTests{
 	};
 
 	Camera cam;
-	Model3d& cube = Scene1::cube;
+	Model3d cube;
 	Window* win;
 
-	void drawBuffer(){
+	virtual void Drawing() override{
 		cube.Draw();
 	}
 
-	void buffer(Window* w){
+	void Loading(Window* w){
 		win = w;
 		// States::lookupkey = SDLK_UP;
 		// States::lookdownkey = SDLK_DOWN;
@@ -37,11 +37,22 @@ namespace BufferTests{
 		// States::leftkey = SDLK_a;
 		// States::rightkey = SDLK_d;
 
+		cam.Resize({0,0,WINDOWW,WINDOWH});
+		cam.SetFrustum();
+
 		cube.Load(Cube::Load());
-		w->SetScene(&cam, drawBuffer);
 	}
 
-	void delBuffers(){
-		
+	virtual void Deleting() override{
+		Delete();
 	}
-}
+
+public:
+	static Scene2* New(){
+		return new Scene2{};
+	}
+	void Delete(){
+		delete this;
+	}
+
+};

@@ -22,7 +22,8 @@ class Scene1 : public Scene{
 		#endif
 
 		floor.Load(Floor::Load());
-		cube.Load(Cube::Load());
+		floor.SetPosition({0,0,-1});
+		//cube.Load(Cube::Load());
 
 		cam.Resize({0,0,WINDOWW,WINDOWH});
 		cam.SetFrustum();
@@ -34,14 +35,16 @@ class Scene1 : public Scene{
 
 	virtual void Drawing() override{
 		floor.Draw();
- 		cube.Draw();
+ 		//cube.Draw();
+	}
+	virtual void Cycle() override{
+		std::string err = SDL_GetError();
+		if(err.length() != 0){
+			Log(err);
+		}
 	}
 
-	virtual void Closing() override{
-		
-	}
-
-	virtual void KeyPressed(SDL_KeyboardEvent key) override{
+	virtual void KeyPressed(SDL_KeyboardEvent& key) override{
 		if(key.keysym.sym == SDLK_b){
 			States::run = false;
 		}
@@ -51,11 +54,12 @@ class Scene1 : public Scene{
 	~Scene1(){
 		FastLog("Scene1 Destr");
 	}
+
 public:
 	static Scene1* New(){
 		return new Scene1{};
 	}
-	void Delete() override{
+	void Deleting() override{
 		delete this;
 	}
 };

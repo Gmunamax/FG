@@ -7,7 +7,7 @@
 namespace States {
 	
 	bool linesxray = false;
-	bool vsync = false;
+	bool vsync = true;
 	bool run = true;
 
 }
