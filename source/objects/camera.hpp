@@ -89,7 +89,7 @@ public:
 		glLoadIdentity();
 		glDepthFunc(GL_LESS);
 		if(aspectratioforheight)
-			glFrustum(-zoom,zoom, zoom*aspectratio,zoom*aspectratio, nearz,farz);
+			glFrustum(-zoom,zoom, -zoom*aspectratio,zoom*aspectratio, nearz,farz);
 		else
 			glFrustum(-zoom*aspectratio,zoom*aspectratio,-zoom,zoom, nearz,farz);
 		cameratype = CAMERA_FRUSTUM;

@@ -5,7 +5,7 @@
 #include "scenes/scene.hpp"
 #include "main/events.hpp"
 
-class Walking : virtual public Scene{
+class CamRotation: virtual public Scene{
 private:
 	bool rtup = false;
 	bool rtdown = false;
@@ -13,67 +13,83 @@ private:
 	bool rtright = false;
 	bool lookmoving = false;
 
-protected:
-	Walking(){}
-
-public:
-	
-	SDL_KeyCode lookupkey;
-	SDL_KeyCode lookdownkey;
+	SDL_KeyCode up;
+	SDL_KeyCode down;
 	SDL_KeyCode lookleftkey;
 	SDL_KeyCode lookrightkey;
 
-	void lookAround(){
+	float speed = 1;
 
-		bool newval;
-		bool changeflags = false;
-		if(currentevent.type == SDL_KEYDOWN){
-			changeflags = true;
-			newval = true;
+	void UpdateFlags(SDL_KeyboardEvent& key, bool newval){
+		if(key.keysym.sym == up){
+			rtup = newval;
+			std::cout << "up" ;
 		}
-		else if(currentevent.type == SDL_KEYUP){
-			changeflags = true;
-			newval = false;
+		else if(key.keysym.sym == down){
+			rtdown = newval;
+			std::cout << "down";
 		}
-
-		if(changeflags){
-			if(currentevent.key.keysym.sym == lookupkey)
-				rtup = newval;
-			else if(currentevent.key.keysym.sym == lookdownkey)
-				rtdown = newval;
-			else if(currentevent.key.keysym.sym == lookleftkey)
-				rtleft = newval;
-			else if(currentevent.key.keysym.sym == lookrightkey)
-				rtright = newval;
-
-			if(rtup or rtdown or rtleft or rtright)
-				lookmoving = true;
-			else
-				lookmoving = false;
+		else if(key.keysym.sym == lookleftkey){
+			rtleft = newval;
+			std::cout << "left";
+		}
+		else if(key.keysym.sym == lookrightkey){
+			rtright = newval;
+			std::cout << "right";
 		}
 
+		if(rtup or rtdown or rtleft or rtright){
+			lookmoving = true;
+			std::cout << "start";
+		}
+		else
+			lookmoving = false;
+	}
+	
+
+protected:
+	CamRotation(){}
+
+public:
+
+	void SetRotationKeys(SDL_KeyCode up, SDL_KeyCode down, SDL_KeyCode left, SDL_KeyCode right){
+		this->up = up;
+		this->down = down;
+		this->lookleftkey = left;
+		this->lookrightkey = right;
+	}
+
+	void CamRotationStart(SDL_KeyboardEvent& key){
+		UpdateFlags(key, true);
+	}
+
+	void CamRotationMove(){
 		Point3d& rotation = cam.GetRotation();
+		double step = win->GetStepCoefficient() * 180;
+		//std::cout << win->GetStepCoefficient() << std::endl;
 
 		if(lookmoving){
 
 			if(rtup){
-				rotation.x--;
+				rotation.x-=step;
 				if(rotation.x < -180)
 					rotation.x = -180;
 			}
-			if(rtdown){			
-				rotation.x++;
+			if(rtdown){
+				rotation.x+=step;
 				if(rotation.x > 0)
 				 	rotation.x = 0;
 
 			}
 			if(rtleft){
-				rotation.z--;
+				std::cout << "-" << std::endl;
+				rotation.z-=step;
 				if(rotation.z < -180)
 					rotation.z = 179;
 			}
 			if(rtright){
-				rotation.z++;
+				std::cout << "+" << std::endl;
+				rotation.z+=step;
 				if(rotation.z > 180)
 					rotation.z = -179;
 			}
@@ -81,7 +97,10 @@ public:
 			win->Update();
 			//std::cout << "{\n\t" << rotation.x << "\n\t" << rotation.y << "\n\t" << rotation.z << "\n" << "}";
 		}
+	}
 
+	void CamRotationEnd(SDL_KeyboardEvent& key){
+		UpdateFlags(key, false);
 	}
 	
-}
+};

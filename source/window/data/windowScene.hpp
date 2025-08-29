@@ -27,8 +27,16 @@ public:
 };
 
 class WindowDrawing: virtual public WindowSceneCore{
-	float frametime;
+	double frametime;
 	Uint8 frameskip = 0;
+
+	double stepsize;
+
+	int frames = 0;
+	std::chrono::time_point<std::chrono::steady_clock> secs;
+
+	std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
+	std::chrono::steady_clock::time_point t2;
 protected:
 
 	WindowDrawing(){}
@@ -36,30 +44,54 @@ protected:
 	void Draw(){
 		if(frameskip <= 0){
 			if(needupdate){
-				std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
 
+				t1 = std::chrono::steady_clock::now();
+
+				glPushMatrix();
 				GetScene()->cam.StartDrawing();
 				GetScene()->Drawing();
+				glPopMatrix();
 				SDL_GL_SwapWindow(SDL_GL_GetCurrentWindow());
-				//needupdate = false;
 
-				std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
+				t2 = std::chrono::steady_clock::now();
+				std::chrono::nanoseconds t = (t2 - t1);
 
-				auto t = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1);
-				frameskip = t.count()/frametime;
+
+				needupdate = false;
+
+				glFlush();
+
+				// if(std::chrono::time_point_cast<std::chrono::seconds>(t2) != secs){
+				// 	secs = std::chrono::time_point_cast<std::chrono::seconds>(t2);
+				// 	// Log(std::string{});
+				// 	std::cout << SDL_GetWindowTitle(SDL_GL_GetCurrentWindow()) << "\n";
+				// 	std::cout << frames << std::endl;
+				// 	frames = 0;
+				// }
+				frameskip = std::chrono::duration_cast<std::chrono::milliseconds>(t).count()/frametime;
+
+				long long f = (frametime *1000 *1000); //nanoseconds
+				stepsize = ((double)t.count()/frametime)*(frameskip+1);
+				stepsize = stepsize /1000 /1000; //to miliseconds
+
+				/* to avoid false positives */
 				if(frameskip == 1)
-					frameskip--; /* to avoid false positives */
+					frameskip = 0;
+
+				frames++;
 			}
 		}
 		else{
-			FastLog("Frameskip: " + std::string{(char)frameskip} + " left\n");
+			std::cout << "Frameskip: " << (int)frameskip << " left\n" << std::endl;
 			frameskip--;
 		}
 	}
 
 public:
+	double GetStepCoefficient(){
+		return stepsize;
+	}
 	
-
 	void SetFPS(short fps){
 		frametime = 1.0/fps*1000;
 	}

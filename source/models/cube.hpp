@@ -117,7 +117,7 @@ namespace Cube{
 		std::vector<Vertex3d> cube;
 		for(auto e : cubeb){
 			for(short i = 0; i < 3; i++){
-				e[i].SetPosition(e[i].GetPosition() - Point3d{0,0,3});
+				e[i].SetPosition(e[i].GetPosition() - Point3d{0,0,0});
 				cube.push_back(e[i]);
 			}
 		}

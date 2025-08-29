@@ -4,6 +4,7 @@
 #include "various/loging.hpp"
 #include "windowBase.hpp"
 
+SDL_GLContext con;
 int GetSystemRefreshRate(){
 	SDL_DisplayMode a;
 	SDL_GetDesktopDisplayMode(0,&a);
@@ -28,10 +29,16 @@ public:
 
 	Window(){
 		AddSelf();
+		if(allwindows.size() == 0){
+			con = SDL_GL_CreateContext(win);
+		}
 	}
 	~Window(){
 		RemoveSelf();
 		Close();
+		if(allwindows.size() == 0){
+			SDL_GL_DeleteContext(con);
+		}
 	}
 
 	void Load(){
@@ -57,20 +64,14 @@ public:
 
 		case SDL_WINDOWEVENT:
 
-			WindowBase* w = GetWindowFromID(event.window.windowID);
-			w->Select();
 			switch(event.window.event){
 
 			case SDL_WINDOWEVENT_RESIZED:
-				w->Resize({event.window.data1,event.window.data2});
-				break;
-			case SDL_WINDOWEVENT_EXPOSED:
-				w->Update();
+				GetWindowFromID(event.window.windowID)->Resize({event.window.data1,event.window.data2});
 				break;
 			}
 			break;
 		}
-		std::cout << event.type << std::endl;
 	}
 	static void DrawAll(){
 		for(Window* w : allwindows){
@@ -80,6 +81,5 @@ public:
 
 			w->Draw();
 		}
-		
 	}
 };

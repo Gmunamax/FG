@@ -19,7 +19,8 @@ void mainCycle(){
 
 		Window::DrawAll();
 
-		if(vsync) SDL_Delay((1.0/75)*1000);
+		SDL_Delay((1.0/60)*1000);
+		//if(appfree) SDL_Delay((1.0/75)*1000);
 	}
 	
 	Window::CloseAll();
@@ -28,5 +29,6 @@ void mainCycle(){
 
 void init(){
 	using namespace States;
+	
 	SDL_Init(SDL_INIT_EVERYTHING);
 }

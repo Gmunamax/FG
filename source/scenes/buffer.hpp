@@ -21,26 +21,42 @@ class Scene2: public Scene{
 	Camera cam;
 	Model3d cube;
 	Window* win;
+	bool linesxray = false;
 
 	virtual void Drawing() override{
 		cube.Draw();
 	}
 
-	void Loading(Window* w){
+	virtual void Loading(Window* w) override{
 		win = w;
-		// States::lookupkey = SDLK_UP;
-		// States::lookdownkey = SDLK_DOWN;
-		// States::lookleftkey = SDLK_LEFT;
-		// States::lookrightkey = SDLK_RIGHT;
-		// States::forwardkey = SDLK_w;
-		// States::backwardkey = SDLK_s;
-		// States::leftkey = SDLK_a;
-		// States::rightkey = SDLK_d;
 
-		cam.Resize({0,0,WINDOWW,WINDOWH});
+		std::cout << SDL_GetWindowTitle(SDL_GL_GetCurrentWindow()) << std::endl;
+
 		cam.SetFrustum();
 
 		cube.Load(Cube::Load());
+		cube.SetPosition({0,0,-5});
+	}
+
+	virtual void KeyPressed(SDL_KeyboardEvent& key) override{
+		switch (key.keysym.sym) {
+		case SDLK_r:
+			linesxray = !linesxray;
+				if(linesxray)
+					glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+				else
+					glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+				win->Update();
+			break;
+		}
+	}
+
+	Point3d& r = cube.GetRotation();
+
+	virtual void Cycle() override{
+		r.x++;
+		r.y++;
+		win->Update();
 	}
 
 	virtual void Deleting() override{

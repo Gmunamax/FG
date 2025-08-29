@@ -5,25 +5,24 @@
 
 namespace States{
 	SDL_Event currentevent;
-	bool appbusy = true;
+	bool appfree = true;
 }
 
 bool PollEvent(){
 	using namespace States;
 
 	if(SDL_PollEvent(&currentevent)){
-		appbusy = true;
-		return true;
+		appfree = false;
 	}
 	else 
-		appbusy = false;
-		return false;
+		appfree = true;
+	return not appfree;
 }
 
 void ProceedEvents(){
 	using namespace States;
 
 	if(PollEvent()){
-		Window::UpdateAll(currentevent);
+		Window::SendEvent(currentevent);
 	}
 }
