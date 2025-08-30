@@ -63,4 +63,5 @@ i dont know. everywere where works sdl2, opengl 4 and glew 2
 Now changes and updates will be created less frequently. But if I have the opportunity, I will try to do something.
 
 
+
 *Made By Gmunamax*
