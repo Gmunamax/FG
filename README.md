@@ -42,7 +42,6 @@ dev files for GL (OpenGL) should be provided by your graphics card driver or by 
 After installing libraries and dev files you can build this application. FG and FGengine use cmake for this. To build application type these commands in this directory:
 
 	cmake .
-	cd build
 	make
 
 Then, in FG directory should appear FG executable. This is it. Enjoy.
