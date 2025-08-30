@@ -1,0 +1,5 @@
+#include "main.hpp"
+#include "objects/objects.hpp"
+#include "structures/structures.hpp"
+#include "window/window.hpp"
+#include "scene/scene.hpp"
