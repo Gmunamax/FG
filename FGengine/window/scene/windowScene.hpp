@@ -25,6 +25,7 @@ public:
 class WindowDrawing: virtual public WindowSceneCore{
 	double frametime;
 	Uint8 frameskip = 0;
+	Colord bgcolor;
 
 	double stepsize;
 
@@ -46,6 +47,8 @@ public:
 	void SetFPS(short fps){
 		frametime = 1.0/fps*1000;
 	}
+
+	
 };
 
 class WindowEvents: virtual public WindowSceneCore{

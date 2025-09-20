@@ -7,7 +7,7 @@ class WindowSize: virtual public WindowScene{
 	using PointType = Point2i;
 
 	PointType size {0,0};
-	bool needupdate = false;
+	bool needupdate = true;
 
 protected:
 	void Apply(){

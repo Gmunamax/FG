@@ -3,21 +3,36 @@
 #include "../properties/transform/transform.hpp"
 #include "../properties/buffer/buffer.hpp"
 
-class Model3d: public Position3d, public Rotation3d, public Scale3d, public Buffer3d{
+template<typename VertexType>
+class Model: public Transform<typename VertexType::VertexPosition::DataType>, public Drawer<VertexType>{
 
-	Point3d collidepos = {0,0,0};
-	Point3d collidescale = {0,0,0};
-
-	void Place();
-
-	bool cancollide = false;
+	VertexType::VertexPosition::DataType collidepos;
+	VertexType::VertexPosition::DataType collidescale;
 
 public:
-	Model3d();
+	Model(){};
 
-	void Load(std::vector<Point3d> points);
-
-	bool IsCollide(Point3d obj);
+	// bool IsCollide(Point3d obj);
 
 	void Draw();
 };
+
+// template<typename VertexType> bool Model<VertexType>::IsCollide(Point3d obj)
+// {
+// 	if(cancollide){
+// 		Point3d collidestart = Model::GetPosition() + collidepos;
+// 		Point3d collideend = collidestart + collidescale;
+
+// 		bool resultx = (collidestart.x < obj.x) and (obj.x < collideend.x);
+// 		bool resulty = (collidestart.y < obj.y) and (obj.y < collideend.y);
+
+// 		return (resultx and resulty);
+// 	}
+// 	return false;
+// }
+
+template<typename VertexType> void Model<VertexType>::Draw(){
+	Model::ProceedTransformations();
+	Model::BindTransformations();
+	Model::drawBuf();
+}

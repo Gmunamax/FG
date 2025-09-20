@@ -2,41 +2,98 @@
 #include <GL/glew.h>
 #include "point.hpp"
 #include "color.hpp"
+#define VertexAttribs template<typename Pos, typename Col>
 
-using Vertex3i = Point3i;
+VertexAttribs class Vertex;
 
-class Vertex3d{
-	Point3d position;
-	Color3i color;
-	
-public:
+VertexAttribs struct VertexAO{
+	static inline GLuint vao;
+	static inline bool ready;
 
-	Vertex3d(){
-		position = {0,0,0};
-		color = {0,0,0};
+	static void Quit(){
+		glDeleteVertexArrays(1,&vao);
 	}
-	Vertex3d(double x, double y, double z){
-		position = {x,y,z};
-		color = {0,0,0};
+	static void SelectVAO(){
+		glBindVertexArray(vao);
 	}
-	void SetPosition(Point3d position){
+
+	static void Init(){
+		if(not ready){
+			glGenVertexArrays(1,&vao);
+			SelectVAO();
+			SetPos();
+			SetCol();
+			ready = true;
+		}
+	}
+
+protected:
+	VertexAO(){}
+
+private:
+	static void SetPos(){
+		std::cout << Pos::_elemcount << std::endl;
+		glVertexAttribPointer(0, Pos::_elemcount, Pos::_gldatatype, false, sizeof(Pos)+sizeof(Col), 0);
+		glEnableVertexAttribArray(0);
+	}
+	static void SetCol(){
+		glVertexAttribPointer(1, Col::_elemcount, Col::_gldatatype, false, sizeof(Pos)+sizeof(Col), (void*)sizeof(Pos));
+		glEnableVertexAttribArray(1);
+	}
+
+};
+
+template<typename Type> 
+struct VertexType{
+	using DataType = Type;
+};
+
+template<typename PosType>
+class VertexPosition: public VertexType<PosType>{
+	PosType position;
+
+protected:
+	VertexPosition(PosType position){
 		this->position = position;
 	}
-	void SetColor(Color3d color){
+	VertexPosition(){}
 
+public:
+	void SetPosition(PosType position){
+		this->position = position;
 	}
-	Point3d& GetPosition(){
+	PosType& GetPosition(){
 		return position;
 	}
-	Color3i& GetColor(){
+};
+
+template<typename ColType>
+class VertexColor: public VertexType<ColType>{
+	ColType color;
+
+protected:
+	VertexColor(ColType color){
+		this->color = color;
+	}
+	VertexColor(){}
+
+public:
+	void SetColor(ColType color){
+		this->color = color;
+	}
+	ColType& GetColor(){
 		return color;
 	}
-	void Draw(){
-		glColor3d(color.r,color.g,color.b);
-		glVertex3d(position.x,position.y,position.z);
-	}
-
-	void DrawAsPart(){
-		glVertex3d(position.x,position.y,position.z);
-	}
 };
+
+VertexAttribs class Vertex: public VertexAO<Pos,Col>, public VertexPosition<Pos>, public VertexColor<Col>{
+public:
+	Vertex(Pos pos, Col col):
+		Vertex::VertexPosition(pos),
+		Vertex::VertexColor(col)
+	{}
+	Vertex(){}
+};
+
+using Vertex2d = Vertex<Point2d,Colord>;
+using Vertex3d = Vertex<Point3d,Colord>;

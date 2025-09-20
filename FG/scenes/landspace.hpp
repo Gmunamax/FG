@@ -8,8 +8,8 @@
 
 class Landspace : virtual public Scene, public CamRotation, public Walking{
 
-	Model3d cube;
-	Model3d floor;
+	Model cube;
+	Model floor;
 
 	virtual void Loading(Window* window) override{
 		win = window;

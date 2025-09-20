@@ -13,3 +13,4 @@
 * Clean WindowDrawing class
 * Return "placing" event
 * Fix mouse movement causes events spam
+* Move opengl and sdl functions into special library
