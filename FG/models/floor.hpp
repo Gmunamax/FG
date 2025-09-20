@@ -1,3 +1,4 @@
+#pragma once
 #include "FGengine/objects/model/model.hpp"
 
 namespace Floor{
@@ -9,15 +10,15 @@ namespace Floor{
 			{0,1,0},
 		};
 	}
-	Color3f cellcolor1 = {255,255,255};
-	Color3f cellcolor2 = {0,0,0};
+	Colord cellcolor1 = {1,1,1};
+	Colord cellcolor2 = {0.1,0.1,0.1};
 	bool swapcolors = false;
 
 	float cellsize = 0.5;
-	short cellcountw = 128;
-	short cellcounth = 128;
+	short cellcountw = 4;
+	short cellcounth = 4;
 
-	std::vector<Point3d> GenerateFloor(){
+	std::vector<Vertex3d> GenerateFloor(){
 
 		std::vector<Point3d> cell = {
 			{0,0,0},
@@ -35,24 +36,28 @@ namespace Floor{
 		// Face3d cell2 = {
 		// 	floorfaces::part,4,cellcolor2,{0,0,1},
 		// };
+		Colord cells[2]{
+			cellcolor1,
+			cellcolor2
+		};
 
-		std::vector<Point3d> result {};
+		std::vector<Vertex3d> result {};
 
-		//bool changecolorw = false;
+		bool changecolorw = false;
 		bool changecolorh = swapcolors;
 		short chcol = 0;
 		//Face3d* sourcecell;
 		for(short cellh = 0; cellh < cellcounth; cellh+=1){
-			//changecolorw = changecolorh;
-			for(short cellw = (int)changecolorh; cellw < cellcountw; cellw+=2){
+			changecolorw = changecolorh;
+			for(short cellw = 0; cellw < cellcountw; cellw+=1){
 
 				for(short i = 0; i < cell.size(); i++){
 					Point3d ttt = cell.at(i);
 					ttt = ttt * Point3d{cellsize,cellsize,0} + Point3d{(double)cellw*cellsize,(double)cellh*cellsize,0};
-					result.push_back(ttt);
+					result.push_back({ ttt,cells[changecolorw] });
 				}
 
-				//changecolorw = !changecolorw;
+				changecolorw = !changecolorw;
 			}
 			changecolorh = !changecolorh;
 		}
@@ -63,7 +68,7 @@ namespace Floor{
 
 	}
 
-	std::vector<Point3d> Load(){
+	std::vector<Vertex3d> Load(){
 
 		return GenerateFloor();
 

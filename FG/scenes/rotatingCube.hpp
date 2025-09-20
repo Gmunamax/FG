@@ -4,7 +4,7 @@
 #include "FG/models/cube.hpp"
 #include "FGengine/scene/scene.hpp"
 
-class Scene2: public Scene{
+class RotatingCube: public Scene{
 	std::vector<Point3d> vv2 = {
 		{-0.9,1,-1},
 		{1,1,-1},
@@ -15,9 +15,7 @@ class Scene2: public Scene{
 		{0,0,-1}
 	};
 
-	Camera cam;
-	Model3d cube;
-	Window* win;
+	Model cube;
 	bool linesxray = false;
 
 	virtual void Drawing() override{
@@ -30,7 +28,7 @@ class Scene2: public Scene{
 		cam.SetFrustum();
 
 		cube.Load(Cube::Load());
-		cube.SetPosition({0,0,-10});
+		cube.SetPosition({0,0,-3});
 	}
 
 	virtual void KeyPressed(SDL_KeyboardEvent& key) override{
@@ -59,8 +57,8 @@ class Scene2: public Scene{
 	}
 
 public:
-	static Scene2* New(){
-		return new Scene2{};
+	static RotatingCube* New(){
+		return new RotatingCube{};
 	}
 	void Delete(){
 		delete this;

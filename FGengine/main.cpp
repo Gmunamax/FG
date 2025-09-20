@@ -1,5 +1,4 @@
 #include "main.hpp"
-#include "events.hpp"
 
 static bool run = true;
 
@@ -11,8 +10,7 @@ void mainCycle(){
 
 	while (run) {
 
-		ProceedEvents();
-
+		Window::SendEvent();
 		Window::DrawAll();
 
 		SDL_Delay((1.0/60)*1000);

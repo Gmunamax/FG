@@ -7,10 +7,10 @@ void WindowDrawing::Draw(){
 
 			t1 = std::chrono::steady_clock::now();
 
-			glPushMatrix();
+			//glPushMatrix();
 			GetScene()->cam.StartDrawing();
 			GetScene()->Drawing();
-			glPopMatrix();
+			//glPopMatrix();
 			SDL_GL_SwapWindow(SDL_GL_GetCurrentWindow());
 
 			t2 = std::chrono::steady_clock::now();

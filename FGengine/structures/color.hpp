@@ -1,9 +1,12 @@
 #pragma once
-struct Color3d{
+struct Colord{
 	double r;
 	double g;
 	double b;
 	double a;
+
+	static constexpr short _gldatatype = GL_DOUBLE;
+	static constexpr short _elemcount = 4;
 };
 
 struct Color3f{
@@ -11,6 +14,9 @@ struct Color3f{
 	float g;
 	float b;
 	float a;
+
+	static constexpr short _gldatatype = GL_FLOAT;
+	static constexpr short _elemcount = 4;
 
 	Color3f(){
 		r = 0;
@@ -40,7 +46,7 @@ struct Color3i{
 	short b;
 	short a;
 
-	Color3d Color255to1f(){
+	Colord Color255to1f(){
 		return{	
 			(double)r/255,
 			(double)g/255,
