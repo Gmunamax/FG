@@ -1,4 +1,0 @@
-w a s d - Movement
-arrows - camera rotation
-r - xray
-b - exit
