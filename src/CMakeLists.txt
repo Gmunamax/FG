@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.19)
 
-project(FGengine)
-
 add_library(FGengine SHARED main.cpp)
 add_compile_options(-fPIC)
 
