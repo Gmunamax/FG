@@ -1,5 +1,4 @@
 #pragma once
-#include <SDL2/SDL.h>
 #include <vector>
 #include "windowBase.hpp"
 
@@ -23,6 +22,6 @@ public:
 
 	void Load();
 
-	static void SendEvent(SDL_Event event);
+	static void SendEvent();
 	static void DrawAll();
 };
