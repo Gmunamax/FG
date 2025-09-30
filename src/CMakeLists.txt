@@ -17,7 +17,7 @@ add_subdirectory(shaders)
 
 target_link_libraries(FGengine window)
 target_link_libraries(FGengine camera)
-target_link_libraries(FGengine model)
+# target_link_libraries(FGengine model)
 target_link_libraries(FGengine shaderprogram)
 # target_link_libraries(FGengine walking)
 # target_link_libraries(FGengine camRotation)

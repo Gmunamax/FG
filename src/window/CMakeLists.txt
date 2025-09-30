@@ -14,10 +14,9 @@ set(base
 set(self
 
 	window.cpp
-	windowBase.cpp 
-	windowBase.hpp)
+	windowBase.cpp)
 
-add_library(window ${self} ${base})
+add_library(window ${self})
 
 add_subdirectory(scene)
 target_link_libraries(window scene)

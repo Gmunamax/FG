@@ -1,43 +1,21 @@
-#include "camera.hpp"
+#include "FGengine/objects/camera.hpp"
 #include "FGengine/shaders/shaderprogram.hpp"
+#include <iostream>
 
-Camera::Camera(){}
-
-void CameraTransform::ProceedPosition(){
-	viewm = glm::translate(viewm,glm::vec3{position.x,position.y,position.z});
-}
-void CameraTransform::ProceedRotation(){
-	if(rotation.x != 0)
-		viewm = glm::rotate(viewm,(float)glm::radians(rotation.x),glm::vec3{1,0,0});
-	if(rotation.y != 0)
-		viewm = glm::rotate(viewm,(float)glm::radians(rotation.y),glm::vec3{0,1,0});
-	if(rotation.z != 0)
-		viewm = glm::rotate(viewm,(float)glm::radians(rotation.z),glm::vec3{0,0,1});
-}
-void CameraTransform::ProceedTransform(){
-	if(CameraTransform::needupdate){
-		ProceedPosition();
-		ProceedRotation();
-		needupdate = false;
-		ShaderProgram::UpdateViewMatrix();
-	}
-}
-
-
-void Camera::SetAspectRatio(double newaspectratio){
+void CameraParams::SetAspectRatio(double newaspectratio){
 	aspectratio = newaspectratio;
 }
 
-void Camera::SetViewportSize(Geometry2i newgeom){
+void CameraParams::SetViewportSize(Geometry2i newgeom){
 	glViewport(newgeom.x,newgeom.y,newgeom.w,newgeom.h);
 	viewportgeom = newgeom;
 }
 
-Geometry2i Camera::GetViewportGeom(){
+Geometry2i CameraParams::GetViewportGeom(){
 	return viewportgeom;
 }
 
-void Camera::Resize(Geometry2i newviewport){
+void CameraParams::Resize(Geometry2i newviewport){
 	SetAspectRatio((double)newviewport.w/(double)newviewport.h);
 	SetViewportSize(newviewport);
 	switch (cameratype) {
@@ -53,11 +31,11 @@ void Camera::Resize(Geometry2i newviewport){
 	}
 }
 
-void Camera::SetBackgroundColor(Colord newbgcolor){
+void CameraParams::SetBackgroundColor(Colord newbgcolor){
 	backgroundcolor = newbgcolor;
 }
 
-// void Camera::SetFocusDistance(double value){
+// void CameraParams::SetFocusDistance(double value){
 // 	nearz = value;
 // 	if(cameratype == CAMERA_FRUSTUM)
 // 		SetFrustum();
@@ -65,42 +43,31 @@ void Camera::SetBackgroundColor(Colord newbgcolor){
 // 		SetOrtho();
 // }
 
-void Camera::SetFOV(double newfov){
+void CameraParams::SetFOV(double newfov){
 	this->fov = newfov;
 }
 
-void Camera::SetFrustum(){
+void CameraParams::SetFrustum(){
 	glDepthFunc(GL_LESS);
 	projm = glm::perspective(fov,aspectratio,nearz,farz);
 	cameratype = CAMERA_FRUSTUM;
 	ShaderProgram::UpdateProjectionMatrix();
 }
 
-void Camera::SetOrtho(){
+void CameraParams::SetOrtho(){
 	glDepthFunc(GL_LESS);
 	projm = glm::ortho<double>(-aspectratio,aspectratio,-1,1,nearz,farz);
 	cameratype = CAMERA_ORTHO;
 	ShaderProgram::UpdateProjectionMatrix();
 }
 
-void Camera::SetUI(){
+void CameraParams::SetUI(){
 	glDepthFunc(GL_GEQUAL);
 	projm = glm::ortho<double>(-aspectratio,aspectratio,-1,1,nearz,farz);
 	cameratype = CAMERA_UI;
 	ShaderProgram::UpdateProjectionMatrix();
 }
 
-Colord Camera::GetBackgroundColor(){
+Colord CameraParams::GetBackgroundColor(){
 	return backgroundcolor;
-}
-
-void Camera::StartDrawing(){
-
-	glClearColor(backgroundcolor.r,backgroundcolor.g,backgroundcolor.b,backgroundcolor.a);
-	glClear(GL_COLOR_BUFFER_BIT);
-	glClear(GL_DEPTH_BUFFER_BIT);
-
-	ProceedTransform();
-	ShaderProgram::SetProjectionMatrix(&projm);
-	ShaderProgram::SetViewMatrix(&viewm);
 }

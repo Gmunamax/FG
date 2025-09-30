@@ -1,4 +1,4 @@
-#include "windowBase.hpp"
+#include "FGengine/window/windowBase.hpp"
 
 void WindowBase::InitBackend(){
 		GLenum glewres = glewInit();

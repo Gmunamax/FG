@@ -1,5 +1,5 @@
 #include <iostream>
-#include "windowScene.hpp"
+#include "FGengine/window/windowScene.hpp"
 
 void WindowDrawing::Draw(){
 	if(frameskip <= 0){

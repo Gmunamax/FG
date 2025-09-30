@@ -2,13 +2,15 @@
 
 #pragma once
 #include <SDL2/SDL.h>
-#include "FGengine/objects/camera/camera.hpp"
+#include "FGengine/objects/camera.hpp"
+#include "FGengine/structures/vertex.hpp"
 
 class Window;
 
 struct Scene{
+	using PointType = Point3d;
 
-	Camera cam;
+	Camera<> cam;
 
 	virtual void Loading(Window* window) {
 		this->win = window;

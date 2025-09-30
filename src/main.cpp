@@ -1,4 +1,5 @@
-#include "main.hpp"
+#include "FGengine/main.hpp"
+#include "FGengine/window/window.hpp"
 
 static bool run = true;
 

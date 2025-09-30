@@ -1,4 +1,4 @@
-#include "shaderprogram.hpp"
+#include "FGengine/shaders/shaderprogram.hpp"
 
 namespace ShaderProgram{
 

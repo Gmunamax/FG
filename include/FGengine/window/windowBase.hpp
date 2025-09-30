@@ -3,7 +3,7 @@
 #include <GL/glew.h>
 #include <iostream>
 
-#include "scene/windowScene.hpp"
+#include "windowScene.hpp"
 #include "data/position.hpp"
 #include "data/flags.hpp"
 #include "data/title.hpp"

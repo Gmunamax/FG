@@ -1,4 +1,4 @@
-#include "window.hpp"
+#include "FGengine/window/window.hpp"
 #include <SDL2/SDL.h>
 #include <iostream>
 

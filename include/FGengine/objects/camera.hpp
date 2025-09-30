@@ -1,39 +1,12 @@
 #pragma once
-#include "../properties/transform/transform.hpp"
 #include "FGengine/structures/geometry.hpp"
+#include "FGengine/structures/point.hpp"
 #include "FGengine/structures/color.hpp"
+#include "FGengine/properties/transform/worldpoint.hpp"
+#include "FGengine/shaders/shaderprogram.hpp"
 
-class CameraTransform{
-	Point3d position;
-	Point3d rotation;
-
+class CameraParams{
 protected:
-	glm::mat4 viewm {1};
-	bool needupdate = true;
-	void ProceedPosition();
-	void ProceedRotation();
-
-	void ProceedTransform();
-
-public:
-	void SetPosition(Point3d newposition){
-		position = newposition;
-		needupdate = true;
-	}
-	Point3d& GetPosition(){
-		return position;
-	}
-
-	void SetRotation(Point3d newrotation){
-		rotation = newrotation;
-		needupdate = true;
-	}
-	Point3d& GetRotation(){
-		return rotation;
-	}
-};
-
-class Camera: public CameraTransform{
 	enum CameraType{
 		CAMERA_FRUSTUM, /* Perspective */
 		CAMERA_ORTHO, 	/* Orthogonal */
@@ -54,10 +27,10 @@ class Camera: public CameraTransform{
 	Colord backgroundcolor = {0,0,0};
 
 	Geometry2i viewportgeom;
-	
-public:
-	Camera();
 
+	CameraParams(){};
+
+public:
 	void SetAspectRatio(double newaspectratio);
 
 	void SetViewportSize(Geometry2i newgeom);
@@ -72,6 +45,21 @@ public:
 	void SetFrustum();
 	void SetOrtho();
 	void SetUI();
+};
 
-	void StartDrawing();
+template<typename PointType = Point3d>
+class Camera: public CameraParams, public WorldPoint<PointType>{
+public:
+	Camera(){};
+
+	void StartDrawing(){
+
+		glClearColor(backgroundcolor.r,backgroundcolor.g,backgroundcolor.b,backgroundcolor.a);
+		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_DEPTH_BUFFER_BIT);
+
+		Camera::ProceedTransformations();
+		ShaderProgram::SetProjectionMatrix(&projm);
+		ShaderProgram::SetViewMatrix(Camera::GetMatrix());
+	}
 };
