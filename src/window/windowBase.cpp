@@ -5,7 +5,7 @@ void WindowBase::InitBackend(){
 	if(glewres != GLEW_OK)
 		std::cout << glewGetErrorString(glewres) << std::endl;
 
-	//glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_DEPTH_CLAMP);
 	glDepthRange(0.5,100);
 }
