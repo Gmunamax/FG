@@ -5,40 +5,41 @@
 #include "FGengine/structures/vertex.hpp"
 #include "FGengine/shaders/shaderprogram.hpp"
 
-class Buffer{
-	GLenum type;
-	GLuint buf;
-
-public:
-	void Select(){
-		glBindBuffer(type,buf);
-	}
-	void Generate(GLenum type){
-		glGenBuffers(1,&buf);
-		this->type = type;
-	}
-	void Delete(){
-		glDeleteBuffers(1,&buf);
-	}
-	void Load(GLsizeiptr size, const void* data, GLenum usage){
-		glBufferData(type, size, data, usage);
-	}
-	GLuint& GetBuffer(){
-		return buf;
-	}
-
-	Buffer(){}
-	~Buffer(){}
-};
-
 template<typename VertexType>
 class Drawer{
+
+	class Buffer{
+		GLenum type;
+		GLuint buf;
+
+	public:
+		void Select(){
+			glBindBuffer(type,buf);
+		}
+		void Generate(GLenum type){
+			glGenBuffers(1,&buf);
+			this->type = type;
+		}
+		void Delete(){
+			glDeleteBuffers(1,&buf);
+		}
+		void Load(GLsizeiptr size, const void* data, GLenum usage){
+			glBufferData(type, size, data, usage);
+		}
+		GLuint& GetBuffer(){
+			return buf;
+		}
+
+		Buffer(){}
+		~Buffer(){}
+	};
+
 	long long size;
 	
 	bool free = true;
 	
 	Buffer vbo;
-	Buffer ebo;
+	// Buffer ebo;
 
 	void Select();
 
@@ -65,7 +66,7 @@ template<typename VertexType> void Drawer <VertexType>::Init(){
 }
 
 template<typename VertexType> void Drawer <VertexType>::Select(){
-	VertexType::SelectVAO();
+	VertexType::SelectType();
 	vbo.Select();
 	// ebo.Select();
 }
@@ -91,7 +92,7 @@ template<typename VertexType> void Drawer <VertexType>::drawBuf(){
 template<typename VertexType>  Drawer <VertexType>::~Drawer(){
 	if(not free){
 		vbo.Delete();
-		ebo.Delete();
+		// ebo.Delete();
 	}
 }
 

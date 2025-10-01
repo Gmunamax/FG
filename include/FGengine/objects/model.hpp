@@ -7,8 +7,8 @@
 template<typename VertexType>
 class Model: public Transform<typename VertexType::VertexPosition::DataType>, public Drawer<VertexType>{
 
-	typename VertexType::VertexPosition::DataType collidepos;
-	typename VertexType::VertexPosition::DataType collidescale;
+	// typename VertexType::VertexPosition::DataType collidepos;
+	// typename VertexType::VertexPosition::DataType collidescale;
 
 public:
 	Model(){};

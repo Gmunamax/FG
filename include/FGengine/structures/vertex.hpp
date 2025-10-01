@@ -2,46 +2,6 @@
 #include <GL/glew.h>
 #include "point.hpp"
 #include "color.hpp"
-#define VertexAttribs template<typename Pos, typename Col>
-
-VertexAttribs class Vertex;
-
-VertexAttribs struct VertexAO{
-	static inline GLuint vao;
-	static inline bool ready;
-
-	static void Quit(){
-		glDeleteVertexArrays(1,&vao);
-	}
-	static void SelectVAO(){
-		glBindVertexArray(vao);
-	}
-
-	static void Init(){
-		if(not ready){
-			glGenVertexArrays(1,&vao);
-			SelectVAO();
-			SetPos();
-			SetCol();
-			ready = true;
-		}
-	}
-
-protected:
-	VertexAO(){}
-
-private:
-	static void SetPos(){
-		std::cout << Pos::_elemcount << std::endl;
-		glVertexAttribPointer(0, Pos::_elemcount, Pos::_gldatatype, false, sizeof(Pos)+sizeof(Col), 0);
-		glEnableVertexAttribArray(0);
-	}
-	static void SetCol(){
-		glVertexAttribPointer(1, Col::_elemcount, Col::_gldatatype, false, sizeof(Pos)+sizeof(Col), (void*)sizeof(Pos));
-		glEnableVertexAttribArray(1);
-	}
-
-};
 
 template<typename Type> 
 struct VertexType{
@@ -86,14 +46,74 @@ public:
 	}
 };
 
-VertexAttribs class Vertex: public VertexAO<Pos,Col>, public VertexPosition<Pos>, public VertexColor<Col>{
+template<typename NormalType>
+class VertexNormal: public VertexType<NormalType>{
+	NormalType normal;
+
+protected:
+	VertexNormal(NormalType normal){
+		SetNormal(normal);
+	}
+	VertexNormal(){}
+
 public:
-	Vertex(Pos pos, Col col):
-		Vertex::VertexPosition(pos),
-		Vertex::VertexColor(col)
-	{}
-	Vertex(){}
+	void SetNormal(NormalType normal){
+		this->normal = normal;
+	}
+	NormalType& GetNormal(){
+		return normal;
+	}
 };
 
-using Vertex2d = Vertex<Point2d,Colord>;
-using Vertex3d = Vertex<Point3d,Colord>;
+template<typename Pos, typename Col, typename Normal = Point3d>
+class Vertex: public VertexPosition<Pos>, public VertexColor<Col>, public VertexNormal<Normal>{
+public:
+	Vertex(Pos pos, Col col, Normal normal):
+		Vertex::VertexPosition(pos),
+		Vertex::VertexColor(col),
+		Vertex::VertexNormal(normal)
+	{}
+	Vertex(){}
+
+	static void DeleteType(){
+		glDeleteVertexArrays(1,&vao);
+	}
+	static void SelectType(){
+		glBindVertexArray(vao);
+	}
+
+	static void Init(){
+		if(not ready){
+			glGenVertexArrays(1,&vao);
+			SelectType();
+
+			ApplyPosition();
+			ApplyColor();
+			ApplyNormal();
+
+			ready = true;
+		}
+	}
+
+private:
+	static void ApplyPosition(){
+		glVertexAttribPointer(0, Pos::_elemcount, Pos::_gldatatype, false, stride, 0);
+		glEnableVertexAttribArray(0);
+	}
+	static void ApplyColor(){
+		glVertexAttribPointer(1, Col::_elemcount, Col::_gldatatype, false, stride, (void*)sizeof(Pos));
+		glEnableVertexAttribArray(1);
+	}
+	static void ApplyNormal(){
+		glVertexAttribPointer(2, Normal::_elemcount, Normal::_gldatatype, false, stride, (void*)(sizeof(Pos)+sizeof(Col)));
+		glEnableVertexAttribArray(2);
+	}
+
+	static const int stride = sizeof(Pos)+sizeof(Col)+sizeof(Normal);
+
+	static inline GLuint vao;
+	static inline bool ready;
+};
+
+using Vertex2d = Vertex<Point2d,Colord,Point2d>; /* Note: Normals in 2d space are useless. They're still here, because I don't know exactly what to do with them, should they be here or not. */
+using Vertex3d = Vertex<Point3d,Colord,Point3d>;
