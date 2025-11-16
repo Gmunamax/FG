@@ -6,26 +6,26 @@
 #include "FGengine/structures/vertex.hpp"
 #include "FGengine/shaders/shaderprogram.hpp"
 
-template<typename VertexType>
 class ElemBuffer{
 	static inline constexpr short target = GL_ELEMENT_ARRAY_BUFFER;
 	static inline constexpr short dividemode = GL_TRIANGLE_STRIP;
 	static inline constexpr short usage = GL_STATIC_DRAW;
+	static inline constexpr short gldatatype = GL_UNSIGNED_INT;
+	using datatype = unsigned int;
 	
 	class FaceLocation{
-		SizeType offset;
-		SizeType size;
-		
-		void Select(){
-			glBindBuffer(target,buf);
-		}
-		
 	public:
 		using SizeType = short;
 
+	private:
+
+		SizeType offset;
+		SizeType size;
+		
+	public:
+
 		void Draw(){
-			Select();
-			glDrawElements(dividemode,size,offset);
+			glDrawElements(dividemode,size,gldatatype,(void*)&offset);
 		}
 		FaceLocation(SizeType offset, SizeType size){
 			this->offset = offset;
@@ -48,20 +48,21 @@ protected:
 		glBindBuffer(target, buf);
 	}
 
-	void Load(std::vector<std::vector<unsigned int>>& ptrtoprops){
-		std::vector<unsigned int> newbuffer;
-		for(std::vector<std::vector<unsigned int>>::const_reference face : ptrtoprops){
+	void Load(const std::vector<std::vector<datatype>>& ptrtoprops){
+		std::vector<datatype> newbuffer;
+		for(std::vector<std::vector<datatype>>::const_reference face : ptrtoprops){
 			facelocators.emplace_back(maxsize, face.size());
 			maxsize+=face.size();
 			for(short i = 0; i<=face.size(); i++)
 				newbuffer.emplace_back(face.at(i));
 		}
 		Select();
-		glBufferData(target, newbuffer.size()*sizeof(unsigned int), newbuffer.data(), usage);
+		glBufferData(target, newbuffer.size()*sizeof(datatype), newbuffer.data(), usage);
 	}
 
 	void Draw(){
-		for(std::vector<FaceLocation>::reference modelface : facelocators){
+		glBindBuffer(target,buf);
+		for(typename std::vector<FaceLocation>::reference modelface : facelocators){
 			modelface.Draw();
 		}
 	}

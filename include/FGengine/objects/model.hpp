@@ -1,30 +1,27 @@
 #pragma once
-#include <GL/glew.h>
 #include "FGengine/properties/transform/transform.hpp"
 #include "FGengine/objects/model/datastorer.hpp"
-#include "FGengine/objects/model/shader.hpp"
+#include "FGengine/objects/model/shaderhandler.hpp"
 
 template<typename VertexType>
-class Model: public ShaderProgram<VertexType>, public VertexDataStorage<VertexType>{
-
-	// typename VertexType::VertexPosition::DataType collidepos;
-	// typename VertexType::VertexPosition::DataType collidescale;
-
+class Model: public ShaderProgram<VertexType>, public Transform<typename VertexType::VertexPosition::DataType>, public VertexDataStorage<VertexType>{
 public:
+
 	Model(){};
 
-	void Init();
+	void Init(){
+		Model::VertexDataStorage::Init();
+	}
 
-	void Draw();
+	void Select(){
+		Model::VertexDataStorage::Select();
+		Model::ShaderHandler::Select();
+	}
+
+	void Draw(){
+		Model::Select();
+		Model::ResetMatrix();
+		Model::ProceedTransformations();
+		Model::DrawData();
+	}
 };
-
-template<typename VertexType> void Model<VertexType>::Init(){
-	Model::VertexDataStorage::Init();
-}
-
-template<typename VertexType> void Model<VertexType>::Draw(){
-	Model::Select();
-	Model::ProceedTransformations();
-	ShaderProgram::UpdateShaderData();
-	Model::DrawData();
-}

@@ -2,36 +2,36 @@
 #include "FGengine/shaders/shaderprogram.hpp"
 #include <iostream>
 
-void CameraParams::SetAspectRatio(double newaspectratio){
+void AspectRatio::SetAspectRatio(double newaspectratio){
 	aspectratio = newaspectratio;
 }
 
-void CameraParams::SetViewportSize(Geometry2i newgeom){
+void Viewport::SetViewportGeom(Geometry2i newgeom){
 	glViewport(newgeom.x,newgeom.y,newgeom.w,newgeom.h);
 	viewportgeom = newgeom;
 }
 
-Geometry2i CameraParams::GetViewportGeom(){
+Geometry2i Viewport::GetViewportGeom(){
 	return viewportgeom;
 }
 
-void CameraParams::Resize(Geometry2i newviewport){
+void Viewport::Resize(Geometry2i newviewport){
 	SetAspectRatio((double)newviewport.w/(double)newviewport.h);
 	SetViewportSize(newviewport);
-	switch (cameratype) {
-	case CAMERA_FRUSTUM:
-		SetFrustum();
-		break;
-	case CAMERA_ORTHO:
-		SetOrtho();
-		break;
-	case CAMERA_UI:
-		SetUI();
-		break;
-	}
+	// switch (cameratype) {
+	// case CAMERA_FRUSTUM:
+	// 	SetFrustum();
+	// 	break;
+	// case CAMERA_ORTHO:
+	// 	SetOrtho();
+	// 	break;
+	// case CAMERA_UI:
+	// 	SetUI();
+	// 	break;
+	// }
 }
 
-void CameraParams::SetBackgroundColor(Colord newbgcolor){
+void Background::SetBackgroundColor(Colord newbgcolor){
 	backgroundcolor = newbgcolor;
 }
 
@@ -43,31 +43,31 @@ void CameraParams::SetBackgroundColor(Colord newbgcolor){
 // 		SetOrtho();
 // }
 
-void CameraParams::SetFOV(double newfov){
+void FOV::SetFOV(double newfov){
 	this->fov = newfov;
 }
 
-void CameraParams::SetFrustum(){
+void CameraType::SetFrustum(){
 	glDepthFunc(GL_LESS);
 	projm = glm::perspective(fov,aspectratio,nearz,farz);
 	cameratype = CAMERA_FRUSTUM;
 	ShaderProgram::UpdateProjectionMatrix();
 }
 
-void CameraParams::SetOrtho(){
+void CameraType::SetOrtho(){
 	glDepthFunc(GL_LESS);
 	projm = glm::ortho<double>(-aspectratio,aspectratio,-1,1,nearz,farz);
 	cameratype = CAMERA_ORTHO;
 	ShaderProgram::UpdateProjectionMatrix();
 }
 
-void CameraParams::SetUI(){
+void CameraType::SetUI(){
 	glDepthFunc(GL_GEQUAL);
 	projm = glm::ortho<double>(-aspectratio,aspectratio,-1,1,nearz,farz);
 	cameratype = CAMERA_UI;
 	ShaderProgram::UpdateProjectionMatrix();
 }
 
-Colord CameraParams::GetBackgroundColor(){
+Colord Background::GetBackgroundColor(){
 	return backgroundcolor;
 }

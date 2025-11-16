@@ -6,15 +6,15 @@ class VertArray{
 	GLuint buf;
 
 	void ApplyPosition(){
-		glVertexAttribPointer(0, VertexType::VertexPosition::DataType::_elemcount, VertexType::VertexPosition::DataType::_gldatatype, false, Property<VertexType::VertexPositon>::GetStride(), 0);
+		glVertexAttribPointer(0, VertexType::VertexPosition::DataType::_elemcount, VertexType::VertexPosition::DataType::_gldatatype, false, VertexType::GetStride(), VertexType::VertexPosition::GetOffset());
 		glEnableVertexAttribArray(0);
 	}
 	void ApplyColor(){
-		glVertexAttribPointer(1, VertexType::VertexColor::DataType::_elemcount, VertexType::VertexColor::DataType::_gldatatype, false, Property<VertexType::VertexPositon>::GetStride(), 0);
+		glVertexAttribPointer(1, VertexType::VertexColor::DataType::_elemcount, VertexType::VertexColor::DataType::_gldatatype, false, VertexType::GetStride(), VertexType::VertexColor::GetOffset());
 		glEnableVertexAttribArray(1);
 	}
 	void ApplyNormal(){
-		glVertexAttribPointer(2, VertexType::VertexNormal::DataType::_elemcount, VertexType::VertexNormal::DataType::_gldatatype, false, Property<VertexType::VertexPositon>::GetStride(), 0);
+		glVertexAttribPointer(2, VertexType::VertexNormal::DataType::_elemcount, VertexType::VertexNormal::DataType::_gldatatype, false, VertexType::GetStride(), VertexType::VertexNormal::GetOffset());
 		glEnableVertexAttribArray(2);
 	}
 

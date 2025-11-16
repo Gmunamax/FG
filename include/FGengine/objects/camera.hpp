@@ -5,50 +5,86 @@
 #include "FGengine/properties/transform/worldpoint.hpp"
 #include "FGengine/shaders/shaderprogram.hpp"
 
-class CameraParams{
+class ShaderData{
+public:
+	glm::mat4 proj;
+	bool needupdateproj;
+	glm::mat4 view;
+	bool needupdateview;
+
+};
+
+class ShaderHandler: virtual private ShaderData{
 protected:
-	enum CameraType{
+	void SendMatrix(){
+		if(needupdateview){
+			glUniformMatrix4fv( glGetUniformLocation(shaderprogram, "viewmatrix"), 1, GL_FALSE, glm::value_ptr((glm::mat4)*viewm));
+			needupdateview = false;
+		}
+
+		if(needupdateproj){
+			glUniformMatrix4fv( glGetUniformLocation(shaderprogram, "projectionmatrix"), 1, GL_FALSE, glm::value_ptr((glm::mat4)*projm));
+			needupdateproj = false;
+		}
+	}
+};
+
+class AspectRatio{
+	double aspectratio = 1;
+
+public:
+	void SetAspectRatio(double newaspectratio);
+	double GetAspectRatio();
+};
+
+class FOV{
+	double fov = 75;
+
+public:
+	void SetFOV(double);
+	double GetFOV();
+};
+
+class ViewDistance{
+	double nearz = 1;
+	double farz = 200;
+};
+
+class Viewport{
+	Geometry2i viewportgeom;
+
+public:
+	void SetViewportGeom(Geometry2i newgeom);
+	Geometry2i GetViewportGeom();
+	void Resize(Geometry2i newviewport);
+};
+
+class Background{
+	Colord backgroundcolor = {0,0,0};
+
+public:
+	void SetBackgroundColor(Colord newbgcolor);
+	Colord GetBackgroundColor();
+};
+
+class CameraType{
+protected:
+	enum CameraTypeEnum{
 		CAMERA_FRUSTUM, /* Perspective */
 		CAMERA_ORTHO, 	/* Orthogonal */
 		CAMERA_UI		/* Orthogonal with inverted depth-test */
 	};
 
-	glm::mat4 projm {1};
-
-	double nearz = 1;
-	double farz = 200;
-	double fov = 75;
-
-	double aspectratio = 1;
-	double zoom = 1;
-
-	CameraType cameratype = CAMERA_ORTHO;
-
-	Colord backgroundcolor = {0,0,0};
-
-	Geometry2i viewportgeom;
-
-	CameraParams(){};
+	CameraTypeEnum cameratype = CAMERA_ORTHO;
 
 public:
-	void SetAspectRatio(double newaspectratio);
-
-	void SetViewportSize(Geometry2i newgeom);
-	Geometry2i GetViewportGeom();
-	void Resize(Geometry2i newviewport);
-
-	void SetBackgroundColor(Colord newbgcolor);
-	Colord GetBackgroundColor();
-
-	void SetFOV(double);
-
 	void SetFrustum();
 	void SetOrtho();
 	void SetUI();
 };
 
 template<typename PointType = Point3d>
-class Camera: public CameraParams, public WorldPoint<PointType>{
+class Camera: public WorldPoint<PointType>, public CameraType, public Background, pubilc Viewport, public ViewDistance, public FOV, public AspectRatio{
 public:
 	Camera(){};
 

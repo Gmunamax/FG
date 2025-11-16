@@ -5,7 +5,6 @@
 
 template<typename PointType>
 class Transform: public Position<PointType>, public Rotation<PointType>, public Scale<PointType>{
-	glm::mat4 mat {1};
 
 protected:
 	void ProceedTransformations();
@@ -15,15 +14,9 @@ protected:
 };
 
 template<typename PointType> void Transform<PointType>::ProceedTransformations(){
-	// if (not ( Transform::Position::needupdate or
-	// 	 Transform::Rotation::needupdate or
-	// 	 Transform::Scale::needupdate ) )
-	// 	return;
-	
-	mat = glm::mat4{1};
-	Transform::ProceedPosition(mat);
-	Transform::ProceedRotation(mat);
-	Transform::ProceedScale(mat);
+	Transform::ProceedPosition();
+	Transform::ProceedRotation();
+	Transform::ProceedScale();
 }
 
 template<typename PointType> glm::mat4* Transform<PointType>::GetMatrix(){

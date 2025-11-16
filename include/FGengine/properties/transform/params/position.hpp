@@ -1,12 +1,16 @@
 #pragma once
 #include <glm/gtc/matrix_transform.hpp>
+#include "FGengine/objects/model/shaderdata.hpp"
 
 template <typename PointType>
-class Position{
-protected:
+class Position: virtual private ShaderData{
 	PointType position;
+
+protected:
 	
-	void ProceedPosition(glm::mat4& mat);
+	void ProceedPosition(){
+		objm = glm::translate(objm,position);
+	}
 
 public:
 	PointType& GetPosition(){
@@ -16,7 +20,3 @@ public:
 		position = newposition;
 	}
 };
-
-template<typename PointType> void Position<PointType>::ProceedPosition(glm::mat4& mat){
-	mat = glm::translate(mat,glm::vec3{position.x,position.y,position.z});
-}

@@ -3,52 +3,55 @@
 #include "point.hpp"
 #include "color.hpp"
 
-template<typename Type> 
-struct VertexType{
+template<typename Type, class Base> 
+class VertexType{
+protected:
 	using DataType = Type;
+	DataType data;
+	static inline const short offset = offsetof(Base, data);
+
+public:
+	static short GetOffset(){
+		return VertexType::offset;
+	}
 };
 
-template<typename PosType>
-class VertexPosition: public VertexType<PosType>{
-	PosType position;
-
+template<typename PosType, class Base>
+class VertexPosition: public VertexType<PosType,Base>{
 protected:
 	VertexPosition(PosType position){
-		this->position = position;
+		SetPosition(position);
 	}
 	VertexPosition(){}
 
 public:
-	void SetPosition(PosType position){
-		this->position = position;
+	void SetPosition(PosType newposition){
+		this->data = newposition;
 	}
 	PosType& GetPosition(){
-		return position;
+		return this->data;
 	}
 };
 
-template<typename ColType>
-class VertexColor: public VertexType<ColType>{
-	ColType color;
-
+template<typename ColType, typename Base>
+class VertexColor: public VertexType<ColType, Base>{
 protected:
 	VertexColor(ColType color){
-		this->color = color;
+		SetColor(color);
 	}
 	VertexColor(){}
 
 public:
-	void SetColor(ColType color){
-		this->color = color;
+	void SetColor(ColType newcolor){
+		this->data = newcolor;
 	}
 	ColType& GetColor(){
-		return color;
+		return this->data;
 	}
 };
 
-template<typename NormalType>
-class VertexNormal: public VertexType<NormalType>{
-	NormalType normal;
+template<typename NormalType, typename Base>
+class VertexNormal: public VertexType<NormalType, Base>{
 
 protected:
 	VertexNormal(NormalType normal){
@@ -57,16 +60,16 @@ protected:
 	VertexNormal(){}
 
 public:
-	void SetNormal(NormalType normal){
-		this->normal = normal;
+	void SetNormal(NormalType newnormal){
+		this->data = newnormal;
 	}
 	NormalType& GetNormal(){
-		return normal;
+		return this->data;
 	}
 };
 
 template<typename Pos, typename Col, typename Normal = Point3d>
-class Vertex: public VertexPosition<Pos>, public VertexColor<Col>, public VertexNormal<Normal>{
+class Vertex: public VertexPosition<Pos,Vertex<Pos,Col,Normal>>, public VertexColor<Col, Vertex<Pos,Col,Normal>>, public VertexNormal<Normal, Vertex<Pos,Col,Normal>>{
 public:
 	Vertex(Pos pos, Col col, Normal normal):
 		Vertex::VertexPosition(pos),
@@ -75,29 +78,13 @@ public:
 	{}
 	Vertex(){}
 
-	static void DeleteType(){
-		glDeleteVertexArrays(1,&vao);
-	}
-	static void SelectType(){
-		glBindVertexArray(vao);
-	}
-
-	static void Init(){
-		if(not ready){
-			glGenVertexArrays(1,&vao);
-			SelectType();
-
-			Vertex::ApplyPosition();
-			Vertex::ApplyColor();
-			Vertex::ApplyNormal();
-
-			ready = true;
-		}
+	static int GetStride(){
+		return stride;
 	}
 
 private:
 
-	static const int stride = sizeof(Pos)+sizeof(Col)+sizeof(Normal);
+	static const int stride = sizeof(Vertex);
 
 	static inline GLuint vao;
 	static inline bool ready;

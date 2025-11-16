@@ -16,7 +16,7 @@ protected:
 	void Init(){
 		glGenBuffers(1,&buf);
 	}
-	void Load(std::vector<VertexType>& data){
+	void Load(const std::vector<VertexType>& data){
 		glBufferData(target, sizeof(VertexType)*data.size(), &data, usage);
 	}
 	void Delete(){

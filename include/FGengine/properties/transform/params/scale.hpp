@@ -1,12 +1,16 @@
 #pragma once
 #include <glm/gtc/matrix_transform.hpp>
+#include "FGengine/objects/model/shaderdata.hpp"
 
 template <typename PointType>
-class Scale{
-protected:
+class Scale: virtual private ShaderData{
 	PointType scale {1};
 
-	void ProceedScale(glm::mat4& mat);
+protected:
+
+	void ProceedScale(){
+		objm = glm::scale(objm,scale);
+	}
 
 public:
 	PointType& GetScale(){
@@ -16,7 +20,3 @@ public:
 		scale = newscale;
 	}
 };
-
-template<typename PointType> void Scale<PointType>::ProceedScale(glm::mat4& mat){
-	mat = glm::scale(mat,glm::vec3(scale.x,scale.y,scale.z));
-}
