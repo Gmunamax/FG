@@ -87,27 +87,15 @@ public:
 			glGenVertexArrays(1,&vao);
 			SelectType();
 
-			ApplyPosition();
-			ApplyColor();
-			ApplyNormal();
+			Vertex::ApplyPosition();
+			Vertex::ApplyColor();
+			Vertex::ApplyNormal();
 
 			ready = true;
 		}
 	}
 
 private:
-	static void ApplyPosition(){
-		glVertexAttribPointer(0, Pos::_elemcount, Pos::_gldatatype, false, stride, 0);
-		glEnableVertexAttribArray(0);
-	}
-	static void ApplyColor(){
-		glVertexAttribPointer(1, Col::_elemcount, Col::_gldatatype, false, stride, (void*)sizeof(Pos));
-		glEnableVertexAttribArray(1);
-	}
-	static void ApplyNormal(){
-		glVertexAttribPointer(2, Normal::_elemcount, Normal::_gldatatype, false, stride, (void*)(sizeof(Pos)+sizeof(Col)));
-		glEnableVertexAttribArray(2);
-	}
 
 	static const int stride = sizeof(Pos)+sizeof(Col)+sizeof(Normal);
 

@@ -1,11 +1,11 @@
 #pragma once
 #include <GL/glew.h>
 #include "FGengine/properties/transform/transform.hpp"
-#include "FGengine/properties/buffer/buffer.hpp"
-#include "FGengine/shaders/shaderprogram.hpp"
+#include "FGengine/objects/model/datastorer.hpp"
+#include "FGengine/objects/model/shader.hpp"
 
 template<typename VertexType>
-class Model: public Transform<typename VertexType::VertexPosition::DataType>, public Drawer<VertexType>{
+class Model: public ShaderProgram<VertexType>, public VertexDataStorage<VertexType>{
 
 	// typename VertexType::VertexPosition::DataType collidepos;
 	// typename VertexType::VertexPosition::DataType collidescale;
@@ -13,11 +13,18 @@ class Model: public Transform<typename VertexType::VertexPosition::DataType>, pu
 public:
 	Model(){};
 
+	void Init();
+
 	void Draw();
 };
 
+template<typename VertexType> void Model<VertexType>::Init(){
+	Model::VertexDataStorage::Init();
+}
+
 template<typename VertexType> void Model<VertexType>::Draw(){
+	Model::Select();
 	Model::ProceedTransformations();
-	ShaderProgram::SetObjectMatrix(Model::Transform::GetMatrix());
-	Model::drawBuf();
+	ShaderProgram::UpdateShaderData();
+	Model::DrawData();
 }
