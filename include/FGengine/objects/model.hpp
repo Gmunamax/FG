@@ -4,7 +4,7 @@
 #include "FGengine/objects/model/shaderhandler.hpp"
 
 template<typename VertexType>
-class Model: public ShaderProgram<VertexType>, public Transform<typename VertexType::VertexPosition::DataType>, public VertexDataStorage<VertexType>{
+class Model: public ShaderHandler<VertexType>, public Transform<typename VertexType::VertexPosition::DataType>, public VertexDataStorage<VertexType>{
 public:
 
 	Model(){};

@@ -4,13 +4,17 @@
 #include "FGengine/structures/color.hpp"
 #include "FGengine/properties/transform/worldpoint.hpp"
 #include "FGengine/shaders/shaderprogram.hpp"
+#include "FGengine/shaders/shaderproperty.hpp"
 
 class ShaderData{
 public:
-	glm::mat4 proj;
-	bool needupdateproj;
-	glm::mat4 view;
-	bool needupdateview;
+
+	Uniforms::Umat4 proj {"fg_projectionmatrix"};
+	Uniforms::Umat4 view {"fg_viewmatrix"};
+	// glm::mat4 proj;
+	// bool needupdateproj;
+	// glm::mat4 view;
+	// bool needupdateview;
 
 };
 
