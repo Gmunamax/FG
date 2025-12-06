@@ -5,12 +5,14 @@
 #include "FGengine/properties/transform/worldpoint.hpp"
 #include "FGengine/shaders/shaderprogram.hpp"
 #include "FGengine/shaders/shaderproperty.hpp"
+#include "FGengine/shaders/shader.hpp"
 
 class ShaderData{
 public:
 
 	Uniforms::Umat4 proj {"fg_projectionmatrix"};
 	Uniforms::Umat4 view {"fg_viewmatrix"};
+	Uniforms::SUmat4 sproj {"fg_projectionmatrix"};
 	// glm::mat4 proj;
 	// bool needupdateproj;
 	// glm::mat4 view;
@@ -21,6 +23,7 @@ public:
 class ShaderHandler: virtual private ShaderData{
 protected:
 	void SendMatrix(){
+		Shader::SetUniformValueForAllByName("fg_projectionmatrix",proj);
 		if(needupdateview){
 			glUniformMatrix4fv( glGetUniformLocation(shaderprogram, "viewmatrix"), 1, GL_FALSE, glm::value_ptr((glm::mat4)*viewm));
 			needupdateview = false;

@@ -34,11 +34,12 @@ namespace Uniforms{
 		DataTypes valuetype;
 
 
-		bool needupdate = false;
 
 		const char* name;
 		GLuint shaderid;
 
+	protected:
+		bool needupdate = false;
 		GLint uniform;
 
 	public:
@@ -73,6 +74,8 @@ namespace Uniforms{
 
 	template<typename ValueType, short EnumValueType>
 	class Uniform: private UniformData{
+		ValueType value;
+
 	public:
 		Uniform(const char* name, GLuint shaderid = 0, ValueType value = nullptr): UniformData(name, shaderid, (void*)EnumValueType){
 			SetValue(value);
@@ -81,12 +84,33 @@ namespace Uniforms{
 			SetValue((void*)newvalue);
 			Update();
 		}
+		void Send();
 
 	};
 
-	using Umat4 = Uniform<glm::mat4*, UniformData::DataTypes::Matrix4f>;
-	using Umat3 = Uniform<glm::mat3*, UniformData::DataTypes::Matrix3f>;
-	using Uvec4 = Uniform<glm::vec4*, UniformData::DataTypes::Vector4f>;
-	using Uvec3 = Uniform<glm::vec3*, UniformData::DataTypes::Vector3f>;
+	template<>
+	void Uniform<glm::mat4, UniformData::DataTypes::Matrix4f>::Send(){
+		glUniformMatrix4fv(uniform, 1, GL_FALSE, glm::value_ptr( (glm::mat4)value ));
+		needupdate = false;
+	}
+
+	
+
+	template<typename ValueType, short EnumValueType>
+	class ShaderUniform: private UniformData{
+	public:
+		ShaderUniform(const char* name, ValueType value = nullptr): UniformData(name, 0, (void*)EnumValueType){
+
+		}
+
+		void operator=(ValueType newvalue){
+
+		}
+	};
+
+	using Umat4 = Uniform<glm::mat4, UniformData::DataTypes::Matrix4f>;
+	using Umat3 = Uniform<glm::mat3, UniformData::DataTypes::Matrix3f>;
+	using Uvec4 = Uniform<glm::vec4, UniformData::DataTypes::Vector4f>;
+	using Uvec3 = Uniform<glm::vec3, UniformData::DataTypes::Vector3f>;
 
 }
