@@ -86,98 +86,14 @@ class Shader{
 
 	static ShadersList shaderslist;
 	
-
-	std::vector<Uniforms::UniformData*> uniforms;
-	std::vector<Shader*> allshaders;
-
 	GLuint shaderid;
-
-	// forward list<Pair (id,pointer)>. 
-	//Creating element:
-	//If new id is not > max.id (id is free), pair points to special Shader object that means this id is free.
-	//If new id IS > max.id (new id), adds new pair
-	//Deleting element:
-	//If id is last, deleting pair
-	//If id is not last, pair will point to null-Shader.
-	//Editing:
-	//Just changing pointer
-	//Access:
-	//In Shader class it will be used to access all elements in loop. So, for(TemporaryPointer p : thisarray) { if(!p.Empty()){ p.DoSomething() } p.GoToPointer()}
-	//For deleting/adding it's not neccesary to do max perfomance.
-
-	class ShaderSourceReader{
-		std::string* file;
-		long cpos = 0;
-		const static inline std::string stopcharacters{" \n\t:;{}()[]\\|/*+-=%#!~`.,<>\"'@$^&"};
-	
-	public:
-
-		std::string ReadWord(){
-			std::string word;
-
-			for(; IsEOF() or IsAStopCharacter((*file)[cpos]); cpos++){
-				word += (*file)[cpos];
-				cpos++;
-			}
-			return word;
-		}
-
-	private:
-		bool IsAStopCharacter(char character){
-			return stopcharacters.find(character) != std::string::npos;
-		}
-	
-	public:
-
-		bool IsEOF(){
-			return cpos <= file->length();
-		}
-
-	public:
-
-		ShaderSourceReader(std::string* file){
-			this->file = file;
-		}
-	};
 
 public:
 	
 	void Load(std::string& file){
-		ApplyUniforms(file);
+		
 	}
 
-private:
-	void ApplyUniforms(std::string& file){
-		std::string word;
-		ShaderSourceReader reader {&file};
-
-
-		while( !reader.IsEOF() ){
-			word = reader.ReadWord();
-			if(word == "uniform"){
-				const char* type = reader.ReadWord().c_str();
-				const char* name = reader.ReadWord().c_str();
-				AddNewUniform(name, type);
-			}
-		}
-	}
-
-	void AddNewUniform(const char* name, const char* type){
-		if(type == "vec4"){
-			uniforms.emplace_back(name, shaderid, (glm::vec4*)nullptr);
-		}
-		else if(type == "vec3"){
-			uniforms.emplace_back(name, shaderid, (glm::vec3*)nullptr);
-		}
-		else if(type == "mat4"){
-			uniforms.emplace_back(name, shaderid, (glm::mat4*)nullptr);
-		}
-		else if(type == "mat3"){
-			uniforms.emplace_back(name, shaderid, (glm::mat3*)nullptr);
-		}
-	}
-
-public:
 	template<typename UniformType>
 	static void SendUniformForAll(UniformType value){
 		for(Shader*& element : shaderslist){
