@@ -18,7 +18,7 @@ namespace Uniforms{
 	
 	protected:
 		UniformData(const char* name, GLuint shaderid, DataTypes datatype){
-			this->uniform = glGetUniformLocation(shaderid,name);
+			this->location = glGetUniformLocation(shaderid,name);
 			valuetype = datatype;
 		}
 
@@ -32,50 +32,28 @@ namespace Uniforms{
 	private:
 		void* value;
 		DataTypes valuetype;
-
-
-
 		const char* name;
-		GLuint shaderid;
 
 	protected:
 		bool needupdate = false;
-		GLint uniform;
+		GLint location;
 
 	public:
-
-		void Send(){
-			if(needupdate){
-				switch(valuetype){
-				case Matrix4f:
-					glUniformMatrix4fv(uniform, 1, GL_FALSE, glm::value_ptr( *(glm::mat4*)value ));
-					break;
-				case Matrix3f:
-					glUniformMatrix4fv(uniform, 1, GL_FALSE, glm::value_ptr( *(glm::mat3*)value ));
-					break;
-				case Vector4f:
-					glUniform4f(uniform, ((glm::vec4*)value)->x, ((glm::vec4*)value)->y, ((glm::vec4*)value)->z, ((glm::vec4*)value)->w);
-					break;
-				case Vector3f:
-					glUniform3f(uniform, ((glm::vec3*)value)->x, ((glm::vec3*)value)->y, ((glm::vec3*)value)->z);
-					break;
-				default:
-					break;
-				}
-				needupdate = false;
-			}
-		}
 
 		const char* GetName(){
 			return name;
 		}
-
+	
+		void SetShader(GLuint newshader){
+			location = glGetUniformLocation(newshader, name);
+		}
 	};
 
-	template<typename ValueType, short EnumValueType>
-	class Uniform: private UniformData{
+	template<typename ValueType>
+	class Uniform: public UniformData{
 		ValueType value;
 
+		void TemplateSend();
 	public:
 		Uniform(const char* name, GLuint shaderid = 0, ValueType value = nullptr): UniformData(name, shaderid, (void*)EnumValueType){
 			SetValue(value);
@@ -84,33 +62,34 @@ namespace Uniforms{
 			SetValue((void*)newvalue);
 			Update();
 		}
-		void Send();
+		void Send(){
+			if(needupdate){
+				TemplateSend();
+				needupdate = false;
+			}
+		}
 
 	};
-
 	template<>
-	void Uniform<glm::mat4, UniformData::DataTypes::Matrix4f>::Send(){
-		glUniformMatrix4fv(uniform, 1, GL_FALSE, glm::value_ptr( (glm::mat4)value ));
-		needupdate = false;
+	void Uniform<glm::mat4>::TemplateSend(){
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr( (glm::mat4)value ));
+	}
+	template<>
+	void Uniform<glm::mat3>::TemplateSend(){
+		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr( (glm::mat3)value ));
+	}
+	template<>
+	void Uniform<glm::vec4>::TemplateSend(){
+		glUniform4f(location, value.x, value.y, value.z, value.w);
+	}
+	template<>
+	void Uniform<glm::vec3>::TemplateSend(){
+		glUniform3f(location, value.x, value.y, value.z);
 	}
 
-	
-
-	template<typename ValueType, short EnumValueType>
-	class ShaderUniform: private UniformData{
-	public:
-		ShaderUniform(const char* name, ValueType value = nullptr): UniformData(name, 0, (void*)EnumValueType){
-
-		}
-
-		void operator=(ValueType newvalue){
-
-		}
-	};
-
-	using Umat4 = Uniform<glm::mat4, UniformData::DataTypes::Matrix4f>;
-	using Umat3 = Uniform<glm::mat3, UniformData::DataTypes::Matrix3f>;
-	using Uvec4 = Uniform<glm::vec4, UniformData::DataTypes::Vector4f>;
-	using Uvec3 = Uniform<glm::vec3, UniformData::DataTypes::Vector3f>;
+	using Umat4 = Uniform<glm::mat4>;
+	using Umat3 = Uniform<glm::mat3>;
+	using Uvec4 = Uniform<glm::vec4>;
+	using Uvec3 = Uniform<glm::vec3>;
 
 }

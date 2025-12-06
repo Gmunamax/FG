@@ -1,35 +1,90 @@
 #pragma once
 #include <vector>
 #include <string>
-#include "shaderproperty.hpp"
 #include <forward_list>
+#include "shaderproperty.hpp"
 
 class Shader{
 
 	class ShadersList{
 		std::forward_list<Shader*> shaderslist;
 
-		std::forward_list<Shader*>::iterator iteratorcarret;
-		std::forward_list<Shader*>::iterator lastelementcarret;
-		unsigned long lastelement = 0;
+		std::forward_list<Shader*>::iterator lastelementcarret =  shaderslist.end();
+		unsigned long maxid = 0;
 
 	public:
-		void MoveForward(){
-			iteratorcarret++;
+		class iterator{
+			std::forward_list<Shader*>::iterator listiterator;
+
+		public:
+			iterator(std::forward_list<Shader*>::iterator i): listiterator(i){}
+
+			Shader*& operator*(){
+				return *listiterator;
+			}
+			iterator& operator++(){
+				++listiterator;
+				return *this;
+			}
+			bool operator==(const iterator& other){
+				return listiterator == other.listiterator;
+			}
+			bool operator!=(const iterator& other){
+				return listiterator != other.listiterator;
+			}
+			bool IsFree(){
+				return *listiterator == nullptr;
+			}
+			const std::forward_list<Shader*>::iterator ToStlIterator(){
+				return listiterator;
+			}
+		};
+
+		iterator begin(){
+			return {shaderslist.begin()};
+		}
+		iterator end(){
+			return {shaderslist.end()};
 		}
 
-		void AddElement(Shader* element, unsigned long id){
+		//returns true on success, false otherwise
+		bool SetElement(unsigned long id, Shader* element){
+			if(id > maxid){
+				return;
+			}
+			else{
+				std::forward_list<Shader*>::iterator itr = shaderslist.begin();
+				for(int i = 0; i != id; i++){
+					++itr;
+				}
+				*itr = element;
+			}
 			//Move carret to here and rewrite pointer to shader
 			//Error if id > maxid (if not do it, we'll have to create elements with ids from maxid to id and delete them and this once this id becomes free)
 		}
 		void AddElementBack(Shader* element){
+			//So, because we can't add element to end of list, we'll add it to begining. And id 1 will mean last element of list
+			shaderslist.push_front(element);
+			maxid++;
 			//Maybe we'll store carret pointing to last element, so we'll copy it here, add new element to shaderslist and give it this new shader.
 		}
-		std::forward_list<Shader*>::const_reference GetAtCarret(){
-			//Return element at iteratorcarret
+		void RemoveElement(unsigned long id){
+			SetElement(id, nullptr);
+			if(id == maxid){
+				iterator i = shaderslist.before_begin();
+				iterator afteri = i;
+				++afteri;
+				while(afteri.IsFree()){
+					shaderslist.erase_after(i.ToStlIterator());
+					++i;
+					++afteri;
+				}
+			}
 		}
-		
+
 	};
+
+	static ShadersList shaderslist;
 	
 
 	std::vector<Uniforms::UniformData*> uniforms;
@@ -123,21 +178,13 @@ private:
 	}
 
 public:
-	Uniforms::UniformData& GetUniformByName(const char* name){
-		for(std::vector<Uniforms::UniformData*>::reference unif : uniforms){
-			if(unif.GetName() == name){
-				return unif;
+	template<typename UniformType>
+	static void SendUniformForAll(UniformType value){
+		for(Shader*& element : shaderslist){
+			if(element != nullptr){
+				value.SetShader(element->shaderid);
+				value.Send();
 			}
-		}
-	}
-
-	static void SetUniformValueForAllByName(Uniforms::UniformData value){
-		value.GetName()
-	}
-	
-	void Update(){
-		for(std::vector<Uniforms::UniformData*>::reference unif : uniforms){
-			unif.Send();
 		}
 	}
 
