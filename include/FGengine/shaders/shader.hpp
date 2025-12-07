@@ -100,17 +100,23 @@ public:
 	};
 	
 	void Load(std::vector<ObjectDescription> descriptions){
-		shaderid = LinkShader( CompileObjects(descriptions) );
+		if(shaderid == 0){
+			LinkShader( CompileObjects(descriptions) );
+		}
 	}
 
 private:
 	
 	std::vector<GLuint> CompileObjects(std::vector<ObjectDescription> descriptions);
 
-	GLuint LinkShader(std::vector<GLuint> shaderparts);
+	void LinkShader(std::vector<GLuint> shaderparts);
 
 	void CheckLoadingForErrors();
 
+	void CheckForError(GLenum type, const char* errorheader);
+
+	static const char* compileerror;
+	static const char* linkerror;
 
 public:
 
