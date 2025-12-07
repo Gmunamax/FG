@@ -2,7 +2,10 @@
 #include <vector>
 #include <string>
 #include <forward_list>
-#include "shaderproperty.hpp"
+#include <fstream>
+#include <iostream>
+#include <GL/glew.h>
+#include "uniform.hpp"
 
 class Shader{
 
@@ -50,7 +53,7 @@ class Shader{
 		//returns true on success, false otherwise
 		bool SetElement(unsigned long id, Shader* element){
 			if(id > maxid){
-				return;
+				return false;
 			}
 			else{
 				std::forward_list<Shader*>::iterator itr = shaderslist.begin();
@@ -58,6 +61,7 @@ class Shader{
 					++itr;
 				}
 				*itr = element;
+				return true;
 			}
 			//Move carret to here and rewrite pointer to shader
 			//Error if id > maxid (if not do it, we'll have to create elements with ids from maxid to id and delete them and this once this id becomes free)
@@ -86,13 +90,29 @@ class Shader{
 
 	static ShadersList shaderslist;
 	
-	GLuint shaderid;
+	GLuint shaderid = 0;
 
 public:
+
+	struct ObjectDescription{
+		GLuint type;
+		std::vector<const char*> filepathes;
+	};
 	
-	void Load(std::string& file){
-		
+	void Load(std::vector<ObjectDescription> descriptions){
+		shaderid = LinkShader( CompileObjects(descriptions) );
 	}
+
+private:
+	
+	std::vector<GLuint> CompileObjects(std::vector<ObjectDescription> descriptions);
+
+	GLuint LinkShader(std::vector<GLuint> shaderparts);
+
+	void CheckLoadingForErrors();
+
+
+public:
 
 	template<typename UniformType>
 	static void SendUniformForAll(UniformType value){
