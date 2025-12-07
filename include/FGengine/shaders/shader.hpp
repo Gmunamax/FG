@@ -13,7 +13,7 @@ class Shader{
 		std::forward_list<Shader*> shaderslist;
 
 		std::forward_list<Shader*>::iterator lastelementcarret =  shaderslist.end();
-		unsigned long maxid = 0;
+		std::forward_list<Shader*>::size_type size = 0;
 
 	public:
 		class iterator{
@@ -50,9 +50,11 @@ class Shader{
 			return {shaderslist.end()};
 		}
 
+		using size_type = std::forward_list<Shader*>::size_type;
+
 		//returns true on success, false otherwise
 		bool SetElement(unsigned long id, Shader* element){
-			if(id > maxid){
+			if(id > size){
 				return false;
 			}
 			else{
@@ -64,31 +66,47 @@ class Shader{
 				return true;
 			}
 			//Move carret to here and rewrite pointer to shader
-			//Error if id > maxid (if not do it, we'll have to create elements with ids from maxid to id and delete them and this once this id becomes free)
+			//Error if id > size (if not do it, we'll have to create elements with ids from size to id and delete them and this once this id becomes free)
 		}
-		void AddElementBack(Shader* element){
-			//So, because we can't add element to end of list, we'll add it to begining. And id 1 will mean last element of list
-			shaderslist.push_front(element);
-			maxid++;
-			//Maybe we'll store carret pointing to last element, so we'll copy it here, add new element to shaderslist and give it this new shader.
+		
+		//returns id that will be chosen for element
+		std::forward_list<Shader*>::size_type AddElementBack(Shader* element){
+			iterator beforeit = shaderslist.before_begin();
+			iterator it = shaderslist.begin();
+			for(std::forward_list<Shader*>::size_type id = 0; id < size; id++){
+				if(it.IsFree()){
+					*it = element;
+					return id;
+				}
+				++it;
+				++beforeit;
+			}
+			shaderslist.insert_after(beforeit.ToStlIterator(), element);
+			size++;
+			return size;
 		}
 		void RemoveElement(unsigned long id){
-			SetElement(id, nullptr);
-			if(id == maxid){
+			if(id == size){
 				iterator i = shaderslist.before_begin();
-				iterator afteri = i;
-				++afteri;
+				iterator afteri = shaderslist.begin();
 				while(afteri.IsFree()){
 					shaderslist.erase_after(i.ToStlIterator());
 					++i;
 					++afteri;
 				}
 			}
+			else if(id < size){
+				SetElement(id, nullptr);
+			}
+		}
+		unsigned long GetSize(){
+			return size;
 		}
 
 	};
 
 	static ShadersList shaderslist;
+	ShadersList::size_type listid;
 	
 	GLuint shaderid = 0;
 
@@ -134,6 +152,10 @@ public:
 		glUseProgram(shaderid);
 	}
 
-	Shader(){}
-	~Shader(){}
+	Shader(){
+		listid = shaderslist.AddElementBack(this);
+	}
+	~Shader(){
+		shaderslist.RemoveElement(listid);
+	}
 };
