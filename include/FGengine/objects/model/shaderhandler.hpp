@@ -9,18 +9,15 @@ class ShaderHandler: virtual private ShaderData{
 
 protected:
 	void Select(){
-		glUseProgram(shader);
-	}
-	void ResetMatrix(){
-		objm = 1;
+		// shader->Bind();
 	}
 	void SendMatrix(){
-		shader->GetUniformByName("ObjectMatrix")
+		
 		glUniformMatrix4fv( glGetUniformLocation(shader, "objectmatrix"), 1, GL_FALSE, glm::value_ptr( (glm::mat4)objm ));
 	}
 
 public:
-	void SetShader(GLuint newshader){
+	void SetShader(Shader* shader){
 		this->shader = newshader;
 	}
 };

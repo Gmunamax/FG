@@ -15,7 +15,7 @@ namespace Uniforms{
 		GLint location = 0;
 
 		void SetValue(ValueType& value){
-			this->value = value
+			this->value = value;
 			needupdate = true;
 		}
 
@@ -31,6 +31,10 @@ namespace Uniforms{
 			location = glGetUniformLocation(newshader, name);
 		}
 
+		const ValueType& GetValue(){
+			return value;
+		}
+
 		void Send(){
 			if(needupdate){
 				TemplateSend();
@@ -38,7 +42,7 @@ namespace Uniforms{
 			}
 		}
 
-		Uniform(const char* name, GLuint shaderid = 0, ValueType value = nullptr): UniformData(name, shaderid, (void*)EnumValueType){
+		Uniform(const char* name, GLuint shaderid = 0, ValueType value = 1){
 			SetValue(value);
 		}
 		void operator=(ValueType newvalue){
@@ -46,24 +50,6 @@ namespace Uniforms{
 		}
 		
 	};
-
-
-	template<>
-	void Uniform<glm::mat4>::TemplateSend(){
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr( (glm::mat4)value ));
-	}
-	template<>
-	void Uniform<glm::mat3>::TemplateSend(){
-		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr( (glm::mat3)value ));
-	}
-	template<>
-	void Uniform<glm::vec4>::TemplateSend(){
-		glUniform4f(location, value.x, value.y, value.z, value.w);
-	}
-	template<>
-	void Uniform<glm::vec3>::TemplateSend(){
-		glUniform3f(location, value.x, value.y, value.z);
-	}
 
 	using Umat4 = Uniform<glm::mat4>;
 	using Umat3 = Uniform<glm::mat3>;

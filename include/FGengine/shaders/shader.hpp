@@ -148,8 +148,8 @@ public:
 		}
 	}
 
-	void Bind(){
-		glUseProgram(shaderid);
+	const GLuint& ToGL(){
+		return shaderid;
 	}
 
 	Shader(){

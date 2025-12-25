@@ -5,8 +5,9 @@
 
 template<typename Type, class Base> 
 class VertexType{
-protected:
+public:
 	using DataType = Type;
+protected:
 	DataType data;
 	static inline const short offset = offsetof(Base, data);
 

@@ -3,78 +3,93 @@
 #include "FGengine/structures/point.hpp"
 #include "FGengine/structures/color.hpp"
 #include "FGengine/properties/transform/worldpoint.hpp"
-#include "FGengine/shaders/shaderprogram.hpp"
-#include "FGengine/shaders/shaderproperty.hpp"
+// #include "FGengine/shaders/shaderprogram.hpp"
 #include "FGengine/shaders/shader.hpp"
 
-class ShaderData{
-public:
-
+template<typename PointType = Point3f>
+class Camera: public WorldPoint<PointType>{
 	Uniforms::Umat4 proj {"fg_projectionmatrix"};
 	Uniforms::Umat4 view {"fg_viewmatrix"};
-	Uniforms::SUmat4 sproj {"fg_projectionmatrix"};
-	// glm::mat4 proj;
-	// bool needupdateproj;
-	// glm::mat4 view;
-	// bool needupdateview;
 
-};
-
-class ShaderHandler: virtual private ShaderData{
 protected:
 	void SendMatrix(){
-		Shader::SetUniformValueForAllByName("fg_projectionmatrix",proj);
-		if(needupdateview){
-			glUniformMatrix4fv( glGetUniformLocation(shaderprogram, "viewmatrix"), 1, GL_FALSE, glm::value_ptr((glm::mat4)*viewm));
-			needupdateview = false;
-		}
-
-		if(needupdateproj){
-			glUniformMatrix4fv( glGetUniformLocation(shaderprogram, "projectionmatrix"), 1, GL_FALSE, glm::value_ptr((glm::mat4)*projm));
-			needupdateproj = false;
-		}
+		Shader::SendUniformForAll(proj);
+		Shader::SendUniformForAll(view);
 	}
-};
 
-class AspectRatio{
+
+private:
 	double aspectratio = 1;
 
 public:
-	void SetAspectRatio(double newaspectratio);
-	double GetAspectRatio();
-};
+	void SetAspectRatio(double newaspectratio){
+		aspectratio = newaspectratio;
+	}
+	double GetAspectRatio(){
+		return aspectratio;
+	}
 
-class FOV{
+
+private:
 	double fov = 75;
 
 public:
-	void SetFOV(double);
-	double GetFOV();
-};
+	void SetFOV(double newfov){
+		this->fov = newfov;
+	}
+	double GetFOV(){
+		return fov;
+	}
 
-class ViewDistance{
+private:
+
 	double nearz = 1;
 	double farz = 200;
-};
 
-class Viewport{
+private:
+
 	Geometry2i viewportgeom;
 
 public:
-	void SetViewportGeom(Geometry2i newgeom);
-	Geometry2i GetViewportGeom();
-	void Resize(Geometry2i newviewport);
-};
+	void SetViewportGeom(Geometry2i newgeom){
+		glViewport(newgeom.x,newgeom.y,newgeom.w,newgeom.h);
+		viewportgeom = newgeom;
+	}
 
-class Background{
+	Geometry2i GetViewportGeom(){
+		return viewportgeom;
+	}
+
+	void Resize(Geometry2i newviewport){
+		SetAspectRatio((double)newviewport.w/(double)newviewport.h);
+		SetViewportGeom(newviewport);
+		switch (cameratype) {
+		case CAMERA_FRUSTUM:
+			SetFrustum();
+			break;
+		case CAMERA_ORTHO:
+			SetOrtho();
+			break;
+		case CAMERA_UI:
+			SetUI();
+			break;
+		}
+	}
+
+private:
+
 	Colord backgroundcolor = {0,0,0};
 
 public:
-	void SetBackgroundColor(Colord newbgcolor);
-	Colord GetBackgroundColor();
-};
+	void SetBackgroundColor(Colord newbgcolor){
+		backgroundcolor = newbgcolor;
+	}
+	Colord GetBackgroundColor(){
+		return backgroundcolor;
+	}
 
-class CameraType{
+
+
 protected:
 	enum CameraTypeEnum{
 		CAMERA_FRUSTUM, /* Perspective */
@@ -85,13 +100,28 @@ protected:
 	CameraTypeEnum cameratype = CAMERA_ORTHO;
 
 public:
-	void SetFrustum();
-	void SetOrtho();
-	void SetUI();
-};
+	void SetFrustum(){
+		glDepthFunc(GL_LESS);
+		proj = glm::perspective(fov,aspectratio,nearz,farz);
+		cameratype = CAMERA_FRUSTUM;
+		// ShaderProgram::UpdateProjectionMatrix();
+	}
+	void SetOrtho(){
+		glDepthFunc(GL_LESS);
+		proj = glm::ortho<double>(-aspectratio,aspectratio,-1,1,nearz,farz);
+		cameratype = CAMERA_ORTHO;
+		// ShaderProgram::UpdateProjectionMatrix();
+	}
 
-template<typename PointType = Point3d>
-class Camera: public WorldPoint<PointType>, public CameraType, public Background, pubilc Viewport, public ViewDistance, public FOV, public AspectRatio{
+	void SetUI(){
+		glDepthFunc(GL_GEQUAL);
+		proj = glm::ortho<double>(-aspectratio,aspectratio,-1,1,nearz,farz);
+		cameratype = CAMERA_UI;
+		// ShaderProgram::UpdateProjectionMatrix();
+	}
+
+
+
 public:
 	Camera(){};
 
@@ -102,7 +132,7 @@ public:
 		glClear(GL_DEPTH_BUFFER_BIT);
 
 		Camera::ProceedTransformations();
-		ShaderProgram::SetProjectionMatrix(&projm);
-		ShaderProgram::SetViewMatrix(Camera::GetMatrix());
+		// ShaderProgram::SetProjectionMatrix(&proj);
+		// ShaderProgram::SetViewMatrix(Camera::GetMatrix());
 	}
 };

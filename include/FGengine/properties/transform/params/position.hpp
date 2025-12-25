@@ -3,8 +3,8 @@
 #include "FGengine/objects/model/shaderdata.hpp"
 
 template <typename PointType>
-class Position: virtual private ShaderData{
-	PointType position;
+class Position: virtual protected ShaderData{
+
 
 protected:
 	
@@ -13,10 +13,5 @@ protected:
 	}
 
 public:
-	PointType& GetPosition(){
-		return position;
-	}
-	void SetPosition(PointType newposition){
-		position = newposition;
-	}
+
 };

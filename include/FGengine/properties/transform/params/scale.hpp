@@ -3,20 +3,15 @@
 #include "FGengine/objects/model/shaderdata.hpp"
 
 template <typename PointType>
-class Scale: virtual private ShaderData{
+class Scale: virtual protected ShaderData{
 	PointType scale {1};
 
 protected:
 
 	void ProceedScale(){
-		objm = glm::scale(objm,scale);
+		
 	}
 
 public:
-	PointType& GetScale(){
-		return scale;
-	}
-	void SetScale(PointType newscale){
-		scale = newscale;
-	}
+
 };
