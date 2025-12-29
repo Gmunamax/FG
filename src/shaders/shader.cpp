@@ -30,6 +30,7 @@ static GLuint CompileObject(Shader::ObjectDescription description){
 	}
 	glShaderSource(object, description.filepathes.size(), &(csources.front()), &(lenghts.front()));
 	glCompileShader(object);
+	return object;
 }
 
 void Shader::CheckForError(GLenum type, const char* errorheader){

@@ -7,7 +7,7 @@
 #include "FGengine/shaders/shaderprogram.hpp"
 
 class ElemBuffer{
-	static inline constexpr short target = GL_ELEMENT_ARRAY_BUFFER;
+	static inline constexpr int target = GL_ELEMENT_ARRAY_BUFFER;
 	static inline constexpr short dividemode = GL_TRIANGLE_STRIP;
 	static inline constexpr short usage = GL_STATIC_DRAW;
 	static inline constexpr short gldatatype = GL_UNSIGNED_INT;
@@ -53,7 +53,7 @@ protected:
 		for(std::vector<std::vector<datatype>>::const_reference face : ptrtoprops){
 			facelocators.emplace_back(maxsize, face.size());
 			maxsize+=face.size();
-			for(short i = 0; i<=face.size(); i++)
+			for(short i = 0; i < face.size(); i++)
 				newbuffer.emplace_back(face.at(i));
 		}
 		Select();
