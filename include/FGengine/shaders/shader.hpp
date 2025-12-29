@@ -12,8 +12,7 @@ class Shader{
 	class ShadersList{
 		std::forward_list<Shader*> shaderslist;
 
-		std::forward_list<Shader*>::iterator lastelementcarret =  shaderslist.end();
-		std::forward_list<Shader*>::size_type size = 0;
+		std::forward_list<Shader*>::size_type size;
 
 	public:
 		class iterator{
@@ -102,10 +101,13 @@ class Shader{
 		unsigned long GetSize(){
 			return size;
 		}
+		ShadersList(){
+			size = 0;
+		}
 
 	};
 
-	static ShadersList shaderslist;
+	static inline ShadersList shaderslist;
 	ShadersList::size_type listid;
 	
 	GLuint shaderid = 0;

@@ -20,11 +20,11 @@ protected:
 			this->objm = glm::translate(this->objm.GetValue(), position);
 
 			if(rotation.x != 0)
-				this->objm = glm::rotate(this->objm.GetValue(), (float)glm::radians(rotation.x), glm::vec3{1,0,0});
+				this->objm = glm::rotate(this->objm.GetValue(), glm::radians(rotation.x), glm::dvec3{1,0,0});
 			if(rotation.y != 0)
-				this->objm = glm::rotate(this->objm.GetValue(), (float)glm::radians(rotation.y), glm::vec3{0,1,0});
+				this->objm = glm::rotate(this->objm.GetValue(), glm::radians(rotation.y), glm::dvec3{0,1,0});
 			if(rotation.z != 0)
-				this->objm = glm::rotate(this->objm.GetValue(), (float)glm::radians(rotation.z), glm::vec3{0,0,1});
+				this->objm = glm::rotate(this->objm.GetValue(), glm::radians(rotation.z), glm::dvec3{0,0,1});
 
 			this->objm = glm::scale(this->objm.GetValue(),scale);
 

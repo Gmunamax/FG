@@ -3,7 +3,6 @@
 // #include "params/rotation.hpp"
 #include "FGengine/shaders/shader.hpp"
 
-//?
 template<typename PointType>
 class WorldPoint{
 	Uniforms::Umat4 mat{"fg_pointmatrix"};
@@ -17,11 +16,11 @@ protected:
 			mat = 1;
 			this->mat = glm::translate(this->mat.GetValue(), position);
 			if(rotation.x != 0)
-				this->mat = glm::rotate(this->mat.GetValue(), (float)glm::radians(rotation.x), glm::vec3{1,0,0});
+				this->mat = glm::rotate(this->mat.GetValue(), glm::radians(rotation.x), glm::dvec3{1,0,0});
 			if(rotation.y != 0)
-				this->mat = glm::rotate(this->mat.GetValue(), (float)glm::radians(rotation.y), glm::vec3{0,1,0});
+				this->mat = glm::rotate(this->mat.GetValue(), glm::radians(rotation.y), glm::dvec3{0,1,0});
 			if(rotation.z != 0)
-				this->mat = glm::rotate(this->mat.GetValue(), (float)glm::radians(rotation.z), glm::vec3{0,0,1});
+				this->mat = glm::rotate(this->mat.GetValue(), glm::radians(rotation.z), glm::dvec3{0,0,1});
 			needupdate = false;
 		}
 	}

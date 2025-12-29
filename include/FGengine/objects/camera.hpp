@@ -6,7 +6,7 @@
 // #include "FGengine/shaders/shaderprogram.hpp"
 #include "FGengine/shaders/shader.hpp"
 
-template<typename PointType = Point3f>
+template<typename PointType = Point3d>
 class Camera: public WorldPoint<PointType>{
 	Uniforms::Umat4 proj {"fg_projectionmatrix"};
 	Uniforms::Umat4 view {"fg_viewmatrix"};

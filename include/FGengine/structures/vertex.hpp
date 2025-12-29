@@ -3,22 +3,8 @@
 #include "point.hpp"
 #include "color.hpp"
 
-template<typename Type, class Base> 
-class VertexType{
-public:
-	using DataType = Type;
-protected:
-	DataType data;
-	static inline const short offset = offsetof(Base, data);
-
-public:
-	static short GetOffset(){
-		return VertexType::offset;
-	}
-};
-
 template<typename PosType, class Base>
-class VertexPosition: public VertexType<PosType,Base>{
+class VertexPosition{
 protected:
 	VertexPosition(PosType position){
 		SetPosition(position);
@@ -26,16 +12,27 @@ protected:
 	VertexPosition(){}
 
 public:
+	using DataType = PosType;
+
+protected:
+
+	DataType position;
+	static inline const short offset = offsetof(Base, position);
+
+public:
 	void SetPosition(PosType newposition){
-		this->data = newposition;
+		this->position = newposition;
 	}
 	PosType& GetPosition(){
-		return this->data;
+		return this->position;
+	}
+	static short GetOffset(){
+		return VertexPosition::offset;
 	}
 };
 
 template<typename ColType, typename Base>
-class VertexColor: public VertexType<ColType, Base>{
+class VertexColor{
 protected:
 	VertexColor(ColType color){
 		SetColor(color);
@@ -43,16 +40,26 @@ protected:
 	VertexColor(){}
 
 public:
+	using DataType = ColType;
+
+protected:
+	DataType color;
+	static inline const short offset = offsetof(Base, color);
+
+public:
 	void SetColor(ColType newcolor){
-		this->data = newcolor;
+		this->color = newcolor;
 	}
 	ColType& GetColor(){
-		return this->data;
+		return this->color;
+	}
+	static short GetOffset(){
+		return VertexColor::offset;
 	}
 };
 
 template<typename NormalType, typename Base>
-class VertexNormal: public VertexType<NormalType, Base>{
+class VertexNormal{
 
 protected:
 	VertexNormal(NormalType normal){
@@ -61,11 +68,21 @@ protected:
 	VertexNormal(){}
 
 public:
+	using DataType = NormalType;
+
+protected:
+	DataType normal;
+	static inline const short offset = offsetof(Base, normal);
+
+public:
 	void SetNormal(NormalType newnormal){
-		this->data = newnormal;
+		this->normal = newnormal;
 	}
 	NormalType& GetNormal(){
-		return this->data;
+		return this->normal;
+	}
+	static short GetOffset(){
+		return VertexNormal::offset;
 	}
 };
 
