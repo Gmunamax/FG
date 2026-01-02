@@ -8,7 +8,7 @@ FGengine is a simple engine for my game "FG".
 
 # PROJECT STATUS
 
-This engine is in developement stage, so a lot of fuctionality for now doesn't exist yet. Also it means that existing fuctionality can be changet at any time, so be careful if you decide to use my engine now. And I'm not a professional, I'm only learning programming, so expect bad code, problems and other bad things, but I try to prevent this from happening.
+This engine is in developement stage, so a lot of fuctionality for now doesn't exist yet. Also it means that existing fuctionality can be changed at any time, so be careful if you decide to use my engine now. Also, I'm not a professional, I'm only learning programming, so expect bad code, problems and other bad things, but I try to prevent this from happening.
 
 
 # DEPENDENCIES
