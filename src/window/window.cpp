@@ -34,33 +34,38 @@ bool needupdateevent = true;
 SDL_Event event;
 void Window::SendEvent(){
 
+	WindowBase* windowptr;
 	while(SDL_PollEvent(&event)){
 		
 		switch(event.type){
 
 		case SDL_KEYDOWN:
-			GetWindowFromID(event.key.windowID)->EventKeyPressed(event.key);
+			windowptr = GetWindowFromID(event.key.windowID);
+			if(windowptr != nullptr) 
+				windowptr->EventKeyPressed(event.key);
 			break;
 
-		case SDL_KEYUP:	
-			GetWindowFromID(event.key.windowID)->EventKeyReleased(event.key);
+		case SDL_KEYUP:
+			windowptr = GetWindowFromID(event.key.windowID);
+			if(windowptr != nullptr)
+				windowptr->EventKeyReleased(event.key);
 			break;
 
-		case SDL_WINDOWEVENT:{
-				WindowBase* w = GetWindowFromID(event.window.windowID);
-				w->Select();
+		case SDL_WINDOWEVENT:
+			windowptr = GetWindowFromID(event.window.windowID);
+			windowptr->Select();
 
-				switch(event.window.event){
+			switch(event.window.event){
 
-				case SDL_WINDOWEVENT_RESIZED:
-					w->Resize({event.window.data1,event.window.data2});
-					break;
-				case SDL_WINDOWEVENT_EXPOSED:
-					w->Update();
-					break;
-				}
+			case SDL_WINDOWEVENT_RESIZED:
+				windowptr->Resize({event.window.data1,event.window.data2});
+				break;
+			case SDL_WINDOWEVENT_EXPOSED:
+				windowptr->Update();
 				break;
 			}
+			break;
+			
 		}
 	}
 }
