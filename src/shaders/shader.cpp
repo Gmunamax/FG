@@ -28,7 +28,7 @@ static GLuint CompileObject(Shader::ObjectDescription description){
 		csources.push_back(source.c_str());
 		lenghts.push_back(source.length());
 	}
-	glShaderSource(object, description.filepathes.size(), &(csources.front()), &(lenghts.front()));
+	glShaderSource(object, description.filepathes.size(), csources.data(), lenghts.data());
 	glCompileShader(object);
 	return object;
 }
@@ -57,9 +57,14 @@ std::vector<GLuint> Shader::CompileObjects(std::vector<Shader::ObjectDescription
 }
 
 void Shader::LinkShader(std::vector<GLuint> shaderparts){
+	if(shaderid != 0)
+		Delete();
+	shaderid = glCreateProgram();
 	for(GLuint& part : shaderparts){
 		glAttachShader(shaderid, part);
 	}
 	glLinkProgram(shaderid);
 	CheckForError(GL_LINK_STATUS, linkerror);
 }
+
+Shader nullshader;

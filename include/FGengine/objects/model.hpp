@@ -9,7 +9,7 @@ public:
 
 	Model(){};
 
-	Shader* shader;
+	Shader* shader = &nullshader;
 
 	void SetShader(Shader* newshader){
 		shader = newshader;
@@ -23,13 +23,13 @@ public:
 	void Select(){
 		Model::VertexDataStorage::Select();
 		glUseProgram(shader->ToGL());
-		// Model::ShaderHandler::Select();
 	}
 
 	void Draw(){
 		Model::Select();
 		// Model::ResetMatrix();
 		Model::ProceedTransformations();
+		Model::SendMatrix();
 		Model::DrawData();
 	}
 };

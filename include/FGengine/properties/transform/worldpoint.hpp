@@ -5,7 +5,7 @@
 
 template<typename PointType>
 class WorldPoint{
-	Uniforms::Umat4 mat{"fg_pointmatrix"};
+	Uniforms::Umat4 mat{"fg_viewmatrix"};
 	bool needupdate = true;
 	PointType position{0};
 	PointType rotation{0};

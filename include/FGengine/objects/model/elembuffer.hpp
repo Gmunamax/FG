@@ -1,6 +1,5 @@
 #pragma once
 #include <GL/glew.h>
-#include <iostream>
 #include <vector>
 #include "FGengine/structures/face.hpp"
 #include "FGengine/structures/vertex.hpp"
@@ -8,9 +7,9 @@
 
 class ElemBuffer{
 	static inline constexpr int target = GL_ELEMENT_ARRAY_BUFFER;
-	static inline constexpr short dividemode = GL_TRIANGLE_STRIP;
-	static inline constexpr short usage = GL_STATIC_DRAW;
-	static inline constexpr short gldatatype = GL_UNSIGNED_INT;
+	static inline constexpr int dividemode = GL_TRIANGLE_STRIP;
+	static inline constexpr int usage = GL_STATIC_DRAW;
+	static inline constexpr int gldatatype = GL_UNSIGNED_INT;
 	using datatype = unsigned int;
 	
 	class FaceLocation{
@@ -25,7 +24,7 @@ class ElemBuffer{
 	public:
 
 		void Draw(){
-			glDrawElements(dividemode,size,gldatatype,(void*)&offset);
+			glDrawElements(dividemode,size,gldatatype,(void*)(sizeof(datatype) * offset));
 		}
 		FaceLocation(SizeType offset, SizeType size){
 			this->offset = offset;
@@ -50,10 +49,10 @@ protected:
 
 	void Load(const std::vector<std::vector<datatype>>& ptrtoprops){
 		std::vector<datatype> newbuffer;
-		for(std::vector<std::vector<datatype>>::const_reference face : ptrtoprops){
+		for(const std::vector<datatype>& face : ptrtoprops){
 			facelocators.emplace_back(maxsize, face.size());
 			maxsize+=face.size();
-			for(short i = 0; i < face.size(); i++)
+			for(short i = 0; i < face.size(); ++i)
 				newbuffer.emplace_back(face.at(i));
 		}
 		Select();

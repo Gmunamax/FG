@@ -5,34 +5,44 @@
 template<glm::length_t Lenght, typename SizeType, glm::qualifier Q = glm::packed>
 struct Point: public glm::vec<Lenght, SizeType, Q> {
 	using glm::vec<Lenght, SizeType, Q>::vec;
+
+	Point(glm::vec<Lenght, SizeType, Q> c): glm::vec<Lenght, SizeType, Q>::vec(c){}
 };
 
 template<glm::length_t Lenght, glm::qualifier Q>
 struct Point<Lenght, short, Q>: public glm::vec<Lenght, short, Q>{
 	using glm::vec<Lenght, short, Q>::vec;
 
-	static constexpr int _gldatatype = GL_SHORT;
+	static constexpr GLenum gldatatype() {return GL_SHORT;}
+
+	Point(glm::vec<Lenght, short, Q> c): glm::vec<Lenght, short, Q>::vec(c){}
 };
 
 template<glm::length_t Lenght, glm::qualifier Q>
 struct Point<Lenght, int, Q>: public glm::vec<Lenght, int, Q>{
 	using glm::vec<Lenght, int, Q>::vec;
 
-	static constexpr int _gldatatype = GL_INT;
+	static constexpr GLenum gldatatype() {return GL_INT;}
+
+	Point(glm::vec<Lenght, int, Q> c): glm::vec<Lenght, int, Q>::vec(c){}
 };
 
 template<glm::length_t Lenght, glm::qualifier Q>
 struct Point<Lenght, float, Q>: public glm::vec<Lenght, float, Q>{
 	using glm::vec<Lenght, float, Q>::vec;
 
-	static constexpr int _gldatatype = GL_FLOAT;
+	static constexpr GLenum gldatatype() {return GL_FLOAT;}
+
+	Point(glm::vec<Lenght, float, Q> c): glm::vec<Lenght, float, Q>::vec(c){}
 };
 
 template<glm::length_t Lenght, glm::qualifier Q>
 struct Point<Lenght, double, Q>: public glm::vec<Lenght, double, Q>{
 	using glm::vec<Lenght, double, Q>::vec;
 
-	static constexpr int _gldatatype = GL_DOUBLE;
+	static constexpr GLenum gldatatype() {return GL_DOUBLE;}
+
+	Point(glm::vec<Lenght, double, Q> c): glm::vec<Lenght, double, Q>::vec(c){}
 };
 
 using Point2d = Point<2,double>;

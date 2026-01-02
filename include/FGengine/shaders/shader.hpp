@@ -141,13 +141,16 @@ private:
 public:
 
 	template<typename UniformType>
-	static void SendUniformForAll(UniformType value){
+	static void SendUniformForAll(UniformType& value){
 		for(Shader*& element : shaderslist){
 			if(element != nullptr){
 				value.SetShader(element->shaderid);
 				value.Send();
 			}
 		}
+	}
+	void Delete(){
+		glDeleteProgram(shaderid);
 	}
 
 	const GLuint& ToGL(){
@@ -161,3 +164,5 @@ public:
 		shaderslist.RemoveElement(listid);
 	}
 };
+
+extern Shader nullshader;

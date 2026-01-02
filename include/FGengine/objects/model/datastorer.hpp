@@ -10,11 +10,13 @@ protected:
 	//Must be called once, after Model created and OpenGL context loaded
 	void Init(){
 		VertexDataStorage::VertArray::Init();
-		VertexDataStorage::VertArray::Select();
 		VertexDataStorage::VertBuffer::Init();
-		VertexDataStorage::VertArray::Select();
 		VertexDataStorage::ElemBuffer::Init();
+		VertexDataStorage::VertArray::Select();
+		VertexDataStorage::VertBuffer::Select();
 		VertexDataStorage::ElemBuffer::Select();
+		VertexDataStorage::VertArray::Setup();
+		glBindVertexArray(0);
 	}
 
 	void Select(){
@@ -27,7 +29,6 @@ protected:
 	}
 	
 	void DrawData(){
-		VertexDataStorage::VertArray::Select();
 		VertexDataStorage::ElemBuffer::Draw();
 	}
 

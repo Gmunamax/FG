@@ -9,12 +9,13 @@
 template<typename PointType = Point3d>
 class Camera: public WorldPoint<PointType>{
 	Uniforms::Umat4 proj {"fg_projectionmatrix"};
-	Uniforms::Umat4 view {"fg_viewmatrix"};
+	// Uniforms::Umat4 view {"fg_viewmatrix"};
 
 protected:
 	void SendMatrix(){
 		Shader::SendUniformForAll(proj);
-		Shader::SendUniformForAll(view);
+		Shader::SendUniformForAll(*Camera::WorldPoint::GetMatrix());
+		// Shader::SendUniformForAll(view);
 	}
 
 
@@ -132,6 +133,7 @@ public:
 		glClear(GL_DEPTH_BUFFER_BIT);
 
 		Camera::ProceedTransformations();
+		Camera::SendMatrix();
 		// ShaderProgram::SetProjectionMatrix(&proj);
 		// ShaderProgram::SetViewMatrix(Camera::GetMatrix());
 	}

@@ -26,7 +26,7 @@ protected:
 			if(rotation.z != 0)
 				this->objm = glm::rotate(this->objm.GetValue(), glm::radians(rotation.z), glm::dvec3{0,0,1});
 
-			this->objm = glm::scale(this->objm.GetValue(),scale);
+			this->objm = glm::scale(this->objm.GetValue(), scale);
 
 			needupdate = false;
 		}

@@ -29,6 +29,9 @@ public:
 	static short GetOffset(){
 		return VertexPosition::offset;
 	}
+	static short GetLength(){
+		return PosType::length();
+	}
 };
 
 template<typename ColType, typename Base>
@@ -55,6 +58,9 @@ public:
 	}
 	static short GetOffset(){
 		return VertexColor::offset;
+	}
+	static short GetLength(){
+		return ColType::_elemcount;
 	}
 };
 
@@ -83,6 +89,9 @@ public:
 	}
 	static short GetOffset(){
 		return VertexNormal::offset;
+	}
+	static short GetLength(){
+		return NormalType::length();
 	}
 };
 

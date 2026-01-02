@@ -36,13 +36,15 @@ namespace Uniforms{
 		}
 
 		void Send(){
-			if(needupdate){
+			// if(needupdate){
 				TemplateSend();
-				needupdate = false;
-			}
+				// needupdate = false;
+			// }
 		}
 
 		Uniform(const char* name, GLuint shaderid = 0, ValueType value = 1){
+			this->name = name;
+			location = glGetUniformLocation(shaderid, name);
 			SetValue(value);
 		}
 		void operator=(ValueType newvalue){
