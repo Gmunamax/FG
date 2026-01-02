@@ -4,8 +4,8 @@
 template<typename VertexType>
 class VertBuffer{
 
-	static inline constexpr short target = GL_ARRAY_BUFFER;
-	static inline constexpr short usage = GL_STATIC_DRAW;
+	static inline constexpr int target = GL_ARRAY_BUFFER;
+	static inline constexpr int usage = GL_STATIC_DRAW;
 
 	GLuint buf;
 
@@ -17,7 +17,7 @@ protected:
 		glGenBuffers(1,&buf);
 	}
 	void Load(const std::vector<VertexType>& data){
-		glBufferData(target, sizeof(VertexType)*data.size(), &data, usage);
+		glBufferData(target, sizeof(VertexType)*data.size(), data.data(), usage);
 	}
 	void Delete(){
 		glDeleteBuffers(1, &buf);

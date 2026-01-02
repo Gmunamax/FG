@@ -1,73 +1,31 @@
-#include "FGengine/objects/camera.hpp"
-#include "FGengine/shaders/shaderprogram.hpp"
-#include <iostream>
+// #include "FGengine/objects/camera.hpp"
+// #include "FGengine/shaders/shaderprogram.hpp"
+// #include <iostream>
 
-void AspectRatio::SetAspectRatio(double newaspectratio){
-	aspectratio = newaspectratio;
-}
+// void AspectRatio::SetAspectRatio(double newaspectratio)
 
-void Viewport::SetViewportGeom(Geometry2i newgeom){
-	glViewport(newgeom.x,newgeom.y,newgeom.w,newgeom.h);
-	viewportgeom = newgeom;
-}
+// void Viewport::SetViewportGeom(Geometry2i newgeom)
 
-Geometry2i Viewport::GetViewportGeom(){
-	return viewportgeom;
-}
+// Geometry2i Viewport::GetViewportGeom()
 
-void Viewport::Resize(Geometry2i newviewport){
-	SetAspectRatio((double)newviewport.w/(double)newviewport.h);
-	SetViewportSize(newviewport);
-	// switch (cameratype) {
-	// case CAMERA_FRUSTUM:
-	// 	SetFrustum();
-	// 	break;
-	// case CAMERA_ORTHO:
-	// 	SetOrtho();
-	// 	break;
-	// case CAMERA_UI:
-	// 	SetUI();
-	// 	break;
-	// }
-}
+// void Viewport::Resize(Geometry2i newviewport)
 
-void Background::SetBackgroundColor(Colord newbgcolor){
-	backgroundcolor = newbgcolor;
-}
+// void Background::SetBackgroundColor(Colord newbgcolor)
 
-// void CameraParams::SetFocusDistance(double value){
-// 	nearz = value;
-// 	if(cameratype == CAMERA_FRUSTUM)
-// 		SetFrustum();
-// 	else if(cameratype == CAMERA_ORTHO)
-// 		SetOrtho();
-// }
+// // void CameraParams::SetFocusDistance(double value){
+// // 	nearz = value;
+// // 	if(cameratype == CAMERA_FRUSTUM)
+// // 		SetFrustum();
+// // 	else if(cameratype == CAMERA_ORTHO)
+// // 		SetOrtho();
+// // }
 
-void FOV::SetFOV(double newfov){
-	this->fov = newfov;
-}
+// void FOV::SetFOV(double newfov)
 
-void CameraType::SetFrustum(){
-	glDepthFunc(GL_LESS);
-	projm = glm::perspective(fov,aspectratio,nearz,farz);
-	cameratype = CAMERA_FRUSTUM;
-	ShaderProgram::UpdateProjectionMatrix();
-}
+// void CameraType::SetFrustum()
 
-void CameraType::SetOrtho(){
-	glDepthFunc(GL_LESS);
-	projm = glm::ortho<double>(-aspectratio,aspectratio,-1,1,nearz,farz);
-	cameratype = CAMERA_ORTHO;
-	ShaderProgram::UpdateProjectionMatrix();
-}
+// void CameraType::SetOrtho()
 
-void CameraType::SetUI(){
-	glDepthFunc(GL_GEQUAL);
-	projm = glm::ortho<double>(-aspectratio,aspectratio,-1,1,nearz,farz);
-	cameratype = CAMERA_UI;
-	ShaderProgram::UpdateProjectionMatrix();
-}
+// void CameraType::SetUI()
 
-Colord Background::GetBackgroundColor(){
-	return backgroundcolor;
-}
+// Colord Background::GetBackgroundColor()

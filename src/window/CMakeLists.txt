@@ -1,22 +1,24 @@
 cmake_minimum_required(VERSION 2.8)
 
-set(base
+# set(base
 
-	data/position.hpp
-	data/flags.hpp
-	data/title.hpp
-	data/size.hpp
-	data/vsync.hpp
-	data/minSize.hpp
+# 	${CMAKE_CURRENT_SOURCE_DIR}/data/position.hpp
+# 	${CMAKE_CURRENT_SOURCE_DIR}/data/flags.hpp
+# 	${CMAKE_CURRENT_SOURCE_DIR}/data/title.hpp
+# 	${CMAKE_CURRENT_SOURCE_DIR}/data/size.hpp
+# 	${CMAKE_CURRENT_SOURCE_DIR}/data/vsync.hpp
+# 	${CMAKE_CURRENT_SOURCE_DIR}/data/minSize.hpp
 	
-	${PROJECT_SOURCE_DIR}/scene/scene.hpp)
+# 	${PROJECT_SOURCE_DIR}/scene/scene.hpp)
 
 set(self
 
-	window.cpp
-	windowBase.cpp)
+	)
 
-add_library(window ${self})
+target_sources(FGengine
+PRIVATE
+	${CMAKE_CURRENT_SOURCE_DIR}/window.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/windowBase.cpp
+)
 
 add_subdirectory(scene)
-target_link_libraries(window scene)

@@ -1,7 +1,7 @@
 #pragma once
-#include <glm/mat4x4.hpp>
+#include "FGengine/shaders/uniform.hpp"
 
 class ShaderData{
 public:
-	glm::mat4 objm;
+	Uniforms::Umat4 objm;
 };

@@ -1,69 +1,48 @@
 #pragma once
-#include <SDL2/SDL.h>
 #include <GL/glew.h>
 #include <glm/glm.hpp>
-#include <iostream>
-// using Point2i = SDL_Point;
 
-template<typename Type>
-struct PointType{};
+template<glm::length_t Lenght, typename SizeType, glm::qualifier Q = glm::packed>
+struct Point: public glm::vec<Lenght, SizeType, Q> {
+	using glm::vec<Lenght, SizeType, Q>::vec;
 
-template<>
-struct PointType<float>{
-	static constexpr int _gldatatype = GL_FLOAT;
+	Point(glm::vec<Lenght, SizeType, Q> c): glm::vec<Lenght, SizeType, Q>::vec(c){}
 };
 
-template<>
-struct PointType<double>{
-	static constexpr int _gldatatype = GL_DOUBLE;
+template<glm::length_t Lenght, glm::qualifier Q>
+struct Point<Lenght, short, Q>: public glm::vec<Lenght, short, Q>{
+	using glm::vec<Lenght, short, Q>::vec;
+
+	static constexpr GLenum gldatatype() {return GL_SHORT;}
+
+	Point(glm::vec<Lenght, short, Q> c): glm::vec<Lenght, short, Q>::vec(c){}
 };
 
-template<>
-struct PointType<int>{
-	static constexpr int _gldatatype = GL_INT;
+template<glm::length_t Lenght, glm::qualifier Q>
+struct Point<Lenght, int, Q>: public glm::vec<Lenght, int, Q>{
+	using glm::vec<Lenght, int, Q>::vec;
+
+	static constexpr GLenum gldatatype() {return GL_INT;}
+
+	Point(glm::vec<Lenght, int, Q> c): glm::vec<Lenght, int, Q>::vec(c){}
 };
 
-template<>
-struct PointType<short>{
-	static constexpr int _gldatatype = GL_SHORT;
+template<glm::length_t Lenght, glm::qualifier Q>
+struct Point<Lenght, float, Q>: public glm::vec<Lenght, float, Q>{
+	using glm::vec<Lenght, float, Q>::vec;
+
+	static constexpr GLenum gldatatype() {return GL_FLOAT;}
+
+	Point(glm::vec<Lenght, float, Q> c): glm::vec<Lenght, float, Q>::vec(c){}
 };
 
-template<glm::length_t Count, typename Size>
-struct Point: public PointType<Size>, public glm::vec<Count,Size,glm::packed_highp> {
-	using glm::vec<Count,Size,glm::packed_highp>::vec;
+template<glm::length_t Lenght, glm::qualifier Q>
+struct Point<Lenght, double, Q>: public glm::vec<Lenght, double, Q>{
+	using glm::vec<Lenght, double, Q>::vec;
 
-	static constexpr short _elemcount = Count;
-	
-	Point(glm::vec<Count,Size,glm::packed_highp> v): glm::vec<Count,Size,glm::packed_highp>(v){
-		std::cout << "UNSUPPORTED POINT TYPE" << std::endl;
-	}
-	Point(Size v): glm::vec<Count,Size,glm::packed_highp>(v){
-		std::cout << "UNSUPPORTED POINT TYPE" << std::endl;
-	}
-};
+	static constexpr GLenum gldatatype() {return GL_DOUBLE;}
 
-template<typename Size>
-struct Point<2,Size>: public PointType<Size>, public glm::vec<2,Size,glm::packed_highp>{
-	using glm::vec<2,Size,glm::packed_highp>::vec;
-
-	static constexpr short _elemcount = 2;
-
-	Point(glm::vec<2,Size,glm::packed_highp> v): glm::vec<2,Size,glm::packed_highp>(v){}
-	Point(Size v): glm::vec<2,Size,glm::packed_highp>(v){}
-
-	Point(Size x, Size y): glm::vec<2,Size,glm::packed_highp>(x,y){}
-};
-
-template<typename Size>
-struct Point<3,Size>: public PointType<Size>, public glm::vec<3,Size,glm::packed_highp>{
-	using glm::vec<3,Size,glm::packed_highp>::vec;
-
-	static constexpr short _elemcount = 3;
-
-	Point(glm::vec<3,Size,glm::packed_highp> v): glm::vec<3,Size,glm::packed_highp>(v){}
-	Point(Size v): glm::vec<3,Size,glm::packed_highp>(v){}
-
-	Point(Size x, Size y, Size z): glm::vec<3,Size,glm::packed_highp>(x,y,z){}
+	Point(glm::vec<Lenght, double, Q> c): glm::vec<Lenght, double, Q>::vec(c){}
 };
 
 using Point2d = Point<2,double>;
