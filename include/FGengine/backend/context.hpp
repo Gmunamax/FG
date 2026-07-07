@@ -13,23 +13,49 @@
 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
-#include "FGengine/special/window.hpp"
+#pragma once
+#include "window.hpp"
+#include "handle.hpp"
 
 namespace FGengine{
 
-void Window::ApplyTitle(){
-	if(GetFlags(Flags::Title)){
-		SDL_SetWindowTitle(SDL_GL_GetCurrentWindow(),title.c_str());
-		RemoveFlags(Flags::Title);
-	}
-}
+namespace Backend{
 
-void Window::SetTitle(const std::string& newtitle){
-	title = newtitle;
-	SetFlags(Flags::Title);
-}
-const std::string& Window::GetTitle(){
-	return title;
+	class GLContext: private Handle{
+	public:
+		enum class VSyncModes{
+			Off = 0,
+			On = 1,
+			Adaptive = -1
+		};
+
+		GLContext(const Window&);
+		GLContext(const GLContext&) = delete;
+		GLContext(GLContext&&) = default;
+		~GLContext(){
+			Destroy();
+		}
+
+		GLContext& operator=(const GLContext&) = delete;
+		GLContext& operator=(GLContext&& context){
+			if(&context != this){
+				Destroy();
+				Handle::operator=(std::move(context));
+			}
+			return *this;
+		}
+
+		void MakeCurrent(const Window& window);
+		void MakeCurrent();
+
+		static void SetVSyncMode(VSyncModes mode);
+		static VSyncModes GetVSyncMode();
+	
+	private:
+		void Destroy();
+		friend struct Internal;
+	};
+
 }
 
 }

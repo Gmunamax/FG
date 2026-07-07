@@ -15,17 +15,15 @@
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <chrono>
-#include <SDL2/SDL.h>
-#include <string>
-#include "FGengine/structures/point.hpp"
 #include "FGengine/special/scene.hpp"
 #include "FGengine/special/defaults.hpp"
 #include "FGengine/structures/frametime.hpp"
 #include "FGengine/special/framebuffer.hpp"
+#include "FGengine/backend/window.hpp"
 
 namespace FGengine{
 
-class Window: public Framebuffer{
+class Window: public Backend::Window, public Framebuffer{
 //flags
 
 private:
@@ -54,102 +52,6 @@ private:
 	}
 
 //flags
-
-
-//minsize
-
-private:
-	using MinSizeType = Point2i;
-	MinSizeType minsize {0};
-
-	void ApplyMinSize();
-
-public:
-	void SetMinSize(const MinSizeType& newminsize);
-	const MinSizeType& GetMinSize();
-
-//minsize
-
-
-//vsync
-
-public:
-	enum class VsyncModes{
-		Off = 0,
-		On = 1,
-		Adaptive = -1
-	};
-
-private:
-	VsyncModes vsyncmode {VsyncModes::Off};
-
-	void ApplyVsync();
-
-public:
-	void SetVsyncMode(const VsyncModes& newstate);
-	const VsyncModes& GetVsyncMode();
-
-//vsync
-
-
-//size
-
-private:
-	using SizeType = Point2i;
-
-	SizeType size {0,0};
-
-	void ApplySize();
-
-
-public:
-	void SetSize(const SizeType& newsize);
-	const SizeType& GetSize();
-
-//size
-
-
-//title
-
-private:
-	std::string title{};
-
-protected:
-	void ApplyTitle();
-
-public:
-	void SetTitle(const std::string& newtitle);
-	const std::string& GetTitle();
-
-//title
-
-
-//sdlflags
-
-private:
-	Uint32 sdlflags {SDL_WINDOW_OPENGL};
-
-public:
-	void SetSDLFlags(const Uint32& newflags);
-	const Uint32& GetSDLFlags();
-
-//sdlflags
-
-
-//position
-
-private:
-	using PositionType = Point2i;
-	PositionType position {SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED};
-
-protected:
-	void ApplyPosition();
-
-public:
-	void SetPosition(const PositionType& newposition);
-	const PositionType& GetPosition();
-
-//position
 
 
 //drawing
@@ -219,8 +121,6 @@ void UseFramebuffer();
 //main
 
 private:
-	SDL_GLContext glcon;
-	SDL_Window* win;
 	bool opened = false;
 
 public:
@@ -231,7 +131,7 @@ public:
 
 	static void CloseAll();
 
-	Window();
+	Window(TitleType title, SizeType size);
 	~Window();
 
 //main

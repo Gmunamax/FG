@@ -15,7 +15,6 @@
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #include "FGengine/special/window.hpp"
 #include "./windowdatanames.hpp"
-#include <SDL2/SDL.h>
 
 namespace FGengine{
 
@@ -72,7 +71,7 @@ void Window::CloseAll(){
 }
 
 
-Window::Window(): scene(Defaults::scene), t1(std::chrono::steady_clock::now()){
+Window::Window(TitleType title, SizeType size): Backend::Window(title, size), scene(Defaults::scene), t1(std::chrono::steady_clock::now()){
 	allwindows.emplace_front(this);
 	elementBeforeThisInList = allwindows.before_begin();
 	SetBuffersToClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);

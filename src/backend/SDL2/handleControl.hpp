@@ -13,23 +13,20 @@
 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
-#include "FGengine/special/window.hpp"
+#pragma once
+#include "FGengine/backend/handle.hpp"
 
 namespace FGengine{
 
-void Window::ApplyVsync(){
-	if(GetFlags(Flags::Vsync)){
-		SDL_GL_SetSwapInterval((int)vsyncmode);
-		RemoveFlags(Flags::Vsync);
-	}
-}
+namespace Backend{
 
-void Window::SetVsyncMode(const VsyncModes& newstate){
-	vsyncmode = newstate;
-	SetFlags(Flags::Vsync);
-}
-const Window::VsyncModes& Window::GetVsyncMode(){
-	return vsyncmode;
+	struct Internal{
+		template<typename T>
+		static const Handle& CastToHandle(const T& obj){
+			return obj;
+		}
+	};
+
 }
 
 }

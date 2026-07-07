@@ -13,15 +13,43 @@
 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
-#include "FGengine/special/window.hpp"
+#pragma once
 
 namespace FGengine{
 
-void Window::SetSDLFlags(const Uint32& newflags){
-	sdlflags = SDL_WINDOW_OPENGL | newflags;
-}
-const Uint32& Window::GetSDLFlags(){
-	return sdlflags;
+namespace Backend{
+
+	class Handle{
+	private:
+		void* handle;
+
+	public:
+		void* GetHandle() const{
+			return handle;
+		}
+
+	protected:
+		void SetHandle(void* newHandle){
+			handle = newHandle;
+		}
+
+		Handle(void* handle): handle(handle) {}
+		Handle(const Handle&) = delete;
+		Handle(Handle&& handle): handle(handle.handle){
+			handle.handle = nullptr;
+		}
+		~Handle() = default;
+
+		Handle& operator=(const Handle&) = delete;
+		Handle& operator=(Handle&& handle){
+			if(&handle != this){
+				this->handle = handle.handle;
+				handle.handle = nullptr;
+			}
+			return *this;
+		}
+	};
+
 }
 
 }

@@ -13,23 +13,36 @@
 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
-#include "FGengine/special/window.hpp"
+#include <SDL2/SDL_video.h>
+#include "FGengine/backend/context.hpp"
+#include "handleControl.hpp"
 
 namespace FGengine{
 
-void Window::ApplyPosition(){
-	if(GetFlags(Flags::Position)){
-		SDL_SetWindowPosition(SDL_GL_GetCurrentWindow(), position.x, position.y);
-		RemoveFlags(Flags::Position);
-	}
-}
+namespace Backend{
 
-void Window::SetPosition(const PositionType& newposition){
-	position = newposition;
-	SetFlags(Flags::Position);
-}
-const Window::PositionType& Window::GetPosition(){
-	return position;
+	GLContext::GLContext(const Window& win): Handle(SDL_GL_CreateContext((SDL_Window*)Internal::CastToHandle(win).GetHandle())) {}
+
+	void GLContext::MakeCurrent(const Window& win){
+		SDL_GL_MakeCurrent((SDL_Window*)Internal::CastToHandle(win).GetHandle(), (SDL_GLContext)GetHandle());
+	}
+	
+	void GLContext::MakeCurrent(){
+		SDL_GL_MakeCurrent(SDL_GL_GetCurrentWindow(), GetHandle());
+	}
+	
+	void GLContext::Destroy(){
+		if(GetHandle() != nullptr)
+			SDL_GL_DeleteContext((SDL_GLContext)GetHandle());
+	}
+
+	void GLContext::SetVSyncMode(VSyncModes newVSyncMode){
+		SDL_GL_SetSwapInterval((int)newVSyncMode);
+	}
+
+	GLContext::VSyncModes GLContext::GetVSyncMode(){
+		return (VSyncModes)SDL_GL_GetSwapInterval();
+	}
 }
 
 }
