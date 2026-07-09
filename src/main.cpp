@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #include "FGengine/main.hpp"
-#include "FGengine/special/window.hpp"
 #include "special/defaults.hpp"
 
 namespace FGengine{
@@ -31,15 +30,12 @@ void setCycleRate(int hz){
 }
 
 static void quitOnEndOfMainCycle(){
-	Window::CloseAll();
 	SDL_Quit();
 }
 
 void mainCycle(){
 
 	while (run) {
-
-		Window::CycleAll();
 
 		SDL_Delay(cycletime);
 	}
