@@ -13,4 +13,4 @@
 #
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, see <https://www.gnu.org/licenses/>.
-target_sources(FGengine PRIVATE context.cpp window.cpp)
+target_sources(FGengine PRIVATE context.cpp window.cpp init.cpp)

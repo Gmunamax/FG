@@ -13,15 +13,19 @@
 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
-#pragma once
-#include <SDL2/SDL.h>
+#include "FGengine/init.hpp"
+#include "backend/init.hpp"
+#include "special/defaults.hpp"
 
 namespace FGengine{
 
-void quit();
+void Init(){
+	Backend::Init();
+	Defaults::init();
+}
 
-void mainCycle();
-
-void init();
+void Quit(){
+	Backend::Quit();
+}
 
 }
