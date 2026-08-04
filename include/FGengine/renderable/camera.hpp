@@ -14,9 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #pragma once
-#include <glm/gtc/matrix_transform.hpp>
 #include "FGengine/properties/worldpoint.hpp"
-#include "FGengine/special/shader.hpp"
 #include "FGengine/structures/aspectratio.hpp"
 #include "FGengine/special/defaults.hpp"
 
@@ -26,14 +24,7 @@ class Camera: public PointTransform<3, floatType>{
 //viewMatrix
 
 private:
-	void ProceedTransformations(){
-		if(Camera::PointTransform::IsNeedUpdate()){
-			typename Camera::PointTransform::MatrixType matrix {1};
-			matrix = Camera::PointTransform::TransformRotation(matrix);
-			matrix = Camera::PointTransform::TransformPosition(matrix);
-			Shader::SendUniformToAll<1>("fg_viewmatrix", &matrix);
-		}
-	}
+	void ProceedTransformations();
 
 //viewMatrix
 
@@ -41,26 +32,7 @@ private:
 //projectionMatrix
 
 private:
-	void ProceedProjection(){
-		glm::mat<4, 4, floatType> matrix;
-		switch(projectionmode){
-		case ProjectionMode::Frustum:
-			glDepthFunc(GL_LESS);
-			matrix = glm::perspective<floatType>(fov, *aspectratio, nearz, farz);
-			break;
-
-		case ProjectionMode::Ortho:
-			glDepthFunc(GL_LESS);
-			matrix = glm::ortho<floatType>(-*aspectratio, *aspectratio, -1.0f, 1.0f, nearz, farz);
-			break;
-
-		case ProjectionMode::Ui:
-			glDepthFunc(GL_GEQUAL);
-			matrix = glm::ortho<floatType>(-*aspectratio, *aspectratio, -1.0f, 1.0f);
-			break;
-		}
-		Shader::SendUniformToAll<1>("fg_projectionmatrix", &matrix);
-	}
+	void ProceedProjection();
 
 //projectionMatrix
 

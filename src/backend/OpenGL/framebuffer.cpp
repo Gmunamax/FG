@@ -13,46 +13,32 @@
 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
-#pragma once
-#include "FGengine/structures/aspectratio.hpp"
-#include "FGengine/structures/geometry.hpp"
-#include "FGengine/structures/color.hpp"
+#include "FGengine/special/framebuffer.hpp"
+#include "gl/gl.hpp"
 
-namespace FGengine{
+using namespace FGengine;
 
-class Framebuffer{
-private:
-	AspectRatio aspectRatio;
+void Framebuffer::SetViewportGeom(const Geometry2i &newgeom){
+	glViewport(newgeom.x, newgeom.y, newgeom.w, newgeom.h);
+	aspectRatio = AspectRatio{(float)newgeom.w, (float)newgeom.h}; 
+}
 
-public:
-	const AspectRatio& GetAspectRatio(){
-		return aspectRatio;
-	}
+Geometry2i Framebuffer::GetViewportGeom() const{
+	int rawgeom[4];
+	glGetIntegerv(GL_VIEWPORT, rawgeom);
+	return {rawgeom[0], rawgeom[1], rawgeom[2], rawgeom[3]};
+}
 
-public:
-	void SetViewportGeom(const Geometry2i& newgeom);
+void Framebuffer::SetBackgroundColor(const Color4f &newbgcolor){
+	glClearColor(newbgcolor.r, newbgcolor.g, newbgcolor.b, newbgcolor.a);
+}
 
-	Geometry2i GetViewportGeom() const;
+Color4f Framebuffer::GetBackgroundColor() const{
+	Color4f color;
+	glGetFloatv(GL_COLOR_CLEAR_VALUE, color.value);
+	return color;
+}
 
-public:
-	void SetBackgroundColor(const Color4f& newbgcolor);
-
-	Color4f GetBackgroundColor() const;
-
-private:
-	unsigned int buffersToClear = 0;
-
-public:
-	void SetBuffersToClear(unsigned int newMask){
-		buffersToClear = newMask;
-	}
-
-	const unsigned int& GetBuffersToClear() const{
-		return buffersToClear;
-	}
-
-public:
-	void Clear();
-};
-
+void Framebuffer::Clear(){
+	glClear(buffersToClear);
 }

@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #pragma once
-#include <GL/glew.h>
 #include <vector>
 #include "FGengine/structures/matrix.hpp"
 #include "FGengine/structures/uniform.hpp"
@@ -32,12 +31,12 @@ public:
 	using NormalMatrixType = Matrix<3,3,double>;
 
 private:
-	static inline constexpr int VBOusage = GL_STATIC_DRAW;
-	static constexpr int EBOusage = GL_STATIC_DRAW;
+	static constexpr int VBOusage;
+	static constexpr int EBOusage;
 
-	GLuint vbo;
-	GLuint vao;
-	GLuint ebo;
+	unsigned int vbo;
+	unsigned int vao;
+	unsigned int ebo;
 
 	struct FaceLocation{
 
@@ -56,7 +55,7 @@ private:
 	std::vector<FaceLocation> facelocators;
 
 	template<typename VertexAttribType>
-	void InitVertexAttribute(const GLuint index){
+	void InitVertexAttribute(const unsigned int index){
 		if(VertexAttribType::PropertyType::gldatatype() == GL_DOUBLE)
 			glVertexAttribLPointer(index, VertexAttribType::GetLength(), VertexAttribType::PropertyType::gldatatype(), VertexType::GetStride(), (void*)VertexAttribType::GetOffset());
 		else

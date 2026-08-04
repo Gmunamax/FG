@@ -16,7 +16,6 @@
 #pragma once
 #include <vector>
 #include <forward_list>
-#include <GL/glew.h>
 #include "FGengine/structures/shaderid.hpp"
 #include "FGengine/structures/uniform.hpp"
 
@@ -129,7 +128,7 @@ class Shader{
 public:
 
 	struct ObjectDescription{
-		GLuint type;
+		unsigned int type;
 		std::vector<const char*> filepathes;
 	};
 	
@@ -147,7 +146,7 @@ public:
 	}
 
 	void Delete(){
-		glDeleteProgram(shaderid);
+		// glDeleteProgram(shaderid);
 		shaderid = 0;
 	}
 

@@ -45,6 +45,9 @@ namespace Backend{
 			return *this;
 		}
 
+		using Proc = void(*)(void);
+		static Proc GetProcAddress(const char* procName);
+
 		void MakeCurrent(const Window& window);
 		void MakeCurrent();
 

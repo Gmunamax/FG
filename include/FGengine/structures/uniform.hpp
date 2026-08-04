@@ -15,7 +15,6 @@
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <glm/matrix.hpp>
-#include <GL/glew.h>
 #include "FGengine/structures/shaderid.hpp"
 
 namespace FGengine{
@@ -24,15 +23,15 @@ class _Uniform{
 	const char* name;
 	ShaderID shaderId;
 
-	void FindLocation(){
-		location = glGetUniformLocation(shaderId, name);
-	}
+	void FindLocation();
 
 protected:
-	GLint location = 0;
+	int location = 0;
 
 	template<typename ValueType>
 	void Send(unsigned count, const ValueType* value) const;
+
+	void UseShader() const;
 
 public:
 	const char* GetName() const{
@@ -71,7 +70,7 @@ public:
 	}
 
 	void Send() const{
-		glUseProgram(GetShader());
+		UseShader();
 		Uniform::_Uniform::Send(Count, value);
 	}
 
@@ -104,7 +103,7 @@ public:
 		return value;
 	}
 	void Send() const{
-		glUseProgram(GetShader());
+		UseShader();
 		SpecialSend();
 	}
 
@@ -122,7 +121,7 @@ template<unsigned Count, typename ValueType>
 class Uniform<Count, ValueType*>: public _Uniform{
 public:
 	void Send(const ValueType* value) const{
-		glUseProgram(GetShader());
+		UseShader();
 		Uniform::_Uniform::Send(Count, value);
 	}
 
@@ -134,7 +133,7 @@ template<typename ValueType>
 class Uniform<1, ValueType*>: public _Uniform{
 public:
 	void Send(const ValueType* value) const{
-		glUseProgram(GetShader());
+		UseShader();
 		Uniform::_Uniform::Send(1, value);
 	}
 

@@ -13,40 +13,52 @@
 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
-#include <SDL2/SDL_video.h>
+#pragma once
 #include "FGengine/backend/context.hpp"
-#include "handleControl.hpp"
 
 namespace FGengine{
 
 namespace Backend{
 
-	GLContext::GLContext(const Window& win): Handle(SDL_GL_CreateContext((SDL_Window*)Internal::CastToHandle(win).GetHandle())) {}
+	class ModernContext: public Backend::GLContext{
+	public:
+		ModernContext(const Window& win);
+		ModernContext(const ModernContext&) = delete;
+		ModernContext(ModernContext&& context): GLContext(std::move(context)){
+			pfns = context.pfns;
+			context.pfns = nullptr;
+		}
+		~ModernContext(){
+			Destroy();
+		}
 
-	void GLContext::MakeCurrent(const Window& win){
-		SDL_GL_MakeCurrent((SDL_Window*)Internal::CastToHandle(win).GetHandle(), (SDL_GLContext)GetHandle());
-	}
+		ModernContext& operator=(const ModernContext&) = delete;
+		ModernContext& operator=(ModernContext&& context){
+			if(&context != this){
+				Destroy();
+				pfns = context.pfns;
+				context.pfns = nullptr;
+			}
+			return *this;
+		}
+		
+		void MakeCurrent(const Window& win){
+			GLContext::MakeCurrent(win);
+			MakePfnsCurrent();
+		}
+
+		void MakeCurrent(){
+			GLContext::MakeCurrent();
+			MakePfnsCurrent();
+		}
 	
-	void GLContext::MakeCurrent(){
-		SDL_GL_MakeCurrent(SDL_GL_GetCurrentWindow(), GetHandle());
-	}
+	private:
+		void* pfns = nullptr;
+		void Destroy();
+		
+		void MakePfnsCurrent();
 
-	GLContext::Proc GLContext::GetProcAddress(const char* procName){
-		return (Proc)SDL_GL_GetProcAddress(procName);
-	}
-	
-	void GLContext::Destroy(){
-		if(GetHandle() != nullptr)
-			SDL_GL_DeleteContext((SDL_GLContext)GetHandle());
-	}
-
-	void GLContext::SetVSyncMode(VSyncModes newVSyncMode){
-		SDL_GL_SetSwapInterval((int)newVSyncMode);
-	}
-
-	GLContext::VSyncModes GLContext::GetVSyncMode(){
-		return (VSyncModes)SDL_GL_GetSwapInterval();
-	}
+	};
 
 }
 

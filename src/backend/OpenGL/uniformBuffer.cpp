@@ -13,46 +13,29 @@
 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
-#pragma once
-#include "FGengine/structures/aspectratio.hpp"
-#include "FGengine/structures/geometry.hpp"
-#include "FGengine/structures/color.hpp"
+#include "FGengine/special/uniformBuffer.hpp"
+#include "gl/gl.hpp"
+#include <cstring>
 
-namespace FGengine{
+using namespace FGengine;
 
-class Framebuffer{
-private:
-	AspectRatio aspectRatio;
+void _UniformBuffer::Bind() const{
+	glBindBuffer(GL_UNIFORM_BUFFER, uniformBuffer);
+}
 
-public:
-	const AspectRatio& GetAspectRatio(){
-		return aspectRatio;
-	}
+void _UniformBuffer::Update(void* newStorage, std::size_t size){
+	Bind();
+	void* buffer = glMapBufferRange(GL_UNIFORM_BUFFER, 0, size, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+	std::memcpy(buffer, newStorage, size);
+	glUnmapBuffer(GL_UNIFORM_BUFFER);
+}
 
-public:
-	void SetViewportGeom(const Geometry2i& newgeom);
+_UniformBuffer::_UniformBuffer(std::size_t size){
+	glGenBuffers(1, &uniformBuffer);
+	Bind();
+	glBufferStorage(GL_UNIFORM_BUFFER, size, NULL, GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT);
 
-	Geometry2i GetViewportGeom() const;
-
-public:
-	void SetBackgroundColor(const Color4f& newbgcolor);
-
-	Color4f GetBackgroundColor() const;
-
-private:
-	unsigned int buffersToClear = 0;
-
-public:
-	void SetBuffersToClear(unsigned int newMask){
-		buffersToClear = newMask;
-	}
-
-	const unsigned int& GetBuffersToClear() const{
-		return buffersToClear;
-	}
-
-public:
-	void Clear();
-};
-
+	bindingPoint = freeBindingPoint;
+	glBindBufferBase(GL_UNIFORM_BUFFER, freeBindingPoint, uniformBuffer);
+	++freeBindingPoint;
 }

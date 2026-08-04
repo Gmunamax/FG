@@ -14,23 +14,22 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #pragma once
-#include <GL/glew.h>
 
 namespace FGengine{
 
 struct ShaderID{
 private:
-	GLuint value;
+	unsigned int value;
 
 public:
-	operator GLuint() const{
+	operator unsigned int() const{
 		return value;
 	}
 
 	ShaderID& operator=(const ShaderID&) = default;
 
 	ShaderID(): value(0) {}
-	ShaderID(GLuint val): value(val) {}
+	ShaderID(unsigned int val): value(val) {}
 	ShaderID(const ShaderID&) = default;
 	ShaderID(const ShaderID&& val): value(val.value) {}
 	~ShaderID() = default;

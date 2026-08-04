@@ -14,41 +14,35 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #pragma once
-#include <GL/glew.h>
+#include <cstddef>
 
 namespace FGengine {
 
-template<typename StructureType>
-class UniformBuffer{
-	static inline GLuint freeBindingPoint = 0;
-	GLuint bindingPoint;
+class _UniformBuffer{
+	static inline unsigned int freeBindingPoint = 0;
+	unsigned int bindingPoint;
 	
-	GLuint uniformBuffer;
+	unsigned int uniformBuffer;
 
-	void Bind() const{
-		glBindBuffer(GL_UNIFORM_BUFFER, uniformBuffer);
-	}
+	void Bind() const;
 
 public:
-	GLuint GetBindingPoint() const{
+	unsigned int GetBindingPoint() const{
 		return bindingPoint;
 	}
 
+	void Update(void* newStorage, std::size_t size);
+
+	_UniformBuffer(std::size_t size);
+};
+
+template<typename StructureType>
+class UniformBuffer: public _UniformBuffer{
+public:
+	UniformBuffer(): _UniformBuffer(sizeof(StructureType)) {}
+
 	void Update(const StructureType& newStorage){
-		Bind();
-		StructureType* buffer = (StructureType*)glMapBufferRange(GL_UNIFORM_BUFFER, 0, sizeof(StructureType), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
-		*buffer = newStorage;
-		glUnmapBuffer(GL_UNIFORM_BUFFER);
-	}
-
-	UniformBuffer(){
-		glGenBuffers(1, &uniformBuffer);
-		Bind();
-		glBufferStorage(GL_UNIFORM_BUFFER, sizeof(StructureType), NULL, GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT);
-
-		bindingPoint = freeBindingPoint;
-		glBindBufferBase(GL_UNIFORM_BUFFER, freeBindingPoint, uniformBuffer);
-		++freeBindingPoint;
+		Update(&newStorage, sizeof(StructureType));
 	}
 };
 

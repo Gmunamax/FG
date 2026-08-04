@@ -15,13 +15,12 @@
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include <glm/mat4x4.hpp>
-#include <GL/glew.h>
-#include "FGengine/backend/context.hpp"
+#include "FGengine/backend/modernContext.hpp"
 #include "uniformBuffer.hpp"
 
 namespace FGengine{
 
-class Context: public Backend::GLContext{
+class Context: public Backend::ModernContext{
 public:
 	struct cameraUniformBuffer{
 		glm::mat4 projectionMatrix;
@@ -36,7 +35,7 @@ public:
 		return cameraUbo;
 	}
 
-	Context(const Backend::Window& win): Backend::GLContext(win) {}
+	Context(const Backend::Window& win): Backend::ModernContext(win) {}
 };
 
 }

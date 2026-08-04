@@ -21,13 +21,9 @@ namespace FGengine{
 
 class Window: public Backend::Window, public Framebuffer{
 public:
-	Window(TitleType title, SizeType size): Backend::Window(title, size){
-		SetBuffersToClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	}
+	Window(TitleType title, SizeType size);
 
-	static void BindViewport(){
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	}
+	static void BindViewport();
 };
 
 }

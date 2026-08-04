@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #pragma once
-#include <GL/glew.h>
 #include "FGengine/structures/geometry.hpp"
 #include "FGengine/special/framebuffer.hpp"
 
@@ -23,11 +22,11 @@ namespace FGengine{
 class Viewport: public Framebuffer{
 
 	struct Buffer{
-		GLuint id;
-		GLenum internalformat;
+		unsigned int id;
+		unsigned int internalformat;
 	};
 	
-	GLuint framebuffer;
+	unsigned int framebuffer;
 	Buffer colorBuffer {0};
 	Buffer depthStencilBuffer {0};
 
@@ -52,30 +51,22 @@ private:
 
 public:
 	enum Buffers{
-		DepthBuffer = GL_DEPTH_BUFFER_BIT,
-		StencilBuffer = GL_STENCIL_BUFFER_BIT,
-		NoBuffer = 0
+		NoBuffer,
+		DepthBuffer,
+		StencilBuffer
 	};
 
 //tests
 
 private:
-	GLint mip = 0;
+	int mip = 0;
 
-	void DefineTextureBuffer(){
-		glBindTexture(GL_TEXTURE_2D, colorBuffer.id);
-		glTexImage2D(GL_TEXTURE_2D, mip, colorBuffer.internalformat, maxSize.w, maxSize.h, 0, colorBuffer.internalformat, GL_UNSIGNED_BYTE, NULL);
-	}
+	void DefineTextureBuffer();
 
-	void DefineDepthStencilBuffer(){
-		glBindRenderbuffer(GL_RENDERBUFFER, depthStencilBuffer.id);
-		glRenderbufferStorage(GL_RENDERBUFFER, depthStencilBuffer.internalformat, maxSize.w, maxSize.h);
-	}
+	void DefineDepthStencilBuffer();
 
 public:
-	void Use(){
-		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-	}
+	void Use();
 
 	Viewport(Buffers buffers, Vector<2, unsigned int, VectorType::Size> maxSize): Viewport(buffers, maxSize, {0, 0, (int)maxSize.w, (int)maxSize.h}) {}
 	Viewport(Buffers buffers, Vector<2, unsigned int, VectorType::Size> maxSize, Geometry2i geom){
@@ -85,51 +76,10 @@ public:
 	}
 
 private:
-	void Init(Buffers buffers, Vector<2, unsigned int, VectorType::Size> maxSize){
-		glGenFramebuffers(1, &framebuffer);
-		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-
-		glGenTextures(1, &colorBuffer.id);
-		glGenRenderbuffers(1, &depthStencilBuffer.id);
-		
-		GLbitfield buffersToClear = 0;
-		GLuint attachment = 0;
-		if(buffers & DepthBuffer){
-			if(buffers & StencilBuffer){
-				attachment = GL_DEPTH_STENCIL_ATTACHMENT;
-				depthStencilBuffer.internalformat = GL_DEPTH_STENCIL;
-				buffersToClear |= GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT;
-			}
-			else{
-				attachment = GL_DEPTH_ATTACHMENT;
-				depthStencilBuffer.internalformat = GL_DEPTH_COMPONENT;
-				buffersToClear |= GL_DEPTH_BUFFER_BIT;
-			}
-		}
-		else{
-			if(buffers & StencilBuffer){
-				attachment = GL_STENCIL_ATTACHMENT;
-				depthStencilBuffer.internalformat = GL_STENCIL_INDEX;
-				buffersToClear |= GL_STENCIL_BUFFER_BIT;
-			}
-		}
-		colorBuffer.internalformat = GL_RGBA;
-		buffersToClear |= GL_COLOR_BUFFER_BIT;
-
-		ResizeBuffers(maxSize);
-		SetBuffersToClear(buffersToClear);
-
-		if(attachment != 0)
-			glFramebufferRenderbuffer(GL_FRAMEBUFFER, attachment, GL_RENDERBUFFER, depthStencilBuffer.id);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBuffer.id, mip);
-	}
+	void Init(Buffers buffers, Vector<2, unsigned int, VectorType::Size> maxSize);
 
 public:
-	~Viewport(){
-		glDeleteRenderbuffers(1, &depthStencilBuffer.id);
-		glDeleteTextures(1, &colorBuffer.id);
-		glDeleteFramebuffers(1, &framebuffer);
-	}
+	~Viewport();
 };
 
 }

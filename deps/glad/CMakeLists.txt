@@ -13,5 +13,8 @@
 #
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, see <https://www.gnu.org/licenses/>.
-add_subdirectory(OpenGL)
-add_subdirectory(SDL2)
+project(glad)
+
+add_library(glad STATIC)
+target_sources(glad PRIVATE src/gl.c)
+target_include_directories(glad PUBLIC include)

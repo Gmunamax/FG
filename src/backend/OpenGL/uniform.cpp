@@ -14,9 +14,18 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #include "FGengine/structures/uniform.hpp"
+#include "gl/gl.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
-namespace FGengine{
+using namespace FGengine;
+
+void _Uniform::FindLocation(){
+	location = glGetUniformLocation(shaderId, name);
+}
+
+void _Uniform::UseShader() const{
+	glUseProgram(GetShader());
+}
 
 template<>
 void Uniform<1, float>::SpecialSend() const{
@@ -274,6 +283,4 @@ void _Uniform::Send(unsigned count, const glm::mat<4, 3, double>* value) const{
 template<>
 void _Uniform::Send(unsigned count, const glm::mat<4, 4, double>* value) const{
 	glUniformMatrix4dv(location, count, GL_FALSE, glm::value_ptr(*value));
-}
-
 }
