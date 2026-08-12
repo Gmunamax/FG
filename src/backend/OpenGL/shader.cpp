@@ -13,51 +13,14 @@
 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
-#pragma once
-#include <vector>
-#include "FGengine/structures/shaderid.hpp"
+#include "FGengine/special/shader.hpp"
+#include "gl/gl.hpp"
 
-namespace FGengine{
+using namespace FGengine;
 
-class Shader{
-public:
-	struct ObjectDescription{
-		unsigned int type;
-		std::vector<const char*> filepathes;
-	};
-
-	Shader(std::vector<ObjectDescription> descriptions){
-		Load(descriptions);
+void Shader::Delete(){
+	if(shaderid != 0){
+		glDeleteProgram(shaderid);
+		shaderid = 0;
 	}
-	Shader(const Shader&) = delete;
-	Shader(Shader&& shader): shaderid(shader.shaderid){
-		shader.shaderid = 0;
-	}
-	~Shader(){
-		Delete();
-	}
-
-	Shader& operator=(const Shader&) = delete;
-	Shader& operator=(Shader&& shader){
-		if(&shader != this){
-			Delete();
-			shaderid = shader.shaderid;
-			shader.shaderid = 0;
-		}
-		return *this;
-	}
-	
-	void Load(std::vector<ObjectDescription> descriptions);
-
-	ShaderID GetID() const{
-		return shaderid;
-	}
-
-private:
-	ShaderID shaderid;
-
-	void Delete();
-	
-};
-
 }

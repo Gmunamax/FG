@@ -22,4 +22,5 @@ target_sources(FGengine PRIVATE
 	window.cpp
 	camera.cpp
 	viewport.cpp
+	shader.cpp
 )
