@@ -13,10 +13,11 @@
 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
-#include <glad/gl.h>
+#pragma once
+#include "FGengine/special/shader.hpp"
 
 namespace FGengine{
 
-void SetCurrentPfns(const GladGLContext&);
+unsigned int CreateShaderProgram(std::vector<Shader::ObjectDescription> description);
 
 }

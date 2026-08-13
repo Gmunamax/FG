@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #include "FGengine/renderable/camera.hpp"
-#include "gl/gl.hpp"
+#include <gl/gl.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "FGengine/special/shader.hpp"
 
@@ -25,7 +25,7 @@ void Camera::ProceedTransformations(){
 		typename Camera::PointTransform::MatrixType matrix {1};
 		matrix = Camera::PointTransform::TransformRotation(matrix);
 		matrix = Camera::PointTransform::TransformPosition(matrix);
-		Shader::SendUniformToAll<1>("fg_viewmatrix", &matrix);
+		// Shader::SendUniformToAll<1>("fg_viewmatrix", &matrix);
 	}
 }
 
@@ -47,5 +47,5 @@ void Camera::ProceedProjection(){
 		matrix = glm::ortho<floatType>(-*aspectratio, *aspectratio, -1.0f, 1.0f);
 		break;
 	}
-	Shader::SendUniformToAll<1>("fg_projectionmatrix", &matrix);
+	// Shader::SendUniformToAll<1>("fg_projectionmatrix", &matrix);
 }

@@ -13,7 +13,7 @@
 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
-#include "compilation.hpp"
+#include "compiler.hpp"
 #include <iostream>
 #include <fstream>
 
@@ -22,14 +22,12 @@ namespace FGengine{
 static const char* const fileNotFoundError = "File not found";
 static const char* const linkFailedError = "Shader link failed";
 
-void Shader::Load(std::vector<ObjectDescription> descriptions){
-	if(shaderid != 0){
-		Shader::Delete();
-	}
+GLuint CreateShaderProgram(std::vector<Shader::ObjectDescription> descriptions){
 	std::vector<GLuint> parts = CompileAllParts(descriptions);
-	shaderid = LinkShader(parts);
+	GLuint shaderid = LinkShader(parts);
 	PrintLinkStatus(shaderid);
 	DeleteParts(parts);
+	return shaderid;
 }
 
 static std::vector<GLuint> CompileAllParts(std::vector<Shader::ObjectDescription> descriptions){

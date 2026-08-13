@@ -13,4 +13,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, see <https://www.gnu.org/licenses/>.
-target_sources(FGengine PRIVATE context.cpp window.cpp init.cpp)
+add_library(shaderCompiler STATIC)
+target_sources(shaderCompiler PRIVATE compiler.cpp)
+target_include_directories(shaderCompiler PUBLIC include)
+target_link_libraries(shaderCompiler PRIVATE loader)

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #include "FGengine/special/viewport.hpp"
-#include "gl/gl.hpp"
+#include <gl/gl.hpp>
 
 using namespace FGengine;
 

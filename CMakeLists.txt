@@ -25,9 +25,10 @@ add_compile_options(-fPIC)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 add_subdirectory(deps/glad)
+add_subdirectory(modules)
 add_subdirectory(src)
 
 find_package(SDL2 2.32 REQUIRED)
 find_package(OpenGL REQUIRED)
 
-target_link_libraries(FGengine SDL2::SDL2 OpenGL::GL glad)
+target_link_libraries(FGengine PRIVATE SDL2::SDL2 OpenGL::GL glad)

@@ -19,6 +19,8 @@ namespace FGengine{
 
 	extern GladGLContext currentPfns;
 
+	void SetCurrentPfns(const GladGLContext&);
+
 }
 
 #define glActiveTexture ::FGengine::currentPfns.ActiveTexture

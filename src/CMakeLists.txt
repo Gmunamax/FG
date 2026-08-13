@@ -16,4 +16,5 @@
 target_sources(FGengine PUBLIC init.cpp)
 add_subdirectory(special)
 add_subdirectory(structures)
+add_subdirectory(OpenGL)
 add_subdirectory(backend)

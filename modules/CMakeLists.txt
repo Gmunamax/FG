@@ -13,14 +13,5 @@
 #
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, see <https://www.gnu.org/licenses/>.
-add_subdirectory(gl)
 add_subdirectory(loader)
-target_sources(FGengine PRIVATE
-	uniformBuffer.cpp
-	uniform.cpp
-	framebuffer.cpp
-	window.cpp
-	camera.cpp
-	viewport.cpp
-	shader.cpp
-)
+add_subdirectory(shaderCompiler)

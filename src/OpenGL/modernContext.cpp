@@ -14,8 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #include "FGengine/backend/modernContext.hpp"
-#include <glad/gl.h>
-#include "../gl/pfns.hpp"
+#include <gl/gl.hpp>
 
 using namespace FGengine::Backend;
 
@@ -26,7 +25,7 @@ ModernContext::ModernContext(const Window& win): Backend::GLContext(win){
 }
 
 void ModernContext::MakePfnsCurrent(){
-	SetCurrentPfns(*static_cast<GladGLContext*>(pfns));
+	currentPfns = *static_cast<GladGLContext*>(pfns);
 }
 
 void ModernContext::Destroy(){

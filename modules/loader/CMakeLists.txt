@@ -13,4 +13,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, see <https://www.gnu.org/licenses/>.
-target_sources(FGengine PRIVATE modernContext.cpp)
+add_library(loader STATIC)
+target_sources(loader PRIVATE gl.cpp)
+target_include_directories(loader PUBLIC include)
+target_link_libraries(loader PUBLIC glad)
