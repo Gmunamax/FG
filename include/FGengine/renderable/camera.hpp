@@ -24,7 +24,7 @@ class Camera: public PointTransform<3, floatType>{
 //viewMatrix
 
 private:
-	void ProceedTransformations();
+	void ProceedTransformations(typename Camera::PointTransform::MatrixType& matrix);
 
 //viewMatrix
 
@@ -32,7 +32,7 @@ private:
 //projectionMatrix
 
 private:
-	void ProceedProjection();
+	void ProceedProjection(glm::mat<4, 4, floatType>& matrix);
 
 //projectionMatrix
 
@@ -121,10 +121,7 @@ public:
 public:
 	Camera() {};
 
-	void ProceedUpdate(){
-		Camera::ProceedTransformations();
-		Camera::ProceedProjection();
-	}
+	void ProceedUpdate();
 
 //main
 };

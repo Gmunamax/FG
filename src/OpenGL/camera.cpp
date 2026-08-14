@@ -16,21 +16,20 @@
 #include "FGengine/renderable/camera.hpp"
 #include <gl/gl.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "FGengine/special/shader.hpp"
+#include "FGengine/special/uniformBuffer.hpp"
+#include "../currentContext/currentContext.hpp"
 
 using namespace FGengine;
 
-void Camera::ProceedTransformations(){
+void Camera::ProceedTransformations(typename Camera::PointTransform::MatrixType& matrix){
 	if(Camera::PointTransform::IsNeedUpdate()){
-		typename Camera::PointTransform::MatrixType matrix {1};
+		matrix = {1};
 		matrix = Camera::PointTransform::TransformRotation(matrix);
 		matrix = Camera::PointTransform::TransformPosition(matrix);
-		// Shader::SendUniformToAll<1>("fg_viewmatrix", &matrix);
 	}
 }
 
-void Camera::ProceedProjection(){
-	glm::mat<4, 4, floatType> matrix;
+void Camera::ProceedProjection(glm::mat<4, 4, floatType>& matrix){
 	switch(projectionmode){
 	case ProjectionMode::Frustum:
 		glDepthFunc(GL_LESS);
@@ -47,5 +46,11 @@ void Camera::ProceedProjection(){
 		matrix = glm::ortho<floatType>(-*aspectratio, *aspectratio, -1.0f, 1.0f);
 		break;
 	}
-	// Shader::SendUniformToAll<1>("fg_projectionmatrix", &matrix);
+}
+
+void Camera::ProceedUpdate(){
+	Context::cameraUniformBuffer cameraBuffer;
+	ProceedTransformations(cameraBuffer.viewMatrix);
+	ProceedProjection(cameraBuffer.projectionMatrix);
+	GetCurrentContext().GetCameraUniformBuffer().Update(cameraBuffer);
 }
