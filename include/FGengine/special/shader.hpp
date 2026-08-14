@@ -28,6 +28,7 @@ public:
 
 	Shader(std::vector<ObjectDescription> descriptions){
 		Load(descriptions);
+		BindCommonUniformBuffers();
 	}
 	Shader(const Shader&) = delete;
 	Shader(Shader&& shader): shaderid(shader.shaderid){
@@ -57,6 +58,7 @@ private:
 	ShaderID shaderid;
 
 	void Delete();
+	void BindCommonUniformBuffers();
 	
 };
 

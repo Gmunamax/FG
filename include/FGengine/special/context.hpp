@@ -31,11 +31,30 @@ private:
 	UniformBuffer<cameraUniformBuffer> cameraUbo;
 
 public:
-	const UniformBuffer<cameraUniformBuffer>& GetCameraUniformBuffer(){
+	const UniformBuffer<cameraUniformBuffer>& GetCameraUniformBuffer() const{
+		return cameraUbo;
+	}
+	UniformBuffer<cameraUniformBuffer>& GetCameraUniformBuffer(){
 		return cameraUbo;
 	}
 
-	Context(const Backend::Window& win): Backend::ModernContext(win) {}
+	void MakeCurrent(const Backend::Window& win){
+		Backend::ModernContext::MakeCurrent(win);
+		MakeContextCurrent();
+	}
+
+	void MakeCurrent(){
+		Backend::ModernContext::MakeCurrent();
+		MakeContextCurrent();
+	}
+
+private:
+	void MakeContextCurrent();
+
+public:
+	Context(const Backend::Window& win): Backend::ModernContext(win) {
+		MakeContextCurrent();
+	}
 };
 
 }

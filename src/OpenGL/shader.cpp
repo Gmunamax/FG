@@ -16,6 +16,8 @@
 #include "FGengine/special/shader.hpp"
 #include <gl/gl.hpp>
 #include <compiler.hpp>
+#include "FGengine/special/uniformBuffer.hpp"
+#include "../currentContext/currentContext.hpp"
 
 using namespace FGengine;
 
@@ -30,4 +32,13 @@ void Shader::Delete(){
 		glDeleteProgram(shaderid);
 		shaderid = 0;
 	}
+}
+
+void BindUniformBlock(const Shader& shader, const _UniformBuffer& uniformBuffer, const char* blockName){
+	GLuint index = glGetUniformBlockIndex(shader.GetID(), blockName);
+	glUniformBlockBinding(shader.GetID(), index, uniformBuffer.GetBindingPoint());
+}
+
+void Shader::BindCommonUniformBuffers(){
+	BindUniformBlock(*this, GetCurrentContext().GetCameraUniformBuffer(), "camera");
 }

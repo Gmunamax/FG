@@ -23,7 +23,7 @@ void _UniformBuffer::Bind() const{
 	glBindBuffer(GL_UNIFORM_BUFFER, uniformBuffer);
 }
 
-void _UniformBuffer::Update(void* newStorage, std::size_t size){
+void _UniformBuffer::Update(const void* newStorage, std::size_t size){
 	Bind();
 	void* buffer = glMapBufferRange(GL_UNIFORM_BUFFER, 0, size, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
 	std::memcpy(buffer, newStorage, size);

@@ -13,37 +13,11 @@
 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
-#pragma once
-#include <cstddef>
+#include "FGengine/special/context.hpp"
+#include "../currentContext/currentContext.hpp"
 
-namespace FGengine {
+using namespace FGengine;
 
-class _UniformBuffer{
-	static inline unsigned int freeBindingPoint = 0;
-	unsigned int bindingPoint;
-	
-	unsigned int uniformBuffer;
-
-	void Bind() const;
-
-public:
-	unsigned int GetBindingPoint() const{
-		return bindingPoint;
-	}
-
-	void Update(const void* newStorage, std::size_t size);
-
-	_UniformBuffer(std::size_t size);
-};
-
-template<typename StructureType>
-class UniformBuffer: public _UniformBuffer{
-public:
-	UniformBuffer(): _UniformBuffer(sizeof(StructureType)) {}
-
-	void Update(const StructureType& newStorage){
-		_UniformBuffer::Update(&newStorage, sizeof(StructureType));
-	}
-};
-
+void Context::MakeContextCurrent(){
+	SetCurrentContext(this);
 }
