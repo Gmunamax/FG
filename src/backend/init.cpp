@@ -13,46 +13,16 @@
 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
-#pragma once
-#include "FGengine/structures/aspectratio.hpp"
-#include "FGengine/structures/geometry.hpp"
-#include "FGengine/structures/color.hpp"
+#include <SDL2/SDL.h>
 
-namespace FGengine{
+namespace FGengine::Backend{
 
-class Framebuffer{
-private:
-	AspectRatio aspectRatio;
+void Init(){
+	SDL_Init(SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_EVENTS);
+}
 
-public:
-	const AspectRatio& GetAspectRatio(){
-		return aspectRatio;
-	}
-
-public:
-	void SetViewportGeom(const Geometry2i& newgeom);
-
-	Geometry2i GetViewportGeom() const;
-
-public:
-	void SetBackgroundColor(const Color4f& newbgcolor);
-
-	Color4f GetBackgroundColor() const;
-
-private:
-	unsigned int buffersToClear = 0;
-
-public:
-	void SetBuffersToClear(unsigned int newMask){
-		buffersToClear = newMask;
-	}
-
-	const unsigned int& GetBuffersToClear() const{
-		return buffersToClear;
-	}
-
-public:
-	void Clear();
-};
+void Quit(){
+	SDL_Quit();
+}
 
 }

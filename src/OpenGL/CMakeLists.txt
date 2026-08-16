@@ -13,4 +13,15 @@
 #
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, see <https://www.gnu.org/licenses/>.
-target_sources(FGengine PUBLIC defaults.cpp)
+target_sources(FGengine PRIVATE
+	uniformBuffer.cpp
+	uniform.cpp
+	framebuffer.cpp
+	window.cpp
+	camera.cpp
+	viewport.cpp
+	shader.cpp
+	modernContext.cpp
+	context.cpp
+)
+target_link_libraries(FGengine PRIVATE loader shaderCompiler)

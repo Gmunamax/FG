@@ -14,45 +14,42 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #pragma once
-#include "FGengine/structures/aspectratio.hpp"
-#include "FGengine/structures/geometry.hpp"
-#include "FGengine/structures/color.hpp"
 
 namespace FGengine{
 
-class Framebuffer{
-private:
-	AspectRatio aspectRatio;
+namespace Backend{
 
-public:
-	const AspectRatio& GetAspectRatio(){
-		return aspectRatio;
-	}
+	class Handle{
+	private:
+		void* handle;
 
-public:
-	void SetViewportGeom(const Geometry2i& newgeom);
+	public:
+		void* GetHandle() const{
+			return handle;
+		}
 
-	Geometry2i GetViewportGeom() const;
+	protected:
+		void SetHandle(void* newHandle){
+			handle = newHandle;
+		}
 
-public:
-	void SetBackgroundColor(const Color4f& newbgcolor);
+		Handle(void* handle): handle(handle) {}
+		Handle(const Handle&) = delete;
+		Handle(Handle&& handle): handle(handle.handle){
+			handle.handle = nullptr;
+		}
+		~Handle() = default;
 
-	Color4f GetBackgroundColor() const;
+		Handle& operator=(const Handle&) = delete;
+		Handle& operator=(Handle&& handle){
+			if(&handle != this){
+				this->handle = handle.handle;
+				handle.handle = nullptr;
+			}
+			return *this;
+		}
+	};
 
-private:
-	unsigned int buffersToClear = 0;
-
-public:
-	void SetBuffersToClear(unsigned int newMask){
-		buffersToClear = newMask;
-	}
-
-	const unsigned int& GetBuffersToClear() const{
-		return buffersToClear;
-	}
-
-public:
-	void Clear();
-};
+}
 
 }

@@ -13,46 +13,21 @@
 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
-#pragma once
-#include "FGengine/structures/aspectratio.hpp"
-#include "FGengine/structures/geometry.hpp"
-#include "FGengine/structures/color.hpp"
+#include "FGengine/backend/modernContext.hpp"
+#include <gl/gl.hpp>
 
-namespace FGengine{
+using namespace FGengine::Backend;
 
-class Framebuffer{
-private:
-	AspectRatio aspectRatio;
+ModernContext::ModernContext(const Window& win): Backend::GLContext(win){
+	pfns = new GladGLContext;
+	gladLoadGLContext(static_cast<GladGLContext*>(pfns), GetProcAddress);
+	MakePfnsCurrent();
+}
 
-public:
-	const AspectRatio& GetAspectRatio(){
-		return aspectRatio;
-	}
+void ModernContext::MakePfnsCurrent(){
+	currentPfns = *static_cast<GladGLContext*>(pfns);
+}
 
-public:
-	void SetViewportGeom(const Geometry2i& newgeom);
-
-	Geometry2i GetViewportGeom() const;
-
-public:
-	void SetBackgroundColor(const Color4f& newbgcolor);
-
-	Color4f GetBackgroundColor() const;
-
-private:
-	unsigned int buffersToClear = 0;
-
-public:
-	void SetBuffersToClear(unsigned int newMask){
-		buffersToClear = newMask;
-	}
-
-	const unsigned int& GetBuffersToClear() const{
-		return buffersToClear;
-	}
-
-public:
-	void Clear();
-};
-
+void ModernContext::Destroy(){
+	delete static_cast<GladGLContext*>(pfns);
 }

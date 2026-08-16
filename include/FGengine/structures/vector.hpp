@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #pragma once
-#include <GL/glew.h>
 #include <glm/glm.hpp>
 
 namespace FGengine{
@@ -29,35 +28,6 @@ enum class VectorType{
 namespace _Vector{
 
 	using length_t = unsigned;
-
-	template<typename DataType>
-	struct VectorDataType{
-		static constexpr GLenum gldatatype();
-	};
-
-	template<>
-	inline constexpr GLenum VectorDataType<char>::gldatatype() {return GL_BYTE;}
-
-	template<>
-	inline constexpr GLenum VectorDataType<short>::gldatatype() {return GL_SHORT;}
-
-	template<>
-	inline constexpr GLenum VectorDataType<int>::gldatatype() {return GL_INT;}
-
-	template<>
-	inline constexpr GLenum VectorDataType<unsigned char>::gldatatype() {return GL_UNSIGNED_BYTE;}
-
-	template<>
-	inline constexpr GLenum VectorDataType<unsigned short>::gldatatype() {return GL_UNSIGNED_SHORT;}
-
-	template<>
-	inline constexpr GLenum VectorDataType<unsigned int>::gldatatype() {return GL_UNSIGNED_INT;}
-
-	template<>
-	inline constexpr GLenum VectorDataType<float>::gldatatype() {return GL_FLOAT;}
-
-	template<>
-	inline constexpr GLenum VectorDataType<double>::gldatatype() {return GL_DOUBLE;}
 
 	template<length_t Length, typename DataType, VectorType VectorPurpose>
 	struct VectorData;
@@ -157,7 +127,7 @@ template<_Vector::length_t Length, typename DataType, VectorType VectorPurpose>
 struct Vector;
 
 template<typename DataType, VectorType VectorPurpose>
-struct Vector<1, DataType, VectorPurpose>: public _Vector::VectorDataType<DataType>, public _Vector::VectorMethods<1, DataType, VectorPurpose>{
+struct Vector<1, DataType, VectorPurpose>: public _Vector::VectorMethods<1, DataType, VectorPurpose>{
 
 	Vector() = default;
 	Vector(DataType value) {
@@ -295,7 +265,7 @@ struct Vector<1, DataType, VectorPurpose>: public _Vector::VectorDataType<DataTy
 };
 
 template<typename DataType, VectorType VectorPurpose>
-struct Vector<2, DataType, VectorPurpose>: public _Vector::VectorDataType<DataType>, public _Vector::VectorMethods<2, DataType, VectorPurpose>{
+struct Vector<2, DataType, VectorPurpose>: public _Vector::VectorMethods<2, DataType, VectorPurpose>{
 
 	Vector() = default;
 	explicit Vector(DataType value){
@@ -460,7 +430,7 @@ struct Vector<2, DataType, VectorPurpose>: public _Vector::VectorDataType<DataTy
 };
 
 template<typename DataType, VectorType VectorPurpose>
-struct Vector<3, DataType, VectorPurpose>: public _Vector::VectorDataType<DataType>, public _Vector::VectorMethods<3, DataType, VectorPurpose>{
+struct Vector<3, DataType, VectorPurpose>: public _Vector::VectorMethods<3, DataType, VectorPurpose>{
 
 	Vector() = default;
 	explicit Vector(DataType value){
@@ -656,7 +626,7 @@ struct Vector<3, DataType, VectorPurpose>: public _Vector::VectorDataType<DataTy
 };
 
 template<typename DataType, VectorType VectorPurpose>
-struct Vector<4, DataType, VectorPurpose>: public _Vector::VectorDataType<DataType>, public _Vector::VectorMethods<4, DataType, VectorPurpose>{
+struct Vector<4, DataType, VectorPurpose>: public _Vector::VectorMethods<4, DataType, VectorPurpose>{
 		
 	Vector() = default;
 	explicit Vector(DataType value){

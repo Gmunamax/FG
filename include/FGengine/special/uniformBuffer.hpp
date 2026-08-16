@@ -14,45 +14,36 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #pragma once
-#include "FGengine/structures/aspectratio.hpp"
-#include "FGengine/structures/geometry.hpp"
-#include "FGengine/structures/color.hpp"
+#include <cstddef>
 
-namespace FGengine{
+namespace FGengine {
 
-class Framebuffer{
-private:
-	AspectRatio aspectRatio;
+class _UniformBuffer{
+	static inline unsigned int freeBindingPoint = 0;
+	unsigned int bindingPoint;
+	
+	unsigned int uniformBuffer;
+
+	void Bind() const;
 
 public:
-	const AspectRatio& GetAspectRatio(){
-		return aspectRatio;
+	unsigned int GetBindingPoint() const{
+		return bindingPoint;
 	}
 
+	void Update(const void* newStorage, std::size_t size);
+
+	_UniformBuffer(std::size_t size);
+};
+
+template<typename StructureType>
+class UniformBuffer: public _UniformBuffer{
 public:
-	void SetViewportGeom(const Geometry2i& newgeom);
+	UniformBuffer(): _UniformBuffer(sizeof(StructureType)) {}
 
-	Geometry2i GetViewportGeom() const;
-
-public:
-	void SetBackgroundColor(const Color4f& newbgcolor);
-
-	Color4f GetBackgroundColor() const;
-
-private:
-	unsigned int buffersToClear = 0;
-
-public:
-	void SetBuffersToClear(unsigned int newMask){
-		buffersToClear = newMask;
+	void Update(const StructureType& newStorage){
+		_UniformBuffer::Update(&newStorage, sizeof(StructureType));
 	}
-
-	const unsigned int& GetBuffersToClear() const{
-		return buffersToClear;
-	}
-
-public:
-	void Clear();
 };
 
 }

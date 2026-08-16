@@ -14,45 +14,47 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #pragma once
-#include "FGengine/structures/aspectratio.hpp"
-#include "FGengine/structures/geometry.hpp"
-#include "FGengine/structures/color.hpp"
+#include <glm/mat4x4.hpp>
+#include "FGengine/backend/modernContext.hpp"
+#include "uniformBuffer.hpp"
 
 namespace FGengine{
 
-class Framebuffer{
-private:
-	AspectRatio aspectRatio;
-
+class Context: public Backend::ModernContext{
 public:
-	const AspectRatio& GetAspectRatio(){
-		return aspectRatio;
-	}
-
-public:
-	void SetViewportGeom(const Geometry2i& newgeom);
-
-	Geometry2i GetViewportGeom() const;
-
-public:
-	void SetBackgroundColor(const Color4f& newbgcolor);
-
-	Color4f GetBackgroundColor() const;
+	struct cameraUniformBuffer{
+		glm::mat4 projectionMatrix;
+		glm::mat4 viewMatrix;
+	};
 
 private:
-	unsigned int buffersToClear = 0;
+	UniformBuffer<cameraUniformBuffer> cameraUbo;
 
 public:
-	void SetBuffersToClear(unsigned int newMask){
-		buffersToClear = newMask;
+	const UniformBuffer<cameraUniformBuffer>& GetCameraUniformBuffer() const{
+		return cameraUbo;
+	}
+	UniformBuffer<cameraUniformBuffer>& GetCameraUniformBuffer(){
+		return cameraUbo;
 	}
 
-	const unsigned int& GetBuffersToClear() const{
-		return buffersToClear;
+	void MakeCurrent(const Backend::Window& win){
+		Backend::ModernContext::MakeCurrent(win);
+		MakeContextCurrent();
 	}
+
+	void MakeCurrent(){
+		Backend::ModernContext::MakeCurrent();
+		MakeContextCurrent();
+	}
+
+private:
+	void MakeContextCurrent();
 
 public:
-	void Clear();
+	Context(const Backend::Window& win): Backend::ModernContext(win) {
+		MakeContextCurrent();
+	}
 };
 
 }

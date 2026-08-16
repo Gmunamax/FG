@@ -14,45 +14,51 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #pragma once
-#include "FGengine/structures/aspectratio.hpp"
-#include "FGengine/structures/geometry.hpp"
-#include "FGengine/structures/color.hpp"
+#include "window.hpp"
+#include "handle.hpp"
 
 namespace FGengine{
 
-class Framebuffer{
-private:
-	AspectRatio aspectRatio;
+namespace Backend{
 
-public:
-	const AspectRatio& GetAspectRatio(){
-		return aspectRatio;
-	}
+	class GLContext: private Handle{
+	public:
+		enum class VSyncModes{
+			Off = 0,
+			On = 1,
+			Adaptive = -1
+		};
 
-public:
-	void SetViewportGeom(const Geometry2i& newgeom);
+		GLContext(const Window&);
+		GLContext(const GLContext&) = delete;
+		GLContext(GLContext&&) = default;
+		~GLContext(){
+			Destroy();
+		}
 
-	Geometry2i GetViewportGeom() const;
+		GLContext& operator=(const GLContext&) = delete;
+		GLContext& operator=(GLContext&& context){
+			if(&context != this){
+				Destroy();
+				Handle::operator=(std::move(context));
+			}
+			return *this;
+		}
 
-public:
-	void SetBackgroundColor(const Color4f& newbgcolor);
+		using Proc = void(*)(void);
+		static Proc GetProcAddress(const char* procName);
 
-	Color4f GetBackgroundColor() const;
+		void MakeCurrent(const Window& window);
+		void MakeCurrent();
 
-private:
-	unsigned int buffersToClear = 0;
+		static void SetVSyncMode(VSyncModes mode);
+		static VSyncModes GetVSyncMode();
+	
+	private:
+		void Destroy();
+		friend struct Internal;
+	};
 
-public:
-	void SetBuffersToClear(unsigned int newMask){
-		buffersToClear = newMask;
-	}
-
-	const unsigned int& GetBuffersToClear() const{
-		return buffersToClear;
-	}
-
-public:
-	void Clear();
-};
+}
 
 }

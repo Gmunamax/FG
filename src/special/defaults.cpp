@@ -21,10 +21,12 @@ namespace FGengine{
 		class DefaultScene: public Scene{
 
 		};
+
+		std::vector<Shader::ObjectDescription> defaultShaderDescription {};
 		
 		void init(){
 			scene = new DefaultScene{};
-			shader = new Shader{};
+			shader = new Shader{defaultShaderDescription};
 			aspectRatio = new AspectRatio{};
 		}
 	}

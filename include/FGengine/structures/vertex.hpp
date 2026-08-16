@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #pragma once
-#include <GL/glew.h>
 #include "point.hpp"
 #include "color.hpp"
 
@@ -130,7 +129,7 @@ private:
 
 	static const int stride = sizeof(Vertex);
 
-	static inline GLuint vao;
+	static inline unsigned int vao;
 	static inline bool ready;
 };
 

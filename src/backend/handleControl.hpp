@@ -14,45 +14,19 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #pragma once
-#include "FGengine/structures/aspectratio.hpp"
-#include "FGengine/structures/geometry.hpp"
-#include "FGengine/structures/color.hpp"
+#include "FGengine/backend/handle.hpp"
 
 namespace FGengine{
 
-class Framebuffer{
-private:
-	AspectRatio aspectRatio;
+namespace Backend{
 
-public:
-	const AspectRatio& GetAspectRatio(){
-		return aspectRatio;
-	}
+	struct Internal{
+		template<typename T>
+		static const Handle& CastToHandle(const T& obj){
+			return obj;
+		}
+	};
 
-public:
-	void SetViewportGeom(const Geometry2i& newgeom);
-
-	Geometry2i GetViewportGeom() const;
-
-public:
-	void SetBackgroundColor(const Color4f& newbgcolor);
-
-	Color4f GetBackgroundColor() const;
-
-private:
-	unsigned int buffersToClear = 0;
-
-public:
-	void SetBuffersToClear(unsigned int newMask){
-		buffersToClear = newMask;
-	}
-
-	const unsigned int& GetBuffersToClear() const{
-		return buffersToClear;
-	}
-
-public:
-	void Clear();
-};
+}
 
 }
