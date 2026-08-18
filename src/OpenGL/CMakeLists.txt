@@ -25,4 +25,4 @@ target_sources(FGengine PRIVATE
 	modernContext.cpp
 	context.cpp
 )
-target_link_libraries(FGengine PRIVATE loader shaderCompiler)
+target_link_libraries(FGengine PRIVATE loader fileReader)

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #include "shaderCompilation.hpp"
-#include <compiler.hpp>
+#include <fileReader.hpp>
 #include <vector>
 #include <string>
 #include <span>
