@@ -15,16 +15,37 @@
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #include "FGengine/special/shader.hpp"
 #include <gl/gl.hpp>
-#include <compiler.hpp>
 #include "FGengine/special/uniformBuffer.hpp"
 #include "../currentContext/currentContext.hpp"
+#include "shaderCompilation/shaderCompilation.hpp"
+#include <iostream>
 
 using namespace FGengine;
 
-void Shader::Load(std::vector<ObjectDescription> descriptions){
+namespace {
+	void PrintLinkStatus(GLuint shaderid);
+}
+
+void Shader::Load(ProgramDescription descriptions){
 	if(shaderid != 0)
 		Delete();
 	shaderid = CreateShaderProgram(descriptions);
+	PrintLinkStatus(shaderid);
+}
+
+namespace {
+
+	void PrintLinkStatus(GLuint shaderid){
+		constexpr short logsize = 512;
+		int status;
+		char log[logsize];
+		glGetProgramiv(shaderid, GL_LINK_STATUS, &status);
+		if(status != GL_TRUE){
+			glGetProgramInfoLog(shaderid, logsize, NULL, log);
+			std::cout << "Shader link failed" << "\n" << log << std::endl;
+		}
+	}
+
 }
 
 void Shader::Delete(){

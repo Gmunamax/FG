@@ -13,21 +13,11 @@
 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
-#include "FGengine/special/defaults.hpp"
+#include <gl/gl.hpp>
+#include "FGengine/special/shader.hpp"
 
 namespace FGengine{
-	namespace Defaults{
-		
-		class DefaultScene: public Scene{
 
-		};
+GLuint CreateShaderProgram(Shader::ProgramDescription descriptions);
 
-		Shader::ProgramDescription defaultShaderDescription {};
-		
-		void init(){
-			scene = new DefaultScene{};
-			shader = new Shader{defaultShaderDescription};
-			aspectRatio = new AspectRatio{};
-		}
-	}
 }

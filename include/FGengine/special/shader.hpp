@@ -14,19 +14,24 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #pragma once
-#include <vector>
+#include <span>
 #include "FGengine/structures/shaderid.hpp"
 
 namespace FGengine{
 
 class Shader{
 public:
-	struct ObjectDescription{
-		unsigned int type;
-		std::vector<const char*> filepathes;
+	struct ProgramDescription{
+		using Pathes = std::span<const char*>;
+		Pathes geometry;
+		Pathes vertex;
+		Pathes fragment;
+		Pathes tessControl;
+		Pathes tessEvaluation;
+		Pathes compute;
 	};
 
-	Shader(std::vector<ObjectDescription> descriptions){
+	Shader(ProgramDescription descriptions){
 		Load(descriptions);
 		BindCommonUniformBuffers();
 	}
@@ -48,7 +53,7 @@ public:
 		return *this;
 	}
 	
-	void Load(std::vector<ObjectDescription> descriptions);
+	void Load(ProgramDescription descriptions);
 
 	ShaderID GetID() const{
 		return shaderid;
