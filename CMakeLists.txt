@@ -31,8 +31,3 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 add_subdirectory(deps/glad)
 add_subdirectory(modules)
 add_subdirectory(src)
-
-find_package(SDL3 3.4 REQUIRED)
-find_package(OpenGL REQUIRED)
-
-target_link_libraries(FGengine PRIVATE SDL3::SDL3 OpenGL::GL glad)
