@@ -24,7 +24,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 include_directories(include)
 
 add_library(FGengine SHARED)
-add_compile_options(-fPIC)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 

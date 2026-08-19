@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, see <https://www.gnu.org/licenses/>.
 add_library(loader STATIC)
+set_target_properties(loader PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_sources(loader PRIVATE gl.cpp)
 target_include_directories(loader PUBLIC include)
 target_link_libraries(loader PUBLIC glad)
