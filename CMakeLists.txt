@@ -32,7 +32,7 @@ add_subdirectory(deps/glad)
 add_subdirectory(modules)
 add_subdirectory(src)
 
-find_package(SDL2 2.32 REQUIRED)
+find_package(SDL3 3.4 REQUIRED)
 find_package(OpenGL REQUIRED)
 
-target_link_libraries(FGengine PRIVATE SDL2::SDL2 OpenGL::GL glad)
+target_link_libraries(FGengine PRIVATE SDL3::SDL3 OpenGL::GL glad)

@@ -13,12 +13,12 @@
 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 namespace FGengine::Backend{
 
 void Init(){
-	SDL_Init(SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_EVENTS);
+	SDL_Init(SDL_INIT_VIDEO);
 }
 
 void Quit(){

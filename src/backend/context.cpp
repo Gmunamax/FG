@@ -13,7 +13,7 @@
 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
-#include <SDL2/SDL_video.h>
+#include <SDL3/SDL_video.h>
 #include "FGengine/backend/context.hpp"
 #include "handleControl.hpp"
 
@@ -28,7 +28,7 @@ namespace Backend{
 	}
 	
 	void GLContext::MakeCurrent(){
-		SDL_GL_MakeCurrent(SDL_GL_GetCurrentWindow(), GetHandle());
+		SDL_GL_MakeCurrent(SDL_GL_GetCurrentWindow(), (SDL_GLContext)GetHandle());
 	}
 
 	GLContext::Proc GLContext::GetProcAddress(const char* procName){
@@ -37,7 +37,7 @@ namespace Backend{
 	
 	void GLContext::Destroy(){
 		if(GetHandle() != nullptr)
-			SDL_GL_DeleteContext((SDL_GLContext)GetHandle());
+			SDL_GL_DestroyContext((SDL_GLContext)GetHandle());
 	}
 
 	void GLContext::SetVSyncMode(VSyncModes newVSyncMode){
@@ -45,7 +45,9 @@ namespace Backend{
 	}
 
 	GLContext::VSyncModes GLContext::GetVSyncMode(){
-		return (VSyncModes)SDL_GL_GetSwapInterval();
+		int mode;
+		SDL_GL_GetSwapInterval(&mode);
+		return (VSyncModes)mode;
 	}
 
 }

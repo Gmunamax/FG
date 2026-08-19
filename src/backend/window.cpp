@@ -13,7 +13,7 @@
 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
-#include <SDL2/SDL_video.h>
+#include <SDL3/SDL_video.h>
 #include "FGengine/backend/window.hpp"
 
 namespace FGengine{
@@ -22,7 +22,7 @@ namespace FGengine{
 
 namespace Backend{
 
-	Window::Window(TitleType title, SizeType size): Handle(SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, size.w, size.h, SDL_WINDOW_OPENGL)) {}
+	Window::Window(TitleType title, SizeType size): Handle(SDL_CreateWindow(title, size.w, size.h, SDL_WINDOW_OPENGL)) {}
 
 	void Window::Update(){
 		SDL_GL_SwapWindow(GetSdlHandle());
