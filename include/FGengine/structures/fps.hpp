@@ -25,16 +25,30 @@ private:
 	DataType fps;
 
 public:
-	Framerate();
-	Framerate(const DataType& fps);
+	Framerate(): fps(0) {}
+	Framerate(const DataType& fps): fps(fps) {}
 	
-	bool operator==(const Framerate& fps) const;
-	bool operator!=(const Framerate& fps) const;
-	bool operator>(const Framerate& fps) const;
-	bool operator<(const Framerate& fps) const;
-	bool operator>=(const Framerate& fps) const;
-	bool operator<=(const Framerate& fps) const;
-	const DataType& toDataType() const;
+	bool operator==(const Framerate& fps) const{
+		return this->fps == fps.fps;
+	}
+	bool operator!=(const Framerate& fps) const{
+		return this->fps != fps.fps;
+	}
+	bool operator>(const Framerate& fps) const{
+		return this->fps > fps.fps;
+	}
+	bool operator<(const Framerate& fps) const{
+		return this->fps < fps.fps;
+	}
+	bool operator>=(const Framerate& fps) const{
+		return this->fps >= fps.fps;
+	}
+	bool operator<=(const Framerate& fps) const{
+		return this->fps <= fps.fps;
+	}
+	const DataType& toDataType() const{
+		return fps;
+	}
 };
 
 inline Framerate operator ""_fps(unsigned long long fps){

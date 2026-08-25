@@ -29,29 +29,59 @@ private:
 	DataType frametime;
 
 public:
-	Frametime();
-	Frametime(const DataType& frametime);
-	Frametime(const Framerate& fps);
-	Frametime(const std::chrono::duration<DataType, ratio>& duration);
+	Frametime(): frametime(0) {}
+	Frametime(const DataType& frametime): frametime(frametime) {}
+	Frametime(const Framerate& fps): frametime(double(ratio::num) / fps.toDataType()*ratio::den) {}
+	Frametime(const std::chrono::duration<DataType, ratio>& duration): frametime(duration.count()) {}
 	
-	void operator=(const std::chrono::duration<DataType, ratio>& duration);
-	const DataType& toDataType() const;
+	void operator=(const std::chrono::duration<DataType, ratio>& duration){
+		frametime = duration.count();
+	}
+	const DataType& toDataType() const { return frametime; }
 
-	bool operator==(const Frametime&) const;
-	bool operator!=(const Frametime&) const;
-	bool operator>(const Frametime&) const;
-	bool operator<(const Frametime&) const;
-	bool operator>=(const Frametime&) const;
-	bool operator<=(const Frametime&) const;
+	bool operator==(const Frametime& frametime) const{
+		return this->frametime == frametime.frametime;
+	}
+	bool operator!=(const Frametime& frametime) const{
+		return this->frametime != frametime.frametime;
+	}
+	bool operator>(const Frametime& frametime) const{
+		return this->frametime > frametime.frametime;
+	}
+	bool operator<(const Frametime& frametime) const{
+		return this->frametime < frametime.frametime;
+	}
+	bool operator>=(const Frametime& frametime) const{
+		return this->frametime >= frametime.frametime;
+	}
+	bool operator<=(const Frametime& frametime) const{
+		return this->frametime <= frametime.frametime;
+	}
 
-	Frametime operator+(const Frametime&) const;
-	Frametime operator-(const Frametime&) const;
-	Frametime operator*(const Frametime&) const;
-	Frametime operator/(const Frametime&) const;
-	Frametime operator+=(const Frametime&);
-	Frametime operator-=(const Frametime&);
-	Frametime operator*=(const Frametime&);
-	Frametime operator/=(const Frametime&);
+	Frametime operator+(const Frametime& frametime) const{
+		return this->frametime + frametime.frametime;
+	}
+	Frametime operator-(const Frametime& frametime) const{
+		return this->frametime - frametime.frametime;
+	}
+	Frametime operator*(const Frametime& frametime) const{
+		return this->frametime * frametime.frametime;
+	}
+	Frametime operator/(const Frametime& frametime) const{
+		return this->frametime / frametime.frametime;
+	}
+	Frametime operator+=(const Frametime& frametime){
+		return this->frametime += frametime.frametime;
+	}
+	Frametime operator-=(const Frametime& frametime){
+		return this->frametime -= frametime.frametime;
+	}
+	Frametime operator*=(const Frametime& frametime){
+		return this->frametime *= frametime.frametime;
+	}
+	Frametime operator/=(const Frametime& frametime){
+		return this->frametime /= frametime.frametime;
+	}
 
 };
 
