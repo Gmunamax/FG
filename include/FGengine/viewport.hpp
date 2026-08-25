@@ -15,7 +15,7 @@
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "FGengine/structures/geometry.hpp"
-#include "FGengine/special/framebuffer.hpp"
+#include "FGengine/properties/framebuffer.hpp"
 
 namespace FGengine{
 

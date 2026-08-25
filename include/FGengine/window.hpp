@@ -14,47 +14,16 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #pragma once
-#include <glm/mat4x4.hpp>
-#include "FGengine/backend/modernContext.hpp"
-#include "uniformBuffer.hpp"
+#include "FGengine/backend/window.hpp"
+#include "FGengine/properties/framebuffer.hpp"
 
 namespace FGengine{
 
-class Context: public Backend::ModernContext{
+class Window: public Backend::Window, public Framebuffer{
 public:
-	struct cameraUniformBuffer{
-		glm::mat4 projectionMatrix;
-		glm::mat4 viewMatrix;
-	};
+	Window(TitleType title, SizeType size);
 
-private:
-	UniformBuffer<cameraUniformBuffer> cameraUbo;
-
-public:
-	const UniformBuffer<cameraUniformBuffer>& GetCameraUniformBuffer() const{
-		return cameraUbo;
-	}
-	UniformBuffer<cameraUniformBuffer>& GetCameraUniformBuffer(){
-		return cameraUbo;
-	}
-
-	void MakeCurrent(const Backend::Window& win){
-		Backend::ModernContext::MakeCurrent(win);
-		MakeContextCurrent();
-	}
-
-	void MakeCurrent(){
-		Backend::ModernContext::MakeCurrent();
-		MakeContextCurrent();
-	}
-
-private:
-	void MakeContextCurrent();
-
-public:
-	Context(const Backend::Window& win): Backend::ModernContext(win) {
-		MakeContextCurrent();
-	}
+	static void BindViewport();
 };
 
 }

@@ -16,7 +16,7 @@
 #pragma once
 #include "FGengine/properties/worldpoint.hpp"
 #include "FGengine/structures/aspectratio.hpp"
-#include "FGengine/special/defaults.hpp"
+#include "FGengine/defaults.hpp"
 
 namespace FGengine{
 

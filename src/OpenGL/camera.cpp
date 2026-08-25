@@ -13,10 +13,10 @@
 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
-#include "FGengine/renderable/camera.hpp"
+#include "FGengine/camera.hpp"
 #include <gl/gl.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "FGengine/special/uniformBuffer.hpp"
+#include "FGengine/uniformBuffer.hpp"
 #include "../currentContext/currentContext.hpp"
 
 using namespace FGengine;
