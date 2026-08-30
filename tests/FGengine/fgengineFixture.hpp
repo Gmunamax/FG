@@ -13,31 +13,30 @@
 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
-#include "FGengine/uniformBuffer.hpp"
-#include <gl/gl.hpp>
-#include <cstring>
+#include <FGengine/window.hpp>
+#include <FGengine/context.hpp>
 
-using namespace FGengine;
+struct FGengineFixture{
 
-void _UniformBuffer::Bind() const{
-	glBindBuffer(GL_UNIFORM_BUFFER, GetHandle());
-}
+	class Window: public FGengine::Window{
+	public:
+		Window(TitleType title, SizeType size): FGengine::Window(title, size){
+			TestCreation();
+		}
 
-void _UniformBuffer::Update(const void* newStorage, std::size_t size){
-	Bind();
-	void* buffer = glMapBufferRange(GL_UNIFORM_BUFFER, 0, size, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
-	std::memcpy(buffer, newStorage, size);
-	glUnmapBuffer(GL_UNIFORM_BUFFER);
-}
+	private:
+		void TestCreation();
+	}
+	win{"FGengine tests", {800, 600}};
 
-_UniformBuffer::_UniformBuffer(std::size_t size){
-	GLuint buffer;
-	glGenBuffers(1, &buffer);
-	SetHandle(buffer);
-	Bind();
-	glBufferStorage(GL_UNIFORM_BUFFER, size, NULL, GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT);
+	class Context: public FGengine::Context{
+	public:
+		Context(const FGengine::Backend::Window& win): FGengine::Context(win){
+			TestCreation();
+		}
 
-	bindingPoint = freeBindingPoint;
-	glBindBufferBase(GL_UNIFORM_BUFFER, freeBindingPoint, GetHandle());
-	++freeBindingPoint;
-}
+	private:
+		void TestCreation();
+	}
+	ctx{win};
+};

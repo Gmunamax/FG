@@ -13,31 +13,35 @@
 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
-#include "FGengine/uniformBuffer.hpp"
+#include <boost/test/unit_test.hpp>
 #include <gl/gl.hpp>
-#include <cstring>
+#include <SDL3/SDL_init.h>
+#include <SDL3/SDL_video.h>
 
-using namespace FGengine;
+struct PfnsFixture{
+public:
+	PfnsFixture(){
+		SDL_Init(SDL_INIT_VIDEO);
+		win = SDL_CreateWindow("FGengine's OpenGL loader test", 320, 240, SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN);
+		ctx = SDL_GL_CreateContext(win);
+		gladLoadGLContext(&pfns, SDL_GL_GetProcAddress);
+	}
+	~PfnsFixture(){
+		SDL_GL_DestroyContext(ctx);
+		SDL_DestroyWindow(win);
+		SDL_Quit();
+	}
 
-void _UniformBuffer::Bind() const{
-	glBindBuffer(GL_UNIFORM_BUFFER, GetHandle());
-}
+	GladGLContext pfns;
 
-void _UniformBuffer::Update(const void* newStorage, std::size_t size){
-	Bind();
-	void* buffer = glMapBufferRange(GL_UNIFORM_BUFFER, 0, size, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
-	std::memcpy(buffer, newStorage, size);
-	glUnmapBuffer(GL_UNIFORM_BUFFER);
-}
+private:
+	SDL_Window* win;
+	SDL_GLContext ctx;
+};
 
-_UniformBuffer::_UniformBuffer(std::size_t size){
-	GLuint buffer;
+BOOST_FIXTURE_TEST_CASE(initialization, PfnsFixture){
+	FGengine::SetCurrentPfns(pfns);
+	GLuint buffer = 0;
 	glGenBuffers(1, &buffer);
-	SetHandle(buffer);
-	Bind();
-	glBufferStorage(GL_UNIFORM_BUFFER, size, NULL, GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT);
-
-	bindingPoint = freeBindingPoint;
-	glBindBufferBase(GL_UNIFORM_BUFFER, freeBindingPoint, GetHandle());
-	++freeBindingPoint;
+	BOOST_TEST(buffer != 0);
 }

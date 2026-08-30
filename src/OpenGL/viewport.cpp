@@ -29,12 +29,16 @@ void Viewport::DefineDepthStencilBuffer(){
 }
 
 void Viewport::Use(){
-	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, GetHandle());
 }
 
 void Viewport::Init(Buffers buffers, Vector<2, unsigned int, VectorType::Size> maxSize){
-	glGenFramebuffers(1, &framebuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+	{
+		BufferType buffer = GetHandle();
+		glGenFramebuffers(1, &buffer);
+		SetHandle(buffer);
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, GetHandle());
 
 	glGenTextures(1, &colorBuffer.id);
 	glGenRenderbuffers(1, &depthStencilBuffer.id);
@@ -74,5 +78,9 @@ void Viewport::Init(Buffers buffers, Vector<2, unsigned int, VectorType::Size> m
 Viewport::~Viewport(){
 	glDeleteRenderbuffers(1, &depthStencilBuffer.id);
 	glDeleteTextures(1, &colorBuffer.id);
-	glDeleteFramebuffers(1, &framebuffer);
+	{
+		BufferType buffer = GetHandle();
+		glDeleteFramebuffers(1, &buffer);
+		SetHandle(buffer);
+	}
 }

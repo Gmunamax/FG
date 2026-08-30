@@ -21,7 +21,7 @@ namespace FGengine{
 
 namespace Backend{
 
-	class GLContext: private Handle{
+	class GLContext: protected Handle{
 	public:
 		enum class VSyncModes{
 			Off = 0,

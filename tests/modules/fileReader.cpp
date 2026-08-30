@@ -13,31 +13,25 @@
 
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
-#include "FGengine/uniformBuffer.hpp"
-#include <gl/gl.hpp>
-#include <cstring>
+#include <boost/test/unit_test.hpp>
+#include <fileReader.hpp>
+#include <fstream>
+#include <string>
+#include <string_view>
+#include <set>
 
-using namespace FGengine;
-
-void _UniformBuffer::Bind() const{
-	glBindBuffer(GL_UNIFORM_BUFFER, GetHandle());
+void CreateFileWithContent(const char* path, std::string_view content){
+	std::fstream stream{path, std::ios::out | std::ios::trunc};
+	stream << content;
 }
 
-void _UniformBuffer::Update(const void* newStorage, std::size_t size){
-	Bind();
-	void* buffer = glMapBufferRange(GL_UNIFORM_BUFFER, 0, size, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
-	std::memcpy(buffer, newStorage, size);
-	glUnmapBuffer(GL_UNIFORM_BUFFER);
-}
+BOOST_AUTO_TEST_CASE(readFile){
+	const std::string fileContent = "Hello world";
+	constexpr const char* testFilePath = "/tmp/testFile.txt";
+	CreateFileWithContent(testFilePath, fileContent);
 
-_UniformBuffer::_UniformBuffer(std::size_t size){
-	GLuint buffer;
-	glGenBuffers(1, &buffer);
-	SetHandle(buffer);
-	Bind();
-	glBufferStorage(GL_UNIFORM_BUFFER, size, NULL, GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT);
+	const std::string readedFile{FGengine::ReadFile(testFilePath)};
 
-	bindingPoint = freeBindingPoint;
-	glBindBufferBase(GL_UNIFORM_BUFFER, freeBindingPoint, GetHandle());
-	++freeBindingPoint;
+	const std::set<std::string> validResults {fileContent, fileContent+"\n"};
+	BOOST_TEST(validResults.contains(readedFile));
 }

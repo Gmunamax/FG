@@ -22,7 +22,7 @@ namespace FGengine{
 
 namespace Backend{
 
-	class Window: private Handle{
+	class Window: protected Handle{
 	public:
 		using PositionType = Point2i;
 		using TitleType = const char*;

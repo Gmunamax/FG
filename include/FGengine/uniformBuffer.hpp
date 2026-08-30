@@ -14,16 +14,15 @@
 // You should have received a copy of the GNU Lesser General Public
 // License along with this library; if not, see <https://www.gnu.org/licenses/>.
 #pragma once
+#include <FGengine/properties/buffer.hpp>
 #include <cstddef>
 
 namespace FGengine {
 
-class _UniformBuffer{
+class _UniformBuffer: protected Buffer{
 	static inline unsigned int freeBindingPoint = 0;
 	unsigned int bindingPoint;
 	
-	unsigned int uniformBuffer;
-
 	void Bind() const;
 
 public:

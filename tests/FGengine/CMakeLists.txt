@@ -13,19 +13,19 @@
 #
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, see <https://www.gnu.org/licenses/>.
-cmake_minimum_required(VERSION 3.25)
+add_executable(FGengineTests)
 
-project(FGengine)
+target_link_libraries(FGengineTests PRIVATE Boost::unit_test_framework)
+target_compile_definitions(FGengineTests PRIVATE BOOST_TEST_DYN_LINK)
 
-set(CMAKE_CXX_STANDARD 26)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+target_link_libraries(FGengineTests PRIVATE FGengine)
 
-add_library(FGengine SHARED)
-
-target_include_directories(FGengine PUBLIC include)
-
-add_subdirectory(deps/glad)
-add_subdirectory(modules)
-add_subdirectory(src)
-add_subdirectory(tests)
+target_sources(FGengineTests PRIVATE
+	main.cpp
+	window.cpp
+	context.cpp
+	shader.cpp
+	uniformBuffer.cpp
+	viewport.cpp
+)
+add_subdirectory(properties)

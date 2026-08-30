@@ -16,17 +16,17 @@
 #pragma once
 #include "FGengine/structures/geometry.hpp"
 #include "FGengine/properties/framebuffer.hpp"
+#include "FGengine/properties/buffer.hpp"
 
 namespace FGengine{
 
-class Viewport: public Framebuffer{
+class Viewport: protected Buffer, public Framebuffer{
 
 	struct Buffer{
 		unsigned int id;
 		unsigned int internalformat;
 	};
 	
-	unsigned int framebuffer;
 	Buffer colorBuffer {0};
 	Buffer depthStencilBuffer {0};
 
