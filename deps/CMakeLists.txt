@@ -1,1 +1,1 @@
-add_subdirectory(FGengine)
+add_subdirectory(engine)
