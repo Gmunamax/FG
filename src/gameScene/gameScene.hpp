@@ -60,19 +60,35 @@ public:
 			break;
 		
 		case Key::W:
-			player.SetWalkY(Walk::WalkType::On);
+			player.SetWalkY(Player::MovementType::On);
 			break;
 		
 		case Key::A:
-			player.SetWalkX(Walk::WalkType::Reverse);
+			player.SetWalkX(Player::MovementType::Reverse);
 			break;
 
 		case Key::S:
-			player.SetWalkY(Walk::WalkType::Reverse);
+			player.SetWalkY(Player::MovementType::Reverse);
 			break;
 		
 		case Key::D:
-			player.SetWalkX(Walk::WalkType::On);
+			player.SetWalkX(Player::MovementType::On);
+			break;
+
+		case Key::Up:
+			player.SetYaw(Player::MovementType::On);
+			break;
+
+		case Key::Down:
+			player.SetYaw(Player::MovementType::Reverse);
+			break;
+
+		case Key::Left:
+			player.SetPitch(Player::MovementType::Reverse);
+			break;
+
+		case Key::Right:
+			player.SetPitch(Player::MovementType::On);
 			break;
 
 		default:
@@ -83,19 +99,35 @@ public:
 	void KeyRelease(Key key) override{
 		switch(key){
 		case Key::W:
-			player.SetWalkY(Walk::WalkType::Off);
+			player.SetWalkY(Player::MovementType::Off);
 			break;
 
 		case Key::A:
-			player.SetWalkX(Walk::WalkType::Off);
+			player.SetWalkX(Player::MovementType::Off);
 			break;
 
 		case Key::S:
-			player.SetWalkY(Walk::WalkType::Off);
+			player.SetWalkY(Player::MovementType::Off);
 			break;
 
 		case Key::D:
-			player.SetWalkX(Walk::WalkType::Off);
+			player.SetWalkX(Player::MovementType::Off);
+			break;
+
+		case Key::Up:
+			player.SetYaw(Player::MovementType::Off);
+			break;
+		
+		case Key::Down:
+			player.SetYaw(Player::MovementType::Off);
+			break;
+
+		case Key::Left:
+			player.SetPitch(Player::MovementType::Off);
+			break;
+
+		case Key::Right:
+			player.SetPitch(Player::MovementType::Off);
 			break;
 
 		default:
