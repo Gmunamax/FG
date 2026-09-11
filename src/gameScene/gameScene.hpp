@@ -54,13 +54,53 @@ public:
 	}
 
 	void KeyPress(Key key) override{
-		if(key == Key::Space){
+		switch(key){
+		case Key::Space:
 			player.Jump();
+			break;
+		
+		case Key::W:
+			player.SetWalkY(Walk::WalkType::On);
+			break;
+		
+		case Key::A:
+			player.SetWalkX(Walk::WalkType::Reverse);
+			break;
+
+		case Key::S:
+			player.SetWalkY(Walk::WalkType::Reverse);
+			break;
+		
+		case Key::D:
+			player.SetWalkX(Walk::WalkType::On);
+			break;
+
+		default:
+			break;
 		}
 	}
 	
 	void KeyRelease(Key key) override{
+		switch(key){
+		case Key::W:
+			player.SetWalkY(Walk::WalkType::Off);
+			break;
 
+		case Key::A:
+			player.SetWalkX(Walk::WalkType::Off);
+			break;
+
+		case Key::S:
+			player.SetWalkY(Walk::WalkType::Off);
+			break;
+
+		case Key::D:
+			player.SetWalkX(Walk::WalkType::Off);
+			break;
+
+		default:
+			break;
+		}
 	}
 
 	GameScene(FGengine::Window* win):
