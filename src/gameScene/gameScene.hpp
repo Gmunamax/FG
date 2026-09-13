@@ -1,8 +1,7 @@
-#pragma once
-#include <FGengine/special/window.hpp>
+#include <engine/graphics/shader.hpp>
 #include <engine/videoOutput/eventsPack.hpp>
-#include <engine/utils/player.hpp>
 #include <engine/graphics/model.hpp>
+#include <FGengine/special/window.hpp>
 #include <memory>
 #include "freeroamPlayer.hpp"
 
@@ -91,6 +90,10 @@ public:
 		case Key::Right:
 			player.SetPitch(FreeroamPlayer::MovementType::On);
 			break;
+		
+		case Key::Lshift:
+			player.SetWalkSpeed(20);
+			break;
 
 		default:
 			break;
@@ -131,6 +134,10 @@ public:
 			player.SetPitch(FreeroamPlayer::MovementType::Off);
 			break;
 
+		case Key::Lshift:
+			player.SetWalkSpeed(3);
+			break;
+			
 		default:
 			break;
 		}

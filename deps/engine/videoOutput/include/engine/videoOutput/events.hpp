@@ -62,6 +62,12 @@ private:
 		case SDLK_SPACE:
 			key = EventsPack::Key::Space;
 			break;
+		case SDLK_RSHIFT:
+			key = EventsPack::Key::Rshift;
+			break;
+		case SDLK_LSHIFT:
+			key = EventsPack::Key::Lshift;
+			break;
 		case SDLK_b:
 			key = EventsPack::Key::B;
 			break;

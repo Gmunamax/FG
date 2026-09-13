@@ -5,6 +5,7 @@ struct EventsPack{
 		W,A,S,D,
 		Up,Left,Down,Right,
 		Space,
+		Lshift, Rshift,
 		B
 	};
 
