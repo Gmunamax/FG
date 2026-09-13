@@ -9,7 +9,9 @@ public:
 	}
 
 protected:
-	void UpdateProperties(TimeType timeDelta){}	
+	void UpdateProperties(TimeType timeDelta){
+		camera.Update();
+	}	
 
 private:
 	Camera camera;
