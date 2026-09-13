@@ -4,10 +4,11 @@
 #include <engine/utils/player.hpp>
 #include <engine/graphics/model.hpp>
 #include <memory>
+#include "freeroamPlayer.hpp"
 
 class GameScene final: public EventsPack{
 
-	Player player;
+	FreeroamPlayer player;
 	std::shared_ptr<Shader> shader = std::make_shared<Shader>(vertexShader, fragmentShader);
 	Model floor{floorVertexes, shader};
 
@@ -60,35 +61,35 @@ public:
 			break;
 		
 		case Key::W:
-			player.SetWalkY(Player::MovementType::On);
+			player.SetWalkY(FreeroamPlayer::MovementType::On);
 			break;
 		
 		case Key::A:
-			player.SetWalkX(Player::MovementType::Reverse);
+			player.SetWalkX(FreeroamPlayer::MovementType::Reverse);
 			break;
 
 		case Key::S:
-			player.SetWalkY(Player::MovementType::Reverse);
+			player.SetWalkY(FreeroamPlayer::MovementType::Reverse);
 			break;
 		
 		case Key::D:
-			player.SetWalkX(Player::MovementType::On);
+			player.SetWalkX(FreeroamPlayer::MovementType::On);
 			break;
 
 		case Key::Up:
-			player.SetYaw(Player::MovementType::On);
+			player.SetYaw(FreeroamPlayer::MovementType::On);
 			break;
 
 		case Key::Down:
-			player.SetYaw(Player::MovementType::Reverse);
+			player.SetYaw(FreeroamPlayer::MovementType::Reverse);
 			break;
 
 		case Key::Left:
-			player.SetPitch(Player::MovementType::Reverse);
+			player.SetPitch(FreeroamPlayer::MovementType::Reverse);
 			break;
 
 		case Key::Right:
-			player.SetPitch(Player::MovementType::On);
+			player.SetPitch(FreeroamPlayer::MovementType::On);
 			break;
 
 		default:
@@ -99,35 +100,35 @@ public:
 	void KeyRelease(Key key) override{
 		switch(key){
 		case Key::W:
-			player.SetWalkY(Player::MovementType::Off);
+			player.SetWalkY(FreeroamPlayer::MovementType::Off);
 			break;
 
 		case Key::A:
-			player.SetWalkX(Player::MovementType::Off);
+			player.SetWalkX(FreeroamPlayer::MovementType::Off);
 			break;
 
 		case Key::S:
-			player.SetWalkY(Player::MovementType::Off);
+			player.SetWalkY(FreeroamPlayer::MovementType::Off);
 			break;
 
 		case Key::D:
-			player.SetWalkX(Player::MovementType::Off);
+			player.SetWalkX(FreeroamPlayer::MovementType::Off);
 			break;
 
 		case Key::Up:
-			player.SetYaw(Player::MovementType::Off);
+			player.SetYaw(FreeroamPlayer::MovementType::Off);
 			break;
 		
 		case Key::Down:
-			player.SetYaw(Player::MovementType::Off);
+			player.SetYaw(FreeroamPlayer::MovementType::Off);
 			break;
 
 		case Key::Left:
-			player.SetPitch(Player::MovementType::Off);
+			player.SetPitch(FreeroamPlayer::MovementType::Off);
 			break;
 
 		case Key::Right:
-			player.SetPitch(Player::MovementType::Off);
+			player.SetPitch(FreeroamPlayer::MovementType::Off);
 			break;
 
 		default:
