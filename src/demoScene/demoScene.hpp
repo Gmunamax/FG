@@ -4,13 +4,17 @@
 #include <FGengine/special/window.hpp>
 #include <memory>
 #include "freeroamPlayer.hpp"
+#include "../gameScene/officeModel.hpp"
+#include <print>
 
 class DemoScene final: public EventsPack{
 
 	FreeroamPlayer player;
 	std::shared_ptr<Shader> shader = std::make_shared<Shader>(vertexShader, fragmentShader);
 	Model floor{floorVertexes, shader};
+	Model office{officeVertexes, shader};
 
+	static inline std::vector<float> officeVertexes = GetOfficeModel();
 	static inline const char* vertexShader = "\
 	#version 330\n\
 	\n\
@@ -40,7 +44,10 @@ class DemoScene final: public EventsPack{
 		-1, 1, 0,
 		1, 1, 0,
 		-1, -1,0,
-		-1, -1, 0
+
+		1, 1, 0,
+		-1, -1,0,
+		-1, -1, 0,
 	};
 
 	FGengine::Window* win;
@@ -49,6 +56,7 @@ public:
 	void Draw() override{
 		win->Clear();
 		floor.Draw();
+		office.Draw();
 		player.Update();
 		win->Update();
 	}
@@ -143,9 +151,18 @@ public:
 		}
 	}
 
+	static void PrintModel(){
+		std::println("size: {}", officeVertexes.size());
+		for(unsigned i = 0; i < officeVertexes.size(); i += 3){
+			std::println("{}, {}, {}", officeVertexes[i], officeVertexes[i+1], officeVertexes[i+2]);
+		}
+	}
+
 	DemoScene(FGengine::Window* win):
-		win(win)
+		win{win}
 	{
 		floor.SetPosition({0,0,-1});
+		office.SetPosition({0, 4, 0});
+		PrintModel();
 	}
 };

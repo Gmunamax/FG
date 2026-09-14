@@ -1,7 +1,9 @@
 #include <engine/graphics/properties/mesh.hpp>
 #include <gl/gl.hpp>
 
-Mesh::Mesh(std::span<float> vertexes){
+Mesh::Mesh(std::span<float> vertexes):
+	size(vertexes.size())
+{
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
@@ -16,5 +18,5 @@ Mesh::Mesh(std::span<float> vertexes){
 
 void Mesh::Draw(){
 	glBindVertexArray(vao);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glDrawArrays(GL_TRIANGLES, 0, size);
 }

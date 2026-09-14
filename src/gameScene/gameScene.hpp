@@ -4,16 +4,20 @@
 #include <FGengine/special/window.hpp>
 #include <memory>
 #include "officePlayer.hpp"
+#include "officeModel.hpp"
 
 class GameScene final: public EventsPack{
 public:
 	GameScene(FGengine::Window* win):
 		window(win)
-	{}
+	{
+		office.SetPosition({0, 4, 1});
+	}
 
 	void Draw() override{
 		window->Clear();
 		player.Update();
+		office.Draw();
 		window->Update();
 	}
 
@@ -28,6 +32,8 @@ public:
 private:
 	OfficePlayer player{{0,0,1}, {90, 0, 0}};
 	std::shared_ptr<Shader> shader = std::make_shared<Shader>(vertexShader, fragmentShader);
+	Model office{officeVertexes, shader};
+	static inline std::vector<float> officeVertexes = GetOfficeModel();
 
 	static const char* vertexShader;
 	static const char* fragmentShader;

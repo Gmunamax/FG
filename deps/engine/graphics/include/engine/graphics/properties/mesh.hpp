@@ -10,4 +10,5 @@ public:
 private:
 	unsigned int vbo;
 	unsigned int vao;
+	size_t size;
 };
