@@ -6,6 +6,7 @@
 #include "freeroamPlayer.hpp"
 #include "../gameScene/officeModel.hpp"
 #include <print>
+#include "../gameScene/tb1.hpp"
 
 class DemoScene final: public EventsPack{
 
@@ -13,6 +14,7 @@ class DemoScene final: public EventsPack{
 	std::shared_ptr<Shader> shader = std::make_shared<Shader>(vertexShader, fragmentShader);
 	Model floor{floorVertexes, shader};
 	Model office{officeVertexes, shader};
+	TB1 tb1;
 
 	static inline std::vector<float> officeVertexes = GetOfficeModel();
 	static inline const char* vertexShader = "\
@@ -41,12 +43,12 @@ class DemoScene final: public EventsPack{
 	";
 
 	static inline float floorVertexes[] {
+		1, 1, 0,
 		-1, 1, 0,
-		1, 1, 0,
-		-1, -1,0,
+		1, -1,0,
 
-		1, 1, 0,
-		-1, -1,0,
+		-1, 1, 0,
+		1, -1,0,
 		-1, -1, 0,
 	};
 
@@ -58,6 +60,7 @@ public:
 		floor.Draw();
 		office.Draw();
 		player.Update();
+		tb1.Update();
 		win->Update();
 	}
 

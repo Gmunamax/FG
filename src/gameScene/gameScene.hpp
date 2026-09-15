@@ -5,6 +5,7 @@
 #include <memory>
 #include "officePlayer.hpp"
 #include "officeModel.hpp"
+#include "tb1.hpp"
 
 class GameScene final: public EventsPack{
 public:
@@ -18,6 +19,7 @@ public:
 		window->Clear();
 		player.Update();
 		office.Draw();
+		tb1.Update();
 		window->Update();
 	}
 
@@ -33,6 +35,7 @@ private:
 	OfficePlayer player{{0,0,1}, {90, 0, 0}};
 	std::shared_ptr<Shader> shader = std::make_shared<Shader>(vertexShader, fragmentShader);
 	Model office{officeVertexes, shader};
+	TB1 tb1;
 	static inline std::vector<float> officeVertexes = GetOfficeModel();
 
 	static const char* vertexShader;
