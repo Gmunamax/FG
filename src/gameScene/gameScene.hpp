@@ -35,7 +35,9 @@ private:
 	OfficePlayer player{{0,0,1}, {90, 0, 0}};
 	std::shared_ptr<Shader> shader = std::make_shared<Shader>(vertexShader, fragmentShader);
 	Model office{officeVertexes, shader};
-	TB1 tb1;
+	
+	static constexpr glm::vec3 tb1StartPosition = {-4, 5, 1};
+	TB1 tb1 {office, tb1StartPosition};
 	static inline std::vector<float> officeVertexes = GetOfficeModel();
 
 	static const char* vertexShader;

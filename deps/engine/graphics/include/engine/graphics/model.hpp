@@ -22,6 +22,18 @@ public:
 		matrix.SetPosition(newPosition);
 	}
 
+	const glm::vec3& GetPosition(){
+		return matrix.GetPosition();
+	}
+
+	void SetRotation(const glm::vec3& newRotation){
+		matrix.SetRotation(newRotation);
+	}
+
+	const glm::vec3& GetRotation(){
+		return matrix.GetRotation();
+	}
+
 private:
 	std::shared_ptr<Shader> shader;
 	Mesh mesh;

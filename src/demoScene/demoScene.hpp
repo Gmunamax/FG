@@ -14,7 +14,7 @@ class DemoScene final: public EventsPack{
 	std::shared_ptr<Shader> shader = std::make_shared<Shader>(vertexShader, fragmentShader);
 	Model floor{floorVertexes, shader};
 	Model office{officeVertexes, shader};
-	TB1 tb1;
+	TB1 tb1{office, {-4, 5, 1}};
 
 	static inline std::vector<float> officeVertexes = GetOfficeModel();
 	static inline const char* vertexShader = "\
