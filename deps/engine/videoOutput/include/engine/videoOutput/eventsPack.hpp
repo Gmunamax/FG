@@ -12,4 +12,8 @@ struct EventsPack{
 	virtual void Draw() = 0;
 	virtual void KeyPress(Key key) = 0;
 	virtual void KeyRelease(Key key) = 0;
+
+	virtual ~EventsPack() = 0;
 };
+
+inline EventsPack::~EventsPack() = default;

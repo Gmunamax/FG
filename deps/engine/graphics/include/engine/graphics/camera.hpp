@@ -1,3 +1,4 @@
+#pragma once
 #include <FGengine/renderable/camera.hpp>
 
 class Camera: public FGengine::Camera{
