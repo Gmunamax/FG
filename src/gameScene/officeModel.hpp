@@ -1,3 +1,7 @@
-#include <vector>
+#include <span>
 
-std::vector<float> GetOfficeModel();
+namespace Office{
+	std::span<float> GetVertexes();
+
+	std::span<unsigned> GetIndices();
+}

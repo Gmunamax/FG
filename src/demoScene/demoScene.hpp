@@ -5,6 +5,7 @@
 #include <memory>
 #include "freeroamPlayer.hpp"
 #include "../gameScene/officeModel.hpp"
+#include "../modelCreator.hpp"
 #include <print>
 #include "../gameScene/tb1.hpp"
 
@@ -16,7 +17,7 @@ class DemoScene final: public EventsPack{
 	Model office{officeVertexes, shader};
 	TB1 tb1{{-4, 5, 1}, office};
 
-	static inline std::vector<float> officeVertexes = GetOfficeModel();
+	static inline std::vector<float> officeVertexes = ConvertToVertexArray(Office::GetVertexes(), Office::GetIndices());
 	static inline const char* vertexShader = "\
 	#version 330\n\
 	\n\

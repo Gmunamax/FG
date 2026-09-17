@@ -6,6 +6,7 @@
 #include "officePlayer.hpp"
 #include "officeModel.hpp"
 #include "tb1.hpp"
+#include "../modelCreator.hpp"
 
 class GameScene final: public EventsPack{
 public:
@@ -37,7 +38,7 @@ private:
 	Model office{officeVertexes, shader};
 	TB1 tb1 {{-4, 5, 1}, office};
 
-	static inline std::vector<float> officeVertexes = GetOfficeModel();
+	static inline std::vector<float> officeVertexes = ConvertToVertexArray(Office::GetVertexes(), Office::GetIndices());
 	static const char* vertexShader;
 	static const char* fragmentShader;
 
