@@ -1,7 +1,5 @@
 #include "officeModel.hpp"
 #include <glm/vec3.hpp>
-#include <vector>
-#include <array>
 #include <span>
 
 namespace{
@@ -36,9 +34,8 @@ namespace{
 		return officeVertexes;
 	}
 
-	using LayoutType = std::vector<unsigned>;
-	const LayoutType& GetModelIndexes(){
-		static const LayoutType modelLayout{
+	std::span<unsigned> GetModelIndexes(){
+		static unsigned modelLayout[]{
 			1, 10, 9,
 			2, 4, 19,
 			4, 7, 3,
@@ -92,33 +89,4 @@ namespace{
 		return modelLayout;
 	}
 
-	std::array<float, 3> GetVertex(unsigned id){
-		auto officeVertexes = GetPoints();
-		id-=1;
-		id*=3;
-		return {officeVertexes[id], officeVertexes[id+1], officeVertexes[id+2]};
-	}
-
-	// std::array<float, 3> GetVertex(const std::array<unsigned, 3>& vertexIndexes){
-	// 	std::array<float, 3> vertex;
-	// 	for(unsigned char i = 0; i < vertexIndexes.size(); ++i){
-	// 		vertex[i] = GetNumber(vertexIndexes[i]);
-	// 	}
-	// 	return vertex;
-	// }
-}
-
-std::vector<float> GetOfficeModel(){
-	const LayoutType& modelLayout = GetModelIndexes();
-
-	std::vector<float> vertexes;
-
-	for(const auto& index : modelLayout){
-		std::array<float, 3> vertex = GetVertex(index);
-		for(const auto& number : vertex){
-			vertexes.push_back(number);
-		}
-	}
-
-	return vertexes;
 }
