@@ -22,14 +22,14 @@ public:
 	void SetPosition(const glm::vec3& newPosition){
 		position = newPosition;
 	}
-	const glm::vec3& GetPosition(){
+	const glm::vec3& GetPosition() const{
 		return position;
 	}
 
 	void SetRotation(const glm::vec3& newRotation){
 		rotation = newRotation;
 	}
-	const glm::vec3& GetRotation(){
+	const glm::vec3& GetRotation() const{
 		return rotation;
 	}
 

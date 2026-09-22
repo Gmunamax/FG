@@ -4,9 +4,8 @@
 #include <FGengine/window.hpp>
 #include <memory>
 #include "officePlayer.hpp"
-#include "officeModel.hpp"
-#include "tb1.hpp"
-#include "../modelCreator.hpp"
+#include "tb1/tb1.hpp"
+#include "office.hpp"
 
 class GameScene final: public EventsPack{
 public:
@@ -19,7 +18,7 @@ public:
 	void Draw() override{
 		window->Clear();
 		player.Update();
-		office.Draw();
+		office.Update();
 		tb1.Update();
 		window->Update();
 	}
@@ -35,10 +34,9 @@ public:
 private:
 	OfficePlayer player{{0,0,1}, {90, 0, 0}};
 	std::shared_ptr<Shader> shader = std::make_shared<Shader>(vertexShader, fragmentShader);
-	Model office{officeVertexes, shader};
-	TB1 tb1 {{-4, 5, 1}, office};
+	TB1 tb1 {{-4, 5, 1}};
+	Office office{shader};
 
-	static inline std::vector<float> officeVertexes = ConvertToVertexArray(Office::GetVertexes(), Office::GetIndices());
 	static const char* vertexShader;
 	static const char* fragmentShader;
 

@@ -4,20 +4,17 @@
 #include <FGengine/window.hpp>
 #include <memory>
 #include "freeroamPlayer.hpp"
-#include "../gameScene/officeModel.hpp"
-#include "../modelCreator.hpp"
-#include <print>
-#include "../gameScene/tb1.hpp"
+#include "../gameScene/office.hpp"
+#include "../gameScene/tb1/tb1.hpp"
 
 class DemoScene final: public EventsPack{
 
 	FreeroamPlayer player;
 	std::shared_ptr<Shader> shader = std::make_shared<Shader>(vertexShader, fragmentShader);
 	Model floor{floorVertexes, shader};
-	Model office{officeVertexes, shader};
-	TB1 tb1{{-4, 5, 1}, office};
+	TB1 tb1{{-4, 5, 1}};
+	Office office{shader};
 
-	static inline std::vector<float> officeVertexes = ConvertToVertexArray(Office::GetVertexes(), Office::GetIndices());
 	static inline const char* vertexShader = "\
 	#version 330\n\
 	\n\
@@ -59,7 +56,7 @@ public:
 	void Draw() override{
 		win->Clear();
 		floor.Draw();
-		office.Draw();
+		office.Update();
 		player.Update();
 		tb1.Update();
 		win->Update();
@@ -155,18 +152,10 @@ public:
 		}
 	}
 
-	static void PrintModel(){
-		std::println("size: {}", officeVertexes.size());
-		for(unsigned i = 0; i < officeVertexes.size(); i += 3){
-			std::println("{}, {}, {}", officeVertexes[i], officeVertexes[i+1], officeVertexes[i+2]);
-		}
-	}
-
 	DemoScene(FGengine::Window* win):
 		win{win}
 	{
 		floor.SetPosition({0,0,-1});
 		office.SetPosition({0, 4, 0});
-		PrintModel();
 	}
 };

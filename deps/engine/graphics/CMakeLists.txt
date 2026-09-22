@@ -1,4 +1,5 @@
 add_library(engineGraphics STATIC)
 target_include_directories(engineGraphics PUBLIC include)
-target_link_libraries(engineGraphics PRIVATE FGengine loader)
+target_link_libraries(engineGraphics PUBLIC FGengine)
+target_link_libraries(engineGraphics PRIVATE loader)
 add_subdirectory(src)

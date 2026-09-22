@@ -22,7 +22,7 @@ public:
 		matrix.SetPosition(newPosition);
 	}
 
-	const glm::vec3& GetPosition(){
+	const glm::vec3& GetPosition() const{
 		return matrix.GetPosition();
 	}
 
@@ -30,7 +30,7 @@ public:
 		matrix.SetRotation(newRotation);
 	}
 
-	const glm::vec3& GetRotation(){
+	const glm::vec3& GetRotation() const{
 		return matrix.GetRotation();
 	}
 

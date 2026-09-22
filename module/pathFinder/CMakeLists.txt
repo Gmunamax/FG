@@ -1,0 +1,5 @@
+add_library(pathFinder STATIC)
+target_link_libraries(pathFinder PRIVATE algorithm)
+target_include_directories(pathFinder PUBLIC public)
+add_subdirectory(modules)
+add_subdirectory(private)
