@@ -1,7 +1,7 @@
 #include <engine/graphics/shader.hpp>
 #include <engine/videoOutput/eventsPack.hpp>
 #include <engine/graphics/model.hpp>
-#include <FGengine/special/window.hpp>
+#include <FGengine/window.hpp>
 #include <memory>
 #include "freeroamPlayer.hpp"
 #include "../gameScene/officeModel.hpp"

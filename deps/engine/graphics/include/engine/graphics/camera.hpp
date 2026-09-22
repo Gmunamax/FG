@@ -1,5 +1,5 @@
 #pragma once
-#include <FGengine/renderable/camera.hpp>
+#include <FGengine/camera.hpp>
 
 class Camera: public FGengine::Camera{
 public:

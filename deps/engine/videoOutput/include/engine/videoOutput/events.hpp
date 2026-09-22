@@ -1,5 +1,5 @@
 #pragma once
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 #include <engine/videoOutput/eventsPack.hpp>
 
 class EventsWorker{
@@ -17,14 +17,14 @@ public:
 		SDL_Event event;
 		while(run){
 			while(SDL_PollEvent(&event)){
-				if(event.type == SDL_QUIT){
+				if(event.type == SDL_EVENT_QUIT){
 					run = false;
 				}
-				else if(event.type == SDL_KEYDOWN){
-					currentPack->KeyPress(SdlToKey(event.key.keysym.sym));
+				else if(event.type == SDL_EVENT_KEY_DOWN){
+					currentPack->KeyPress(SdlToKey(event.key.scancode));
 				}
-				else if(event.type == SDL_KEYUP){
-					currentPack->KeyRelease(SdlToKey(event.key.keysym.sym));
+				else if(event.type == SDL_EVENT_KEY_UP){
+					currentPack->KeyRelease(SdlToKey(event.key.scancode));
 				}
 			}
 			currentPack->Draw();
@@ -32,44 +32,47 @@ public:
 	}
 
 private:
-	EventsPack::Key SdlToKey(SDL_Keycode keycode){
+	EventsPack::Key SdlToKey(SDL_Scancode keycode){
 		EventsPack::Key key;
 		switch(keycode){
-		case SDLK_w:
+		case SDL_SCANCODE_W:
 			key = EventsPack::Key::W;
 			break;
-		case SDLK_a:
+		case SDL_SCANCODE_A:
 			key = EventsPack::Key::A;
 			break;
-		case SDLK_s:
+		case SDL_SCANCODE_S:
 			key = EventsPack::Key::S;
 			break;
-		case SDLK_d:
+		case SDL_SCANCODE_D:
 			key = EventsPack::Key::D;
 			break;
-		case SDLK_UP:
+		case SDL_SCANCODE_UP:
 			key = EventsPack::Key::Up;
 			break;
-		case SDLK_LEFT:
+		case SDL_SCANCODE_LEFT:
 			key = EventsPack::Key::Left;
 			break;
-		case SDLK_DOWN:
+		case SDL_SCANCODE_DOWN:
 			key = EventsPack::Key::Down;
 			break;
-		case SDLK_RIGHT:
+		case SDL_SCANCODE_RIGHT:
 			key = EventsPack::Key::Right;
 			break;
-		case SDLK_SPACE:
+		case SDL_SCANCODE_SPACE:
 			key = EventsPack::Key::Space;
 			break;
-		case SDLK_RSHIFT:
+		case SDL_SCANCODE_RSHIFT:
 			key = EventsPack::Key::Rshift;
 			break;
-		case SDLK_LSHIFT:
+		case SDL_SCANCODE_LSHIFT:
 			key = EventsPack::Key::Lshift;
 			break;
-		case SDLK_b:
+		case SDL_SCANCODE_B:
 			key = EventsPack::Key::B;
+			break;
+		
+		default:
 			break;
 		}
 		return key;
