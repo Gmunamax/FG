@@ -31,6 +31,17 @@ private:
 	};
 
 	void MakeNewAction(Player::TimeType timeDelta){
+		OfficeGraph::LocationsEnum currentLocation = OfficeGraph::GetNearestLocation(model.GetPosition());
+		switch(currentLocation){
+		using enum OfficeGraph::LocationsEnum;
+		case BehindTheFrontDoor:
+			action = &TB1ai::EnterFrontDoor;
+			return;
+			break;
+
+		default:
+			break;
+		}
 		PossibleAction action = (PossibleAction)GetRandomNumber((int)PossibleAction::Min, (int)PossibleAction::Max);
 		const char* actionString = "Unknown";
 		switch(action){
@@ -73,6 +84,17 @@ private:
 				path.pop();
 			}
 		}
+	}
+
+	void EnterFrontDoor(Player::TimeType timeDelta){
+		std::print("Hi from TB1, Your Game Is Over, bye from TB1.");
+		TeleportToRandom();
+		this->action = &TB1ai::MakeNewAction;
+	}
+
+	void TeleportToRandom(){
+		OfficeGraph::LocationsEnum randomNumber = (OfficeGraph::LocationsEnum)GetRandomNumber<int>(0, 6);
+		model.SetPosition(OfficeGraph::GetLocationPosition(randomNumber));
 	}
 
 	void(TB1ai::* action)(Player::TimeType) = &TB1ai::MakeNewAction;
