@@ -1,6 +1,5 @@
-#include <random>
-#include <print>
 #include <engine/utils/player.hpp>
+#include <random.hpp>
 #include "../office.hpp"
 
 class TB1ai{
@@ -10,95 +9,103 @@ public:
 	{}
 
 	void Update(Player::TimeType timeDelta){
-		(this->*action)(timeDelta);
+		action = (this->*action)(timeDelta).nextAction;
 	}
 
 private:
-	template<typename Type>
-	Type GetRandomNumber(Type min, Type max){
-		std::random_device random;
-		std::mt19937 generator(random());
-		std::uniform_int_distribution<>	distribution{min, max};
-		return distribution(generator);
-	}
+	struct NextAction;
 
-	enum class PossibleAction{
-		ToDoor1,
-		ToDoor2,
-		ToBackDoor,
-		Min = ToDoor1,
-		Max = ToBackDoor
+	using Action = NextAction(TB1ai::*)(Player::TimeType);
+
+	struct NextAction{
+		Action nextAction;
+
+		NextAction& operator=(Action newAction){
+			nextAction = newAction;
+			return *this;
+		}
 	};
 
-	void MakeNewAction(Player::TimeType timeDelta){
+	NextAction MakeNewAction(Player::TimeType timeDelta){
 		OfficeGraph::LocationsEnum currentLocation = OfficeGraph::GetNearestLocation(model.GetPosition());
+		NextAction newAction;
 		switch(currentLocation){
 		using enum OfficeGraph::LocationsEnum;
 		case BehindTheFrontDoor:
-			action = &TB1ai::EnterFrontDoor;
-			return;
+			newAction = &TB1ai::EnterFrontDoor;
 			break;
 
 		default:
+			newAction = &TB1ai::GoToRandomExit;
 			break;
 		}
-		PossibleAction action = (PossibleAction)GetRandomNumber((int)PossibleAction::Min, (int)PossibleAction::Max);
-		const char* actionString = "Unknown";
-		switch(action){
-		case PossibleAction::ToDoor1:
-			actionString = "To door 1";
-			path = pathFinder.FindPath(OfficeGraph::GetNearestLocation(model.GetPosition()), OfficeGraph::LocationsEnum::BehindTheFrontDoor);
-			this->action = &TB1ai::FollowPath;
-			break;
-
-		case PossibleAction::ToDoor2:
-			actionString = "To door 2";
-			path = pathFinder.FindPath(OfficeGraph::GetNearestLocation(model.GetPosition()), OfficeGraph::LocationsEnum::NearTheSideDoor);
-			this->action = &TB1ai::FollowPath;
-			break;
-
-		case PossibleAction::ToBackDoor:
-			actionString = "To back door";
-			path = pathFinder.FindPath(OfficeGraph::GetNearestLocation(model.GetPosition()), OfficeGraph::LocationsEnum::FarAway);
-			this->action = &TB1ai::FollowPath;
-			break;
-		}
-		std::println("new action: {}", actionString);
+		return newAction;
 	}
 
-	void FollowPath(Player::TimeType timeDelta){
+	NextAction GoToRandomExit(Player::TimeType){
+		path = pathFinder.FindPath(OfficeGraph::GetNearestLocation(model.GetPosition()), GetRandomExit());
+		return {&TB1ai::FollowPath};
+	}
+
+	OfficeGraph::LocationsEnum GetRandomExit(){
+		enum class AvaliableExit{
+			ToDoor1,
+			ToDoor2,
+			ToBackDoor,
+			Min = ToDoor1,
+			Max = ToBackDoor
+		};
+
+		AvaliableExit action = (AvaliableExit)Random::GetRandomNumber((Random::RandomType)AvaliableExit::Min, (Random::RandomType)AvaliableExit::Max);
+		OfficeGraph::LocationsEnum exit;
+		switch(action){
+		using enum AvaliableExit;
+		case ToDoor1:
+			exit = OfficeGraph::LocationsEnum::BehindTheFrontDoor;
+			break;
+
+		case ToDoor2:
+			exit = OfficeGraph::LocationsEnum::BehindTheSideDoor;
+			break;
+
+		case ToBackDoor:
+			exit = OfficeGraph::LocationsEnum::FarAway;
+			break;
+		}
+		return exit;
+	}
+
+	NextAction FollowPath(Player::TimeType timeDelta){
 		static Player::TimeType timePassed = 0;
 		if(timePassed < 1){
 			timePassed += timeDelta;
-			return;
 		}
 		else{
 			timePassed = 0;
 
 			if(path.empty()){
-				this->action = &TB1ai::MakeNewAction;
-				return;
+				return {&TB1ai::MakeNewAction};
 			}
 			else{
 				model.SetPosition(OfficeGraph::GetLocationPosition((OfficeGraph::LocationsEnum)path.front()));
 				path.pop();
 			}
 		}
+		return {&TB1ai::FollowPath};
 	}
 
-	void EnterFrontDoor(Player::TimeType timeDelta){
-		std::print("Hi from TB1, Your Game Is Over, bye from TB1.");
+	NextAction EnterFrontDoor(Player::TimeType timeDelta){
 		TeleportToRandom();
-		this->action = &TB1ai::MakeNewAction;
+		return {&TB1ai::MakeNewAction};
 	}
 
 	void TeleportToRandom(){
-		OfficeGraph::LocationsEnum randomNumber = (OfficeGraph::LocationsEnum)GetRandomNumber<int>(0, 6);
+		OfficeGraph::LocationsEnum randomNumber = (OfficeGraph::LocationsEnum)Random::GetRandomNumber(0, 6);
 		model.SetPosition(OfficeGraph::GetLocationPosition(randomNumber));
 	}
 
-	void(TB1ai::* action)(Player::TimeType) = &TB1ai::MakeNewAction;
 	PathFinder::PathFinder pathFinder{Office::GenGraph()};
+	Action action = &TB1ai::MakeNewAction;
 	PathFinder::PathFinder::Path path;
 	Model& model;
 };
