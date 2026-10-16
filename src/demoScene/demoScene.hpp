@@ -1,19 +1,20 @@
+#pragma once
 #include <engine/graphics/shader.hpp>
 #include <engine/videoOutput/eventsPack.hpp>
 #include <engine/graphics/model.hpp>
 #include <FGengine/window.hpp>
 #include <memory>
 #include "freeroamPlayer.hpp"
-#include "../gameScene/office.hpp"
-#include "../gameScene/tb1/tb1.hpp"
+#include "tb1.hpp"
+#include "office.hpp"
 
 class DemoScene final: public EventsPack{
 
 	FreeroamPlayer player;
 	std::shared_ptr<Shader> shader = std::make_shared<Shader>(vertexShader, fragmentShader);
 	Model floor{floorVertexes, shader};
-	TB1 tb1{{-4, 5, 1}};
-	Office office{shader};
+	TB1 tb1;
+	Office office;
 
 	static inline const char* vertexShader = "\
 	#version 330\n\

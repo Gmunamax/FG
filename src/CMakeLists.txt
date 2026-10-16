@@ -1,3 +1,5 @@
 target_sources(FG PRIVATE main.cpp)
-target_link_libraries(FG PRIVATE argParser pathFinder random engine FGengine)
-add_subdirectory(gameScene)
+target_link_libraries(FG PRIVATE argParser pathFinder random engine)
+add_subdirectory(night1)
+add_subdirectory(assets)
+target_link_libraries(FG PRIVATE assets)

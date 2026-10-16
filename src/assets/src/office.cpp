@@ -1,7 +1,7 @@
-#include "office.hpp"
-#include <glm/vec3.hpp>
-#include <span>
-#include "../modelCreator.hpp"
+#include <assets/office.hpp>
+#include "modelCreator.hpp"
+
+using namespace Assets;
 
 std::span<float> Office::GetVertexes(){
 	static float officeVertexes[]{

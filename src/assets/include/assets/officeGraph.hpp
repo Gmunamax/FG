@@ -3,6 +3,8 @@
 #include <engine/graphics/model.hpp>
 #include <pathFinder.hpp>
 
+namespace Assets{
+
 class OfficeGraph{
 public:
 	enum LocationsEnum{
@@ -64,33 +66,4 @@ private:
 	PathFinder::Graph graph;
 };
 
-class Office{
-public:
-	Office(std::shared_ptr<Shader> shader):
-		model{officeVertexes, shader}
-	{}
-
-	void Update(){
-		model.Draw();
-	}
-
-	void SetPosition(glm::vec3 newPosition){
-		model.SetPosition(newPosition);
-	}
-
-	glm::vec3 GetPosition(){
-		return model.GetPosition();
-	}
-
-	static const PathFinder::Graph& GenGraph(){
-		static OfficeGraph graph;
-		return graph.GetGraph();
-	}
-
-private:
-	static std::span<float> GetVertexes();
-	static std::span<unsigned> GetIndices();
-	static std::vector<float> officeVertexes;
-
-	Model model;
-};
+}

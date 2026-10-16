@@ -2,7 +2,7 @@
 #include <FGengine/context.hpp>
 #include <FGengine/init.hpp>
 #include <engine/videoOutput/events.hpp>
-#include "gameScene/gameScene.hpp"
+import Night1;
 #include "demoScene/demoScene.hpp"
 #include <cstring>
 #include <memory>
@@ -22,7 +22,7 @@ int main(int argc, char* argv[]){
 	if(demo)
 		scene = std::make_unique<DemoScene>(&win);
 	else
-		scene = std::make_unique<GameScene>(&win);
+		scene = std::make_unique<Night1::Scene>(&win);
 	EventsWorker eventsWorker{scene.get()};
 	eventsWorker.MainCycle();
 	FGengine::Quit();

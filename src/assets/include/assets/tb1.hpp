@@ -3,22 +3,14 @@
 #include <engine/graphics/model.hpp>
 #include <engine/utils/player.hpp>
 #include <engine/utils/pathWalker.hpp>
-#include "ai.hpp"
 
-class TB1{
+namespace Assets{
+
+class TB1: public Model{
 public:
-	TB1(const glm::vec3& startPosition){
-		model.SetPosition(startPosition);
-	}
-
-	void Update(){
-		static Timer timer;
-		float timeDelta = timer.GetTime();
-		timer.Reset();
-
-		ai.Update(timeDelta);
-		model.Draw();
-	}
+	TB1():
+		Model{GetModel(), GetShader()}
+	{}
 
 private:
 	static std::span<float> GetModel(){
@@ -35,7 +27,7 @@ private:
 		return vertexes;
 	}
 
-	static Shader GetShader(){
+	static const std::shared_ptr<Shader>& GetShader(){
 		static const char* vertex = "\
 			#version 330\n\
 			\n\
@@ -62,12 +54,11 @@ private:
 			}\n\
 		";
 
-		Shader shader{vertex, fragment};
+		static Shader shader{vertex, fragment};
+		static std::shared_ptr<Shader> ptr{&shader};
 
-		return shader;
+		return ptr;
 	}
-
-	std::shared_ptr<Shader> shader = std::make_shared<Shader>(GetShader());
-	Model model{GetModel(), shader};
-	TB1ai ai{model};
 };
+
+}
