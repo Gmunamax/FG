@@ -9,6 +9,10 @@ namespace Night1{
 
 	class TB1{
 	public:
+		TB1(Door* door):
+			ai{door}
+		{}
+
 		void Update(){
 			ai.Update();
 			tb1.Draw();

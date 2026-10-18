@@ -5,12 +5,15 @@ module;
 #include <random>
 
 export module Night1:TB1ai;
+import :Door;
 
 namespace Night1{
 
 	class TB1ai{
 	public:
-		TB1ai(){
+		TB1ai(Door* door):
+			door{door}
+		{
 			BeginWaiting();
 		}
 
@@ -32,9 +35,11 @@ namespace Night1{
 			const Player::TimeType timeToEvade = 5;
 
 			if(timer.GetTime() > timeToEvade){
-				bool evaded = false;
-				if(!evaded){
+				if(!IsEvading()){
 					std::println("Looks like YGIO");
+				}
+				else{
+					std::println("I'll get you");
 				}
 
 				BeginWaiting();
@@ -67,10 +72,20 @@ namespace Night1{
 			timer.Reset();
 		}
 
+		bool IsEvading(){
+			if(door->GetClosed()){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+
 		Action action;
 		Timer timer;
 		Player::TimeType attackDelay;
 		unsigned attacks = 0;
+		Door* door;
 	};
 
 }

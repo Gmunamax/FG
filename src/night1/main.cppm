@@ -6,12 +6,16 @@ export module Night1;
 import :Office;
 import :TB1;
 import :Player;
+import :Door;
 
 namespace Night1{
 
 	export class Scene: public EventsPack{
-		TB1 tb1;
+		TB1 tb1{&door};
+
 		Office office;
+		Door door;
+
 		Player player;
 		FGengine::Window* win;
 
@@ -23,11 +27,27 @@ namespace Night1{
 		}
 
 		virtual void KeyPress(Key key){
+			switch(key){
+			using enum Key;
+			case Space:
+				door.SetClosed(true);
+				break;
 
+			default:
+				break;
+			}
 		}
 
 		virtual void KeyRelease(Key key){
+			switch(key){
+			using enum Key;
+			case Space:
+				door.SetClosed(false);
+				break;
 
+			default:
+				break;
+			}
 		}
 
 	public:
