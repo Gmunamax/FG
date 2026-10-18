@@ -10,10 +10,6 @@ public:
 		Model{officeVertexes, GetShader()}
 	{}
 
-	void Update(){
-		Model::Draw();
-	}
-
 private:
 	static std::span<float> GetVertexes();
 	static std::span<unsigned> GetIndices();

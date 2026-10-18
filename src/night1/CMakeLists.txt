@@ -5,4 +5,5 @@ target_sources(FG PUBLIC
 		office.cppm
 		tb1.cppm
 		player.cppm 
+		tb1ai.cppm
 )

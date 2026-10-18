@@ -3,12 +3,14 @@ module;
 #include "assets/tb1.hpp"
 
 export module Night1:TB1;
+import :TB1ai;
 
 namespace Night1{
 
 	class TB1{
 	public:
 		void Update(){
+			ai.Update();
 			tb1.Draw();
 		}
 
@@ -22,6 +24,7 @@ namespace Night1{
 
 	private:
 		Assets::TB1 tb1;
+		TB1ai ai;
 	};
 
 }

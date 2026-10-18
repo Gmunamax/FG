@@ -5,6 +5,14 @@ export module Night1:Office;
 
 namespace Night1{
 
-	export using Office = Assets::Office;
+	class Office{
+	public:
+		void Update(){
+			office.Draw();
+		}
+
+	private:
+		Assets::Office office;
+	};
 
 }
