@@ -7,4 +7,5 @@ target_sources(FG PUBLIC
 		player.cppm 
 		tb1ai.cppm
 		door.cppm
+		time.cppm
 )

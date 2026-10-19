@@ -7,16 +7,18 @@ import :Office;
 import :TB1;
 import :Player;
 import :Door;
+import :Time;
 
 namespace Night1{
 
 	export class Scene: public EventsPack{
-		TB1 tb1{&door};
+		TB1 tb1{&door, &time};
 
 		Office office;
 		Door door;
 
 		Player player;
+		Time time{7*60};
 		FGengine::Window* win;
 
 		virtual void Draw(){

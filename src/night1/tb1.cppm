@@ -9,8 +9,8 @@ namespace Night1{
 
 	class TB1{
 	public:
-		TB1(Door* door):
-			ai{door}
+		TB1(Door* door, Time* time):
+			ai{door, time}
 		{}
 
 		void Update(){

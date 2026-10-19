@@ -6,15 +6,17 @@ module;
 
 export module Night1:TB1ai;
 import :Door;
+import :Time;
 
 namespace Night1{
 
 	class TB1ai{
 	public:
-		TB1ai(Door* door):
-			door{door}
+		TB1ai(Door* door, Time* time):
+			door{door},
+			time{time}
 		{
-			BeginWaiting();
+			Reset();
 		}
 
 		void Update(){
@@ -23,6 +25,7 @@ namespace Night1{
 
 	private:
 		void WaitForAttack(){
+			TestEndTime();
 			if(timer.GetTime() > attackDelay){
 				BeginAttack();
 			}
@@ -34,9 +37,10 @@ namespace Night1{
 		void Attack(){
 			const Player::TimeType timeToEvade = 5;
 
+			TestEndTime();
 			if(timer.GetTime() > timeToEvade){
 				if(!IsEvading()){
-					std::println("Looks like YGIO");
+					HuntPlayer();
 				}
 				else{
 					std::println("I'll get you");
@@ -47,6 +51,32 @@ namespace Night1{
 			else{
 				// wait for next iteration
 			}
+		}
+
+		void TestEndTime(){
+			if(time->GetTime() >= time->GetEndTime()){
+				action = &TB1ai::EndTime;
+			}
+		}
+
+		void EndTime(){
+			std::println("Congratulations. Next time I'll get you...");
+			action = &TB1ai::NoopAfterEndTime;
+		}
+
+		void NoopAfterEndTime(){
+			
+		}
+
+		void HuntPlayer(){
+			std::println("I got you. YGIO");
+			Reset();
+		}
+
+		void Reset(){
+			time->ResetTimer();
+			attacks = 0;
+			BeginWaiting();
 		}
 
 		template<typename Type>
@@ -86,6 +116,7 @@ namespace Night1{
 		Player::TimeType attackDelay;
 		unsigned attacks = 0;
 		Door* door;
+		Time* time;
 	};
 
 }
