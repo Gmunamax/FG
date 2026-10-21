@@ -1,6 +1,7 @@
 #pragma once
+#include <glm/vec3.hpp>
+#include <glm/geometric.hpp>
 #include <vector>
-#include <engine/graphics/model.hpp>
 #include <pathFinder.hpp>
 
 namespace Assets{

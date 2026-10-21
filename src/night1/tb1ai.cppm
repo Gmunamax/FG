@@ -1,12 +1,13 @@
 module;
-#include <engine/utils/player.hpp>
-#include <engine/utils/properties/timer.hpp>
+#include <FGengine/utils/timer.hpp>
 #include <print>
 #include <random>
 
 export module Night1:TB1ai;
 import :Door;
 import :Time;
+
+using FGengine::Utils::Timer;
 
 namespace Night1{
 
@@ -35,7 +36,7 @@ namespace Night1{
 		}
 
 		void Attack(){
-			const Player::TimeType timeToEvade = 5;
+			const Timer::DataType timeToEvade = 5;
 
 			TestEndTime();
 			if(timer.GetTime() > timeToEvade){
@@ -113,7 +114,7 @@ namespace Night1{
 
 		Action action;
 		Timer timer;
-		Player::TimeType attackDelay;
+		Timer::DataType attackDelay;
 		unsigned attacks = 0;
 		Door* door;
 		Time* time;

@@ -1,5 +1,4 @@
 module;
-#include <engine/graphics/model.hpp>
 #include "assets/tb1.hpp"
 
 export module Night1:TB1;

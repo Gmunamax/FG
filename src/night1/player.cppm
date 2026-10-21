@@ -1,13 +1,18 @@
 module;
-#include <engine/graphics/camera.hpp>
-#include <engine/utils/player.hpp>
+#include <FGengine/graphics/camera.hpp>
 
 export module Night1:Player;
 
+using FGengine::Graphics::Camera;
+
 namespace Night1{
 
-	class Player: public ::Player{
+	class Player{
 	public:
+		void Update(){
+			camera.Update();
+		}
+
 		void SetPosition(const glm::vec3& newPosition){
 			camera.SetPosition(newPosition);
 		}
@@ -26,10 +31,6 @@ namespace Night1{
 
 	private:
 		Camera camera;
-
-		virtual void UpdateProperties(TimeType time) override{
-			camera.Update();
-		}
 	};
 
 }

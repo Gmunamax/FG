@@ -1,12 +1,10 @@
 #pragma once
 #include <span>
-#include <engine/graphics/model.hpp>
-#include <engine/utils/player.hpp>
-#include <engine/utils/pathWalker.hpp>
+#include <FGengine/graphics/model.hpp>
 
 namespace Assets{
 
-class TB1: public Model{
+class TB1: public FGengine::Graphics::Model{
 public:
 	TB1():
 		Model{GetModel(), GetShader()}
@@ -27,7 +25,7 @@ private:
 		return vertexes;
 	}
 
-	static const std::shared_ptr<Shader>& GetShader(){
+	static const std::shared_ptr<FGengine::Graphics::Shader>& GetShader(){
 		static const char* vertex = "\
 			#version 330\n\
 			\n\
@@ -54,8 +52,8 @@ private:
 			}\n\
 		";
 
-		static Shader shader{vertex, fragment};
-		static std::shared_ptr<Shader> ptr{&shader};
+		static FGengine::Graphics::Shader shader{vertex, fragment};
+		static std::shared_ptr<FGengine::Graphics::Shader> ptr{&shader};
 
 		return ptr;
 	}

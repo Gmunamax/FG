@@ -1,10 +1,11 @@
-#include <engine/graphics/model.hpp>
+#include <FGengine/graphics/model.hpp>
+#include <FGengine/graphics/shader.hpp>
 #include <span>
 #include <vector>
 
 namespace Assets{
 
-class Office: public Model{
+class Office: public FGengine::Graphics::Model{
 public:
 	Office():
 		Model{officeVertexes, GetShader()}
@@ -15,7 +16,7 @@ private:
 	static std::span<unsigned> GetIndices();
 	static std::vector<float> officeVertexes;
 
-	static std::shared_ptr<Shader> GetShader(){
+	static std::shared_ptr<FGengine::Graphics::Shader> GetShader(){
 		static const char* vertex = "\
 			#version 330\n\
 			\n\
@@ -42,8 +43,8 @@ private:
 			}\n\
 		";
 
-		static Shader shader{vertex, fragment};
-		static std::shared_ptr<Shader> ptr{&shader};
+		static FGengine::Graphics::Shader shader{vertex, fragment};
+		static std::shared_ptr<FGengine::Graphics::Shader> ptr{&shader};
 
 		return ptr;
 	}

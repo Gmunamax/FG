@@ -1,5 +1,5 @@
 target_sources(FG PRIVATE main.cpp)
-target_link_libraries(FG PRIVATE argParser pathFinder random engine)
+target_link_libraries(FG PRIVATE argParser pathFinder random FGengine)
 add_subdirectory(night1)
 add_subdirectory(assets)
 target_link_libraries(FG PRIVATE assets)

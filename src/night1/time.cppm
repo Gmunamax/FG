@@ -1,17 +1,19 @@
 module;
-#include <engine/utils/properties/timer.hpp>
+#include <FGengine/utils/timer.hpp>
 
 export module Night1:Time;
+
+using FGengine::Utils::Timer;
 
 namespace Night1{
 
 	class Time{
 	public:
-		Time(Timer::dataType endTime):
+		Time(Timer::DataType endTime):
 			endTime{endTime}
 		{}
 
-		Timer::dataType GetTime(){
+		Timer::DataType GetTime(){
 			return timer.GetTime();
 		}
 
@@ -19,13 +21,13 @@ namespace Night1{
 			timer.Reset();
 		}
 
-		Timer::dataType GetEndTime(){
+		Timer::DataType GetEndTime(){
 			return endTime;
 		}
 
 	private:
 		Timer timer;
-		Timer::dataType endTime;
+		Timer::DataType endTime;
 	};
 
 }

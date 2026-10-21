@@ -1,6 +1,7 @@
 module;
-#include <engine/videoOutput/eventsPack.hpp>
-#include <FGengine/window.hpp>
+#include <FGengine/videoOutput/eventsPack.hpp>
+#include <FGengine/videoOutput/window.hpp>
+#include <FGengine/graphics/context.hpp>
 
 export module Night1;
 import :Office;
@@ -8,6 +9,8 @@ import :TB1;
 import :Player;
 import :Door;
 import :Time;
+
+using FGengine::VideoOutput::Window, FGengine::VideoOutput::EventsPack;
 
 namespace Night1{
 
@@ -19,10 +22,10 @@ namespace Night1{
 
 		Player player;
 		Time time{7*60};
-		FGengine::Window* win;
+		Window* win;
 
 		virtual void Draw(){
-			win->Clear();
+			FGengine::Graphics::Context::GetCurrentWindow().Clear();
 			tb1.Update();
 			player.Update();
 			win->Update();
@@ -53,7 +56,7 @@ namespace Night1{
 		}
 
 	public:
-		Scene(FGengine::Window* win):
+		Scene(Window* win):
 			win(win)
 		{
 			tb1.SetPosition({0, 3, 0});

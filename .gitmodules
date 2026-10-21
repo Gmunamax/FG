@@ -1,5 +1,4 @@
-[submodule "deps/engine/deps/FGengine"]
-	path = deps/engine/deps/FGengine
+[submodule "FGengine"]
+	path = deps/FGengine
 	url = https://github.com/Gmunamax/FGengine
-[submodule "DbConnector"]
-	branch = v0.5.0
+	branch = dev
