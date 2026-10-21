@@ -3,7 +3,6 @@
 #include <FGengine/init.hpp>
 #include <engine/videoOutput/events.hpp>
 import Night1;
-#include "demoScene/demoScene.hpp"
 #include <cstring>
 #include <memory>
 
@@ -19,10 +18,7 @@ int main(int argc, char* argv[]){
 	FGengine::Window win{"FG", {800, 600}};
 	FGengine::Context ctx{win};
 	std::unique_ptr<EventsPack> scene;
-	if(demo)
-		scene = std::make_unique<DemoScene>(&win);
-	else
-		scene = std::make_unique<Night1::Scene>(&win);
+	scene = std::make_unique<Night1::Scene>(&win);
 	EventsWorker eventsWorker{scene.get()};
 	eventsWorker.MainCycle();
 	FGengine::Quit();
