@@ -1,6 +1,5 @@
 #include <glm/vec3.hpp>
 #include <glm/geometric.hpp>
-#include <engine/utils/player.hpp>
 
 class PathWalker{
 public:
@@ -8,7 +7,7 @@ public:
 		destination = newDestination;
 	}
 
-	void Update(glm::vec3& position, glm::vec3& rotation, Player::TimeType timeDelta){
+	void Update(glm::vec3& position, glm::vec3& rotation, float timeDelta){
 		glm::vec3 distance = destination - position;
 		if(glm::length(distance) < finishCheckError){
 			return;

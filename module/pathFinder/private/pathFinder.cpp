@@ -1,5 +1,5 @@
 #include <pathFinder.hpp>
-#include <algorithm.hpp>
+#include "algorithm.hpp"
 #include <algorithm>
 
 namespace PathFinder{

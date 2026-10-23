@@ -6,5 +6,3 @@ target_compile_definitions(pathFinderTests PRIVATE BOOST_DYN_LINK)
 target_sources(pathFinderTests PRIVATE
 	main.cpp
 )
-
-add_subdirectory(algorithm)

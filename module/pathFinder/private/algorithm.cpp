@@ -1,4 +1,4 @@
-#include <algorithm.hpp>
+#include "algorithm.hpp"
 #include <queue>
 
 namespace PathFinder::algorithm{
