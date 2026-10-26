@@ -13,20 +13,39 @@
 // 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#pragma once
-#include <vector>
-#include <span>
+module;
+#include <FGengine/graphics/camera.hpp>
 
-inline std::vector<float> ConvertToVertexArray(const std::span<float> vertexes, const std::span<unsigned> indices){
-	constexpr unsigned vertexLength = 3;
-	std::vector<float> vertexArray;
+export module Logic:Player;
 
-	for(auto index : indices){
-		index = (index-1)*3;
-		for(unsigned int i = 0; i < vertexLength; ++i){
-			vertexArray.push_back(vertexes[index+i]);
+using FGengine::Graphics::Camera;
+
+namespace Logic{
+
+	export class Player{
+	public:
+		void Update(){
+			camera.Update();
 		}
-	}
 
-	return vertexArray;
+		void SetPosition(const glm::vec3& newPosition){
+			camera.SetPosition(newPosition);
+		}
+
+		glm::vec3 GetPosition(){
+			return camera.GetPosition();
+		}
+
+		void SetRotation(const glm::vec3& newRotation){
+			camera.SetRotation(newRotation);
+		}
+
+		glm::vec3 GetRotation(){
+			return camera.GetRotation();
+		}
+
+	private:
+		Camera camera;
+	};
+
 }

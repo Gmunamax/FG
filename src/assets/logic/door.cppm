@@ -13,21 +13,23 @@
 // 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-module;
-#include "assets/office.hpp"
+export module Logic:Door;
 
-export module Night1:Office;
+namespace Logic{
 
-namespace Night1{
-
-	class Office{
+	export class Door{
 	public:
-		void Update(){
-			office.Draw();
+		void SetClosed(bool newState){
+			closed = newState;
 		}
 
+		bool GetClosed(){
+			return closed;
+		}
+	
 	private:
-		Assets::Office office;
+		bool closed = false;
+
 	};
 
 }

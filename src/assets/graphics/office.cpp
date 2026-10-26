@@ -13,10 +13,13 @@
 // 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#include <assets/office.hpp>
-#include "modelCreator.hpp"
+module;
+#include <span>
+#include <vector>
 
-using namespace Assets;
+module Graphics;
+
+using namespace Graphics;
 
 std::span<float> Office::GetVertexes(){
 	static float officeVertexes[]{

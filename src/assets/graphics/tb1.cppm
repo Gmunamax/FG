@@ -13,25 +13,38 @@
 // 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#include <FGengine/graphics/model.hpp>
-#include <FGengine/graphics/shader.hpp>
+module;
 #include <span>
-#include <vector>
+#include <FGengine/graphics/model.hpp>
 
-namespace Assets{
+export module Graphics:TB1;
 
-class Office: public FGengine::Graphics::Model{
+using FGengine::Graphics::Model, FGengine::Graphics::Shader;
+
+namespace Graphics{
+
+class TB1: public Model{
 public:
-	Office():
-		Model{officeVertexes, GetShader()}
+	TB1():
+		Model{GetModel(), GetShader()}
 	{}
 
 private:
-	static std::span<float> GetVertexes();
-	static std::span<unsigned> GetIndices();
-	static std::vector<float> officeVertexes;
+	static std::span<float> GetModel(){
+		static float vertexes[]{
+			1, 0, -1,
+			-1, 0, 1,
+			-1, 0, -1,
 
-	static std::shared_ptr<FGengine::Graphics::Shader> GetShader(){
+			-1, 0, 1,
+			1, 0, -1,
+			1, 0, 1
+		};
+
+		return vertexes;
+	}
+
+	static const std::shared_ptr<Shader>& GetShader(){
 		static const char* vertex = "\
 			#version 330\n\
 			\n\
@@ -54,12 +67,12 @@ private:
 			out vec4 fragColor;\n\
 			\n\
 			void main(){\n\
-			\t	fragColor = vec4(1,1,0,0);\n\
+			\t	fragColor = vec4(0.5,0.5,0.5,0);\n\
 			}\n\
 		";
 
-		static FGengine::Graphics::Shader shader{vertex, fragment};
-		static std::shared_ptr<FGengine::Graphics::Shader> ptr{&shader};
+		static Shader shader{vertex, fragment};
+		static std::shared_ptr<Shader> ptr{&shader};
 
 		return ptr;
 	}

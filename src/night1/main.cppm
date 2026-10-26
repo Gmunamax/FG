@@ -19,44 +19,14 @@ module;
 #include <FGengine/graphics/context.hpp>
 
 export module Night1;
-import :Office;
-import :TB1;
-import :Player;
-import :Door;
-import :Time;
-import :DistributionBoard;
+import Logic;
 
 using FGengine::VideoOutput::Window, FGengine::VideoOutput::EventsPack;
+using namespace Logic;
 
 namespace Night1{
 
 	export class Scene: public EventsPack{
-		TB1 tb1{&door, &time};
-
-		Office office;
-		Door door;
-		DistributionBoard board{
-			true, true,
-			true, true,
-			true, true,
-			true, true,
-			true, true
-		};
-		enum class InteractionsTarget{
-			World,
-			DistributionBoard
-		} interactionsFocus = InteractionsTarget::World;
-
-		Player player;
-		Time time{7*60};
-		Window* win;
-
-		virtual void Draw() override{
-			FGengine::Graphics::Context::GetCurrentWindow().Clear();
-			tb1.Update();
-			player.Update();
-			win->Update();
-		}
 
 		virtual void KeyPress(Key key) override{
 			switch(interactionsFocus){
@@ -71,34 +41,9 @@ namespace Night1{
 			}
 		}
 
-		void HandleWorldKeyPress(Key key){
-			switch(key){
-			using enum Key;
-			case Space:
-				door.SetClosed(true);
-				break;
+		void HandleWorldKeyPress(Key key);
 
-			case Num1:
-				interactionsFocus = InteractionsTarget::DistributionBoard;
-				break;
-
-			default:
-				break;
-			}
-		}
-
-		void HandleBoardKeyPress(Key key){
-			switch(key){
-			using enum Key;
-			case Esc:
-				interactionsFocus = InteractionsTarget::World;
-				break;
-			default:
-				HandleBoardNumberKey(key);
-				break;
-			}
-		}
-
+		void HandleBoardKeyPress(Key key);
 		void HandleBoardNumberKey(Key key);
 
 		virtual void KeyRelease(Key key) override{
@@ -109,34 +54,48 @@ namespace Night1{
 				break;
 			
 			case DistributionBoard:
-				HandleBoardKeyRelease(key);
+				// noop
 				break;
 			}
 		}
 
-		void HandleWorldKeyRelease(Key key){
-			switch(key){
-			using enum Key;
-			case Space:
-				door.SetClosed(false);
-				break;
+		void HandleWorldKeyRelease(Key key);
 
-			default:
-				break;
-			}
-		}
-
-		void HandleBoardKeyRelease(Key key){
-			
+		virtual void Draw() override{
+			FGengine::Graphics::Context::GetCurrentWindow().Clear();
+			tb1.Update();
+			player.Update();
+			win->Update();
 		}
 
 	public:
 		Scene(Window* win):
-			win(win)
+			win{win}
 		{
-			tb1.SetPosition({0, 3, 0});
+			// tb1.SetPosition({0, 3, 0});
 			player.SetRotation({90, 0, 0});
 		}
+		
+	private:
+		TB1ai tb1{&door, &time};
+		// Office office;
+		Door door;
+		DistributionBoard board{
+			true, true,
+			true, true,
+			true, true,
+			true, true,
+			true, true
+		};
+		Player player;
+		Time time{7*60};
+
+		enum class InteractionsTarget{
+			World,
+			DistributionBoard
+		} interactionsFocus = InteractionsTarget::World;
+		Window* win;
+
 	};
 
 }

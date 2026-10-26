@@ -14,17 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 target_sources(FG PUBLIC
-	FILE_SET CXX_MODULES TYPE CXX_MODULES
+	FILE_SET night1
+	TYPE CXX_MODULES
 	FILES
 		main.cppm
-		office.cppm
-		tb1.cppm
-		player.cppm 
-		tb1ai.cppm
-		door.cppm
-		time.cppm
-		distributionBoard.cppm
-		circuitBreaker.cppm
-	PRIVATE
-		main.cpp
 )
+add_subdirectory(events)

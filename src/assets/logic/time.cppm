@@ -14,38 +14,35 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
-#include <FGengine/graphics/camera.hpp>
+#include <FGengine/utils/timer.hpp>
 
-export module Night1:Player;
+export module Logic:Time;
 
-using FGengine::Graphics::Camera;
+using FGengine::Utils::Timer;
 
-namespace Night1{
+namespace Logic{
 
-	class Player{
+	export class Time{
 	public:
-		void Update(){
-			camera.Update();
+		Time(Timer::DataType endTime):
+			endTime{endTime}
+		{}
+
+		Timer::DataType GetTime(){
+			return timer.GetTime();
 		}
 
-		void SetPosition(const glm::vec3& newPosition){
-			camera.SetPosition(newPosition);
+		void ResetTimer(){
+			timer.Reset();
 		}
 
-		glm::vec3 GetPosition(){
-			return camera.GetPosition();
-		}
-
-		void SetRotation(const glm::vec3& newRotation){
-			camera.SetRotation(newRotation);
-		}
-
-		glm::vec3 GetRotation(){
-			return camera.GetRotation();
+		Timer::DataType GetEndTime(){
+			return endTime;
 		}
 
 	private:
-		Camera camera;
+		Timer timer;
+		Timer::DataType endTime;
 	};
 
 }

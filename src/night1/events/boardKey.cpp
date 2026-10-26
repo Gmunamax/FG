@@ -76,6 +76,18 @@ namespace {
 
 }
 
+void Scene::HandleBoardKeyPress(Key key){
+	switch(key){
+	using enum Key;
+	case Esc:
+		interactionsFocus = InteractionsTarget::World;
+		break;
+	default:
+		HandleBoardNumberKey(key);
+		break;
+	}
+}
+
 void Scene::HandleBoardNumberKey(Key key){
 	auto number = ConvertNumberKeyToNumber(key);
 	if(number == -1) return;

@@ -13,29 +13,34 @@
 // 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-module;
-#include <print>
+module Night1;
 
-export module Night1:CircuitBreaker;
+using namespace Night1;
 
-namespace Night1{
+void Scene::HandleWorldKeyPress(Key key){
+	switch(key){
+	using enum Key;
+	case Space:
+		door.SetClosed(true);
+		break;
 
-	class CircuitBreaker{
-	public:
-		CircuitBreaker(bool starterState):
-			triggered{starterState}
-		{}
+	case Num1:
+		interactionsFocus = InteractionsTarget::DistributionBoard;
+		break;
 
-		void SetTriggered(bool newState){
-			triggered = newState;
-		}
+	default:
+		break;
+	}
+}
 
-		bool IsTriggered(){
-			return triggered;
-		}
+void Scene::HandleWorldKeyRelease(Key key){
+	switch(key){
+	using enum Key;
+	case Space:
+		door.SetClosed(false);
+		break;
 
-	private:
-		bool triggered;
-	};
-
+	default:
+		break;
+	}
 }

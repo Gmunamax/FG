@@ -13,7 +13,5 @@
 # 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-add_library(assets STATIC)
-target_link_libraries(assets PUBLIC FGengine)
-target_include_directories(assets PUBLIC include)
-add_subdirectory(src)
+add_subdirectory(graphics)
+add_subdirectory(logic)

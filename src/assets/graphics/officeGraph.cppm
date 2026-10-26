@@ -13,13 +13,15 @@
 // 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#pragma once
+module;
 #include <glm/vec3.hpp>
 #include <glm/geometric.hpp>
 #include <vector>
 #include <pathFinder.hpp>
 
-namespace Assets{
+export module Graphics:OfficeGraph;
+
+namespace Graphics{
 
 class OfficeGraph{
 public:

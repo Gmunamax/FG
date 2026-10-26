@@ -15,14 +15,13 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
 #include <array>
-#include <print>
 
-export module Night1:DistributionBoard;
+export module Logic:DistributionBoard;
 import :CircuitBreaker;
 
-namespace Night1{
+namespace Logic{
 
-	struct DistributionBoard{
+	export struct DistributionBoard{
 		std::array<CircuitBreaker, 10> breakers;
 	};
 

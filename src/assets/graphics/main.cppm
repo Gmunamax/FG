@@ -14,35 +14,25 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
-#include <FGengine/utils/timer.hpp>
+#include <vector>
+#include <span>
 
-export module Night1:Time;
+export module Graphics;
 
-using FGengine::Utils::Timer;
+export import :TB1;
+export import :OfficeGraph;
+export import :Office;
 
-namespace Night1{
+std::vector<float> ConvertToVertexArray(const std::span<float> vertexes, const std::span<unsigned> indices){
+	constexpr unsigned vertexLength = 3;
+	std::vector<float> vertexArray;
 
-	class Time{
-	public:
-		Time(Timer::DataType endTime):
-			endTime{endTime}
-		{}
-
-		Timer::DataType GetTime(){
-			return timer.GetTime();
+	for(auto index : indices){
+		index = (index-1)*3;
+		for(unsigned int i = 0; i < vertexLength; ++i){
+			vertexArray.push_back(vertexes[index+i]);
 		}
+	}
 
-		void ResetTimer(){
-			timer.Reset();
-		}
-
-		Timer::DataType GetEndTime(){
-			return endTime;
-		}
-
-	private:
-		Timer timer;
-		Timer::DataType endTime;
-	};
-
+	return vertexArray;
 }

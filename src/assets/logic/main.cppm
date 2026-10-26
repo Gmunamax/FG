@@ -13,23 +13,11 @@
 // 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-export module Night1:Door;
+export module Logic;
 
-namespace Night1{
-
-	class Door{
-	public:
-		void SetClosed(bool newState){
-			closed = newState;
-		}
-
-		bool GetClosed(){
-			return closed;
-		}
-	
-	private:
-		bool closed = false;
-
-	};
-
-}
+export import :CircuitBreaker;
+export import :DistributionBoard;
+export import :Door;
+export import :TB1ai;
+export import :Time;
+export import :Player;

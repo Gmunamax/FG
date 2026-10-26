@@ -14,35 +14,28 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
-#include "assets/tb1.hpp"
+#include <print>
 
-export module Night1:TB1;
-import :TB1ai;
+export module Logic:CircuitBreaker;
 
-namespace Night1{
+namespace Logic{
 
-	class TB1{
+	export class CircuitBreaker{
 	public:
-		TB1(Door* door, Time* time):
-			ai{door, time}
+		CircuitBreaker(bool starterState):
+			triggered{starterState}
 		{}
 
-		void Update(){
-			ai.Update();
-			tb1.Draw();
+		void SetTriggered(bool newState){
+			triggered = newState;
 		}
 
-		void SetPosition(const glm::vec3& newPosition){
-			tb1.SetPosition(newPosition);
-		}
-
-		const glm::vec3& GetPosition(){
-			return tb1.GetPosition();
+		bool IsTriggered(){
+			return triggered;
 		}
 
 	private:
-		Assets::TB1 tb1;
-		TB1ai ai;
+		bool triggered;
 	};
 
 }

@@ -13,7 +13,15 @@
 # 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-target_sources(assets PRIVATE
-	tb1.cpp
-	office.cpp
+target_sources(FG PUBLIC
+	FILE_SET logic
+	TYPE CXX_MODULES
+	FILES
+		player.cppm 
+		tb1ai.cppm
+		door.cppm
+		time.cppm
+		distributionBoard.cppm
+		circuitBreaker.cppm
+		main.cppm
 )

@@ -18,15 +18,15 @@ module;
 #include <print>
 #include <random>
 
-export module Night1:TB1ai;
+export module Logic:TB1ai;
 import :Door;
 import :Time;
 
 using FGengine::Utils::Timer;
 
-namespace Night1{
+namespace Logic{
 
-	class TB1ai{
+	export class TB1ai{
 	public:
 		TB1ai(Door* door, Time* time):
 			door{door},
