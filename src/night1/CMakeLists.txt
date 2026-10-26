@@ -23,4 +23,8 @@ target_sources(FG PUBLIC
 		tb1ai.cppm
 		door.cppm
 		time.cppm
+		distributionBoard.cppm
+		circuitBreaker.cppm
+	PRIVATE
+		main.cpp
 )

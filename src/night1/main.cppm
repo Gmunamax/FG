@@ -24,6 +24,7 @@ import :TB1;
 import :Player;
 import :Door;
 import :Time;
+import :DistributionBoard;
 
 using FGengine::VideoOutput::Window, FGengine::VideoOutput::EventsPack;
 
@@ -34,23 +35,51 @@ namespace Night1{
 
 		Office office;
 		Door door;
+		DistributionBoard board{
+			true, true,
+			true, true,
+			true, true,
+			true, true,
+			true, true
+		};
+		enum class InteractionsTarget{
+			World,
+			DistributionBoard
+		} interactionsFocus = InteractionsTarget::World;
 
 		Player player;
 		Time time{7*60};
 		Window* win;
 
-		virtual void Draw(){
+		virtual void Draw() override{
 			FGengine::Graphics::Context::GetCurrentWindow().Clear();
 			tb1.Update();
 			player.Update();
 			win->Update();
 		}
 
-		virtual void KeyPress(Key key){
+		virtual void KeyPress(Key key) override{
+			switch(interactionsFocus){
+			using enum InteractionsTarget;
+			case World:
+				HandleWorldKeyPress(key);
+				break;
+
+			case DistributionBoard:
+				HandleBoardKeyPress(key);
+				break;
+			}
+		}
+
+		void HandleWorldKeyPress(Key key){
 			switch(key){
 			using enum Key;
 			case Space:
 				door.SetClosed(true);
+				break;
+
+			case Num1:
+				interactionsFocus = InteractionsTarget::DistributionBoard;
 				break;
 
 			default:
@@ -58,7 +87,34 @@ namespace Night1{
 			}
 		}
 
-		virtual void KeyRelease(Key key){
+		void HandleBoardKeyPress(Key key){
+			switch(key){
+			using enum Key;
+			case Esc:
+				interactionsFocus = InteractionsTarget::World;
+				break;
+			default:
+				HandleBoardNumberKey(key);
+				break;
+			}
+		}
+
+		void HandleBoardNumberKey(Key key);
+
+		virtual void KeyRelease(Key key) override{
+			switch(interactionsFocus){
+			using enum InteractionsTarget;
+			case World:
+				HandleWorldKeyRelease(key);
+				break;
+			
+			case DistributionBoard:
+				HandleBoardKeyRelease(key);
+				break;
+			}
+		}
+
+		void HandleWorldKeyRelease(Key key){
 			switch(key){
 			using enum Key;
 			case Space:
@@ -68,6 +124,10 @@ namespace Night1{
 			default:
 				break;
 			}
+		}
+
+		void HandleBoardKeyRelease(Key key){
+			
 		}
 
 	public:
