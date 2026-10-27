@@ -24,4 +24,6 @@ target_sources(FG PUBLIC
 		distributionBoard.cppm
 		circuitBreaker.cppm
 		main.cppm
+		fuse.cppm
+		fusesBoard.cppm
 )

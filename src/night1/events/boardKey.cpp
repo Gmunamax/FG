@@ -14,67 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
-#include <cstdint>
 #include <print>
 
 module Night1;
+import :SomeThings;
 
 using namespace Night1;
-
-namespace {
-
-	int_fast8_t ConvertNumberKeyToNumber(EventsPack::Key key){
-		unsigned number;
-		switch(key){
-		using enum EventsPack::Key;
-		case Num1:
-			number = 1;
-			break;
-		
-		case Num2:
-			number = 2;
-			break;
-
-		case Num3:
-			number = 3;
-			break;
-
-		case Num4:
-			number = 4;
-			break;
-
-		case Num5:
-			number = 5;
-			break;
-
-		case Num6:
-			number = 6;
-			break;
-
-		case Num7:
-			number = 7;
-			break;
-
-		case Num8:
-			number = 8;
-			break;
-
-		case Num9:
-			number = 9;
-			break;
-
-		case Num0:
-			number = 0;
-			break;
-
-		default:
-			number = -1;
-			break;
-		}
-		return number;
-	}
-
-}
 
 void Scene::HandleBoardKeyPress(Key key){
 	switch(key){

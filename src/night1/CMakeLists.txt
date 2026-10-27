@@ -18,5 +18,6 @@ target_sources(FG PUBLIC
 	TYPE CXX_MODULES
 	FILES
 		main.cppm
+		someThings.cppm
 )
 add_subdirectory(events)

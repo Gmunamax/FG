@@ -28,6 +28,10 @@ void Scene::HandleWorldKeyPress(Key key){
 		interactionsFocus = InteractionsTarget::DistributionBoard;
 		break;
 
+	case Num2:
+		interactionsFocus = InteractionsTarget::FusesBoard;
+		break;
+
 	default:
 		break;
 	}

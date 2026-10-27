@@ -38,6 +38,10 @@ namespace Night1{
 			case DistributionBoard:
 				HandleBoardKeyPress(key);
 				break;
+			
+			case FusesBoard:
+				HandleFuseKeyPress(key);
+				break;
 			}
 		}
 
@@ -45,6 +49,9 @@ namespace Night1{
 
 		void HandleBoardKeyPress(Key key);
 		void HandleBoardNumberKey(Key key);
+
+		void HandleFuseKeyPress(Key key);
+		void HandleFuseNumberKey(Key key);
 
 		virtual void KeyRelease(Key key) override{
 			switch(interactionsFocus){
@@ -54,6 +61,10 @@ namespace Night1{
 				break;
 			
 			case DistributionBoard:
+				// noop
+				break;
+			
+			case FusesBoard:
 				// noop
 				break;
 			}
@@ -87,12 +98,20 @@ namespace Night1{
 			true, true,
 			true, true
 		};
+		FusesBoard fusesBoard{
+			false, false,
+			false, false,
+			true, false,
+			false, false,
+			false, false
+		};
 		Player player;
 		Time time{7*60};
 
 		enum class InteractionsTarget{
 			World,
-			DistributionBoard
+			DistributionBoard,
+			FusesBoard
 		} interactionsFocus = InteractionsTarget::World;
 		Window* win;
 

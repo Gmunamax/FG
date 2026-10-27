@@ -21,3 +21,5 @@ export import :Door;
 export import :TB1ai;
 export import :Time;
 export import :Player;
+export import :FusesBoard;
+export import :Fuse;

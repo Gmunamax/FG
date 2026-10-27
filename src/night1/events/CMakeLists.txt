@@ -16,4 +16,5 @@
 target_sources(FG PRIVATE
 	boardKey.cpp
 	worldKey.cpp
+	fusesKey.cpp
 )
