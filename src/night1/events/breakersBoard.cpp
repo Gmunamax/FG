@@ -21,25 +21,25 @@ import :SomeThings;
 
 using namespace Night1;
 
-void Scene::HandleBoardKeyPress(Key key){
+void Scene::HandleBreakersKeyPress(Key key){
 	switch(key){
 	using enum Key;
 	case Esc:
 		interactionsFocus = InteractionsTarget::World;
 		break;
 	default:
-		HandleBoardNumberKey(key);
+		HandleBreakersNumberKey(key);
 		break;
 	}
 }
 
-void Scene::HandleBoardNumberKey(Key key){
+void Scene::HandleBreakersNumberKey(Key key){
 	auto number = ConvertNumberKeyToNumber(key);
 	if(number == -1) return;
 	if(number == 0) number = 10;
 	auto id = number-1;
 	
-	auto& breaker = board.breakers[id];
+	auto& breaker = breakersBoard.breakers[id];
 	breaker.SetTriggered(!breaker.IsTriggered());
 	std::println("breaker {}: trigger became {}", number, breaker.IsTriggered());
 }

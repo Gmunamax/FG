@@ -16,12 +16,12 @@
 module;
 #include <array>
 
-export module Logic:DistributionBoard;
+export module Logic:BreakersBoard;
 import :CircuitBreaker;
 
 namespace Logic{
 
-	export struct DistributionBoard{
+	export struct BreakersBoard{
 		std::array<CircuitBreaker, 10> breakers;
 	};
 

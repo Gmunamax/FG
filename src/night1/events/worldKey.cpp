@@ -25,7 +25,7 @@ void Scene::HandleWorldKeyPress(Key key){
 		break;
 
 	case Num1:
-		interactionsFocus = InteractionsTarget::DistributionBoard;
+		interactionsFocus = InteractionsTarget::BreakersBoard;
 		break;
 
 	case Num2:

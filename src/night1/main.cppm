@@ -35,8 +35,8 @@ namespace Night1{
 				HandleWorldKeyPress(key);
 				break;
 
-			case DistributionBoard:
-				HandleBoardKeyPress(key);
+			case BreakersBoard:
+				HandleBreakersKeyPress(key);
 				break;
 			
 			case FusesBoard:
@@ -47,8 +47,8 @@ namespace Night1{
 
 		void HandleWorldKeyPress(Key key);
 
-		void HandleBoardKeyPress(Key key);
-		void HandleBoardNumberKey(Key key);
+		void HandleBreakersKeyPress(Key key);
+		void HandleBreakersNumberKey(Key key);
 
 		void HandleFuseKeyPress(Key key);
 		void HandleFuseNumberKey(Key key);
@@ -60,7 +60,7 @@ namespace Night1{
 				HandleWorldKeyRelease(key);
 				break;
 			
-			case DistributionBoard:
+			case BreakersBoard:
 				// noop
 				break;
 			
@@ -91,7 +91,7 @@ namespace Night1{
 		TB1ai tb1{&door, &time};
 		// Office office;
 		Door door;
-		DistributionBoard board{
+		BreakersBoard breakersBoard{
 			true, true,
 			true, true,
 			true, true,
@@ -110,7 +110,7 @@ namespace Night1{
 
 		enum class InteractionsTarget{
 			World,
-			DistributionBoard,
+			BreakersBoard,
 			FusesBoard
 		} interactionsFocus = InteractionsTarget::World;
 		Window* win;

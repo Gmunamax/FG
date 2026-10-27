@@ -16,7 +16,7 @@
 export module Logic;
 
 export import :CircuitBreaker;
-export import :DistributionBoard;
+export import :BreakersBoard;
 export import :Door;
 export import :TB1ai;
 export import :Time;
