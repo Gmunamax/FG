@@ -38,9 +38,7 @@ void Scene::HandleFuseNumberKey(Key key){
 	if(number == -1) return;
 	if(number == 0) number = 10;
 	auto id = number-1;
-	
-	auto& fuse = fusesBoard.fuses[id];
-	std::print("fuse {}: {} -> ", number, fuse.IsWorking());
-	fuse.Fix();
-	std::println("{}", fuse.IsWorking());
+	bool isWorked = fusesBoard.IsFuseWorking(id);
+	fusesBoard.TryFixFuse(id);
+	std::println("fuse {}: {} -> {}", number, isWorked, fusesBoard.IsFuseWorking(id));
 }

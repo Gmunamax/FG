@@ -98,13 +98,13 @@ namespace Night1{
 			true, true,
 			true, true
 		};
-		FusesBoard fusesBoard{
+		FusesBoard fusesBoard{{
 			false, false,
 			false, false,
 			true, false,
 			false, false,
 			false, false
-		};
+		}, &breakersBoard};
 		Player player;
 		Time time{7*60};
 

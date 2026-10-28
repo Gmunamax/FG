@@ -22,7 +22,7 @@ namespace Logic{
 	export class Fuse{
 	public:
 		Fuse(bool working):
-			working{!working}
+			working{working}
 		{}
 
 		void Break(){

@@ -15,14 +15,37 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
 #include <array>
+#include <print>
 
 export module Logic:FusesBoard;
 import :Fuse;
+import :BreakersBoard;
 
 namespace Logic{
 
-	export struct FusesBoard{
+	export class FusesBoard{
+	public:
+		FusesBoard(std::array<Fuse, 10> fuses, BreakersBoard* breakersBoard):
+			fuses{fuses},
+			breakersBoard{*breakersBoard}
+		{}
+
+		void TryFixFuse(unsigned id){
+			if( not breakersBoard.breakers.at(id).IsTriggered()){
+				fuses.at(id).Fix();
+			}
+			else{
+				std::println("Disable breaker first");
+			}
+		}
+
+		bool IsFuseWorking(unsigned id){
+			return fuses.at(id).IsWorking();
+		}
+
+	private:
 		std::array<Fuse, 10> fuses;
+		BreakersBoard& breakersBoard;
 	};
 
 }
