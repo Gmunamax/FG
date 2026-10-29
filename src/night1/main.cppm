@@ -17,6 +17,7 @@ module;
 #include <FGengine/videoOutput/eventsPack.hpp>
 #include <FGengine/videoOutput/window.hpp>
 #include <FGengine/graphics/context.hpp>
+#include <span>
 
 export module Night1;
 import Logic;
@@ -91,20 +92,21 @@ namespace Night1{
 		TB1ai tb1{&door, &time};
 		// Office office;
 		Door door;
-		BreakersBoard breakersBoard{
+		static inline constexpr bool breakersBoard[]{
 			true, true,
 			true, true,
 			true, true,
 			true, true,
 			true, true
 		};
-		FusesBoard fusesBoard{{
+		static inline constexpr bool fusesBoard[]{
 			false, false,
 			false, false,
 			true, false,
 			false, false,
 			false, false
-		}, &breakersBoard};
+		};
+		Electricity electricity{breakersBoard, fusesBoard};
 		Player player;
 		Time time{7*60};
 

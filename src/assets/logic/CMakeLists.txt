@@ -21,9 +21,6 @@ target_sources(FG PUBLIC
 		tb1ai.cppm
 		door.cppm
 		time.cppm
-		breakersBoard.cppm
-		circuitBreaker.cppm
 		main.cppm
-		fuse.cppm
-		fusesBoard.cppm
+		electricity.cppm
 )

@@ -39,7 +39,13 @@ void Scene::HandleBreakersNumberKey(Key key){
 	if(number == 0) number = 10;
 	auto id = number-1;
 	
-	auto& breaker = breakersBoard.breakers[id];
-	breaker.SetTriggered(!breaker.IsTriggered());
-	std::println("breaker {}: trigger became {}", number, breaker.IsTriggered());
+	electricity.GetCircuit(id).breaker = !electricity.GetCircuit(id).breaker;
+	const char* stateWord;
+	if(electricity.GetCircuit(id).breaker == true){
+		stateWord = "enabled";
+	}
+	else{
+		stateWord = "disabled";
+	}
+	std::println("breaker {}: trigger became {}", number, stateWord);
 }

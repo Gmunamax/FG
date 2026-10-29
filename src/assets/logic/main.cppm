@@ -15,11 +15,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 export module Logic;
 
-export import :CircuitBreaker;
-export import :BreakersBoard;
 export import :Door;
 export import :TB1ai;
 export import :Time;
 export import :Player;
-export import :FusesBoard;
-export import :Fuse;
+export import :Electricity;

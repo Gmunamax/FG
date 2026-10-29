@@ -15,37 +15,45 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
 #include <array>
-#include <print>
+#include <span>
 
-export module Logic:FusesBoard;
-import :Fuse;
-import :BreakersBoard;
+export module Logic:Electricity;
 
 namespace Logic{
 
-	export class FusesBoard{
+	export class Electricity{
 	public:
-		FusesBoard(std::array<Fuse, 10> fuses, BreakersBoard* breakersBoard):
-			fuses{fuses},
-			breakersBoard{*breakersBoard}
-		{}
+		struct Circuit{
+			bool breaker :1;
+			bool fuse :1;
 
-		void TryFixFuse(unsigned id){
-			if( not breakersBoard.breakers.at(id).IsTriggered()){
-				fuses.at(id).Fix();
+			bool IsWorking(){
+				return breaker && fuse;
 			}
-			else{
-				std::println("Disable breaker first");
+		};
+
+		Electricity(std::span<const bool, 10> breakers, std::span<const bool, 10> fuses){
+			for(unsigned i = 0; i < 10; ++i){
+				circuits.at(i).breaker = breakers.at(i);
+				circuits.at(i).fuse = fuses.at(i);
 			}
 		}
 
-		bool IsFuseWorking(unsigned id){
-			return fuses.at(id).IsWorking();
+		bool IsWorking(){
+			bool working = true;
+			for(auto& circuit : circuits){
+				working = working && circuit.IsWorking();
+			}
+			return working;
+		}
+
+		Circuit& GetCircuit(unsigned id){
+			return circuits.at(id);
 		}
 
 	private:
-		std::array<Fuse, 10> fuses;
-		BreakersBoard& breakersBoard;
+		std::array<Circuit, 10> circuits;
+
 	};
 
 }
