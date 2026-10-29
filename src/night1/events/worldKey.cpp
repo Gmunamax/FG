@@ -13,6 +13,9 @@
 // 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+module;
+#include <print>
+
 module Night1;
 
 using namespace Night1;
@@ -44,6 +47,13 @@ void Scene::HandleWorldKeyRelease(Key key){
 		door.SetClosed(false);
 		break;
 
+	case B:
+		if(electricity.IsWorking()){
+			std::println("Congratulations");
+		}
+		else{
+			std::println("Mission is not complete yet");
+		}
 	default:
 		break;
 	}
