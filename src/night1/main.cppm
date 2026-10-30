@@ -43,14 +43,24 @@ namespace Night1{
 			case FusesBoard:
 				HandleFuseKeyPress(key);
 				break;
+			
+			case BreakersLock:
+				HandleBreakersLockKeyPress(key);
+				break;
+
+			case FusesLock:
+				HandleFusesLockKeyPress(key);
+				break;
 			}
 		}
 
 		void HandleWorldKeyPress(Key key);
 
+		void HandleBreakersLockKeyPress(Key key);
 		void HandleBreakersKeyPress(Key key);
 		void HandleBreakersNumberKey(Key key);
 
+		void HandleFusesLockKeyPress(Key key);
 		void HandleFuseKeyPress(Key key);
 		void HandleFuseNumberKey(Key key);
 
@@ -68,6 +78,14 @@ namespace Night1{
 			case FusesBoard:
 				// noop
 				break;
+
+			case BreakersLock:
+				// noop
+				break;
+
+			case FusesLock:
+				// noop
+				break;
 			}
 		}
 
@@ -78,6 +96,19 @@ namespace Night1{
 			tb1.Update();
 			player.Update();
 			win->Update();
+			switch(interactionsFocus){
+			using enum InteractionsTarget;
+			case BreakersLock:
+				breakersLock.Update();
+				break;
+			
+			case FusesLock:
+				fusesLock.Update();
+				break;
+
+			default:
+				break;
+			}
 		}
 
 	public:
@@ -107,13 +138,17 @@ namespace Night1{
 			false, false
 		};
 		Electricity electricity{breakersBoard, fusesBoard};
+		Lock breakersLock{{90, 35}, true};
+		Lock fusesLock{{90, 45}, true};
 		Player player;
 		Time time{7*60};
 
 		enum class InteractionsTarget{
 			World,
 			BreakersBoard,
-			FusesBoard
+			FusesBoard,
+			BreakersLock,
+			FusesLock
 		} interactionsFocus = InteractionsTarget::World;
 		Window* win;
 

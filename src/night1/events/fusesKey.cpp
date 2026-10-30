@@ -21,6 +21,26 @@ import :SomeThings;
 
 using namespace Night1;
 
+void Scene::HandleFusesLockKeyPress(Key key){
+	switch(key){
+	using enum Key;
+	case Space:
+		if(fusesLock.TryUnlock()){
+			interactionsFocus = InteractionsTarget::FusesBoard;
+		}
+		DrawSimpleKeyVisualization(fusesLock);
+		break;
+	
+	case Esc:
+		interactionsFocus = InteractionsTarget::World;
+		break;
+
+	default:
+		std::println("Board is locked");
+		break;
+	}
+}
+
 void Scene::HandleFuseKeyPress(Key key){
 	switch(key){
 	using enum Key;

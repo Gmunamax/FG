@@ -28,11 +28,21 @@ void Scene::HandleWorldKeyPress(Key key){
 		break;
 
 	case Num1:
-		interactionsFocus = InteractionsTarget::BreakersBoard;
+		if(breakersLock.IsLocked()){
+			interactionsFocus = InteractionsTarget::BreakersLock;
+		}
+		else{
+			interactionsFocus = InteractionsTarget::BreakersBoard;
+		}
 		break;
 
 	case Num2:
-		interactionsFocus = InteractionsTarget::FusesBoard;
+		if(fusesLock.IsLocked()){
+			interactionsFocus = InteractionsTarget::FusesLock;
+		}
+		else{
+			interactionsFocus = InteractionsTarget::FusesBoard;
+		}
 		break;
 
 	default:

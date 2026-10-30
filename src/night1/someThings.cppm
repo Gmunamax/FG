@@ -16,10 +16,12 @@
 module;
 #include <FGengine/videoOutput/eventsPack.hpp>
 #include <cstdint>
+#include <print>
 
 export module Night1:SomeThings;
+import Logic;
 
-using FGengine::VideoOutput::EventsPack;
+using FGengine::VideoOutput::EventsPack, Logic::Lock;
 
 namespace Night1{
 
@@ -72,6 +74,43 @@ namespace Night1{
 			break;
 		}
 		return number;
+	}
+
+	void DrawSimpleKeyVisualization(const Lock& lock){
+		const unsigned width = 80;
+		const char empty = '-';
+		const char fill = '_';
+		const char key = '|';
+
+		unsigned angleOnWidth = 0;
+		while(angleOnWidth < width){
+			if(lock.GetKeyAngle() < ((360.0/width) * angleOnWidth+1)){
+				break;
+			}
+			else{
+				++angleOnWidth;
+			}
+		}
+
+		const auto range = lock.GetKeyAngle();
+		for(unsigned i = 0; i < width; ++i){
+			const char* character;
+			const Lock::AngleType currentAngle = (360.0/width) * i;
+
+			if(lock.GetRange().IsInRange(currentAngle)){
+				character = &fill;
+			}
+			else{
+				character = &empty;
+			}
+
+			if(i == angleOnWidth){
+				character = &key;
+			}
+
+			std::print("{}", *character);
+		}
+		std::println();
 	}
 
 }

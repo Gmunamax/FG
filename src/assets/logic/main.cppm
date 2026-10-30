@@ -20,3 +20,4 @@ export import :TB1ai;
 export import :Time;
 export import :Player;
 export import :Electricity;
+export import :Lock;

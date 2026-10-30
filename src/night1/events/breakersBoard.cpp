@@ -21,6 +21,26 @@ import :SomeThings;
 
 using namespace Night1;
 
+void Scene::HandleBreakersLockKeyPress(Key key){
+	switch(key){
+	using enum Key;
+	case Space:
+		if(breakersLock.TryUnlock()){
+			interactionsFocus = InteractionsTarget::BreakersBoard;
+		}
+		DrawSimpleKeyVisualization(breakersLock);
+		break;
+
+	case Esc:
+		interactionsFocus = InteractionsTarget::World;
+		break;
+
+	default:
+		std::println("Board is locked");
+		break;
+	}
+}
+
 void Scene::HandleBreakersKeyPress(Key key){
 	switch(key){
 	using enum Key;

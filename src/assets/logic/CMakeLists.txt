@@ -23,4 +23,5 @@ target_sources(FG PUBLIC
 		time.cppm
 		main.cppm
 		electricity.cppm
+		lock.cppm
 )
