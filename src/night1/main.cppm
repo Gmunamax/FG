@@ -18,8 +18,14 @@ module;
 #include <FGengine/videoOutput/window.hpp>
 #include <FGengine/graphics/context.hpp>
 #include <span>
+#include <memory>
+#include <stack>
 
 export module Night1;
+import :FocusManager;
+import :BreakersBoard;
+import :FusesBoard;
+import :World;
 import Logic;
 
 using FGengine::VideoOutput::Window, FGengine::VideoOutput::EventsPack;
@@ -30,85 +36,19 @@ namespace Night1{
 	export class Scene: public EventsPack{
 
 		virtual void KeyPress(Key key) override{
-			switch(interactionsFocus){
-			using enum InteractionsTarget;
-			case World:
-				HandleWorldKeyPress(key);
-				break;
-
-			case BreakersBoard:
-				HandleBreakersKeyPress(key);
-				break;
-			
-			case FusesBoard:
-				HandleFuseKeyPress(key);
-				break;
-			
-			case BreakersLock:
-				HandleBreakersLockKeyPress(key);
-				break;
-
-			case FusesLock:
-				HandleFusesLockKeyPress(key);
-				break;
-			}
+			focus.Get()->KeyPress(key);
 		}
-
-		void HandleWorldKeyPress(Key key);
-
-		void HandleBreakersLockKeyPress(Key key);
-		void HandleBreakersKeyPress(Key key);
-		void HandleBreakersNumberKey(Key key);
-
-		void HandleFusesLockKeyPress(Key key);
-		void HandleFuseKeyPress(Key key);
-		void HandleFuseNumberKey(Key key);
 
 		virtual void KeyRelease(Key key) override{
-			switch(interactionsFocus){
-			using enum InteractionsTarget;
-			case World:
-				HandleWorldKeyRelease(key);
-				break;
-			
-			case BreakersBoard:
-				// noop
-				break;
-			
-			case FusesBoard:
-				// noop
-				break;
-
-			case BreakersLock:
-				// noop
-				break;
-
-			case FusesLock:
-				// noop
-				break;
-			}
+			focus.Get()->KeyRelease(key);
 		}
-
-		void HandleWorldKeyRelease(Key key);
 
 		virtual void Draw() override{
 			FGengine::Graphics::Context::GetCurrentWindow().Clear();
 			tb1.Update();
 			player.Update();
+			focus.Get()->Draw();
 			win->Update();
-			switch(interactionsFocus){
-			using enum InteractionsTarget;
-			case BreakersLock:
-				breakersLock.Update();
-				break;
-			
-			case FusesLock:
-				fusesLock.Update();
-				break;
-
-			default:
-				break;
-			}
 		}
 
 	public:
@@ -123,35 +63,30 @@ namespace Night1{
 		TB1ai tb1{&door, &time};
 		// Office office;
 		Door door;
-		static inline constexpr bool breakersBoard[]{
+		Player player;
+		Time time{7*60};
+
+		static inline constexpr bool breakers[]{
 			true, true,
 			true, true,
 			true, true,
 			true, true,
 			true, true
 		};
-		static inline constexpr bool fusesBoard[]{
+		static inline constexpr bool fuses[]{
 			false, false,
 			false, false,
 			true, false,
 			false, false,
 			false, false
 		};
-		Electricity electricity{breakersBoard, fusesBoard};
-		Lock breakersLock{{90, 35}, true};
-		Lock fusesLock{{90, 45}, true};
-		Player player;
-		Time time{7*60};
+		Electricity electricity{breakers, fuses};
+		BreakersBoard breakersBoard{electricity, focus};
+		FusesBoard fusesBoard{electricity, focus};
+		World world{door, electricity, breakersBoard, fusesBoard, focus};
 
-		enum class InteractionsTarget{
-			World,
-			BreakersBoard,
-			FusesBoard,
-			BreakersLock,
-			FusesLock
-		} interactionsFocus = InteractionsTarget::World;
+		FocusManager focus{&world};
 		Window* win;
-
 	};
 
 }

@@ -20,29 +20,19 @@ module Night1;
 
 using namespace Night1;
 
-void Scene::HandleWorldKeyPress(Key key){
+void World::HandleWorldKeyPress(Key key){
 	switch(key){
 	using enum Key;
 	case Space:
-		door.SetClosed(true);
+		door->SetClosed(true);
 		break;
 
 	case Num1:
-		if(breakersLock.IsLocked()){
-			interactionsFocus = InteractionsTarget::BreakersLock;
-		}
-		else{
-			interactionsFocus = InteractionsTarget::BreakersBoard;
-		}
+		focus->Enter(breakersBoard);
 		break;
 
 	case Num2:
-		if(fusesLock.IsLocked()){
-			interactionsFocus = InteractionsTarget::FusesLock;
-		}
-		else{
-			interactionsFocus = InteractionsTarget::FusesBoard;
-		}
+		focus->Enter(fusesBoard);
 		break;
 
 	default:
@@ -50,15 +40,15 @@ void Scene::HandleWorldKeyPress(Key key){
 	}
 }
 
-void Scene::HandleWorldKeyRelease(Key key){
+void World::HandleWorldKeyRelease(Key key){
 	switch(key){
 	using enum Key;
 	case Space:
-		door.SetClosed(false);
+		door->SetClosed(false);
 		break;
 
 	case B:
-		if(electricity.IsWorking()){
+		if(electricity->IsWorking()){
 			std::println("Congratulations");
 		}
 		else{

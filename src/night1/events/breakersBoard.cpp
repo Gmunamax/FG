@@ -21,18 +21,16 @@ import :SomeThings;
 
 using namespace Night1;
 
-void Scene::HandleBreakersLockKeyPress(Key key){
+void BreakersBoard::HandleBreakersLockKeyPress(Key key){
 	switch(key){
 	using enum Key;
 	case Space:
-		if(breakersLock.TryUnlock()){
-			interactionsFocus = InteractionsTarget::BreakersBoard;
-		}
+		breakersLock.TryUnlock();
 		DrawSimpleKeyVisualization(breakersLock);
 		break;
 
 	case Esc:
-		interactionsFocus = InteractionsTarget::World;
+		focus->Leave();
 		break;
 
 	default:
@@ -41,11 +39,11 @@ void Scene::HandleBreakersLockKeyPress(Key key){
 	}
 }
 
-void Scene::HandleBreakersKeyPress(Key key){
+void BreakersBoard::HandleBreakersKeyPress(Key key){
 	switch(key){
 	using enum Key;
 	case Esc:
-		interactionsFocus = InteractionsTarget::World;
+		focus->Leave();
 		break;
 	default:
 		HandleBreakersNumberKey(key);
@@ -53,15 +51,15 @@ void Scene::HandleBreakersKeyPress(Key key){
 	}
 }
 
-void Scene::HandleBreakersNumberKey(Key key){
+void BreakersBoard::HandleBreakersNumberKey(Key key){
 	auto number = ConvertNumberKeyToNumber(key);
 	if(number == -1) return;
 	if(number == 0) number = 10;
 	auto id = number-1;
 	
-	electricity.GetCircuit(id).breaker = !electricity.GetCircuit(id).breaker;
+	electricity->GetCircuit(id).breaker = !electricity->GetCircuit(id).breaker;
 	const char* stateWord;
-	if(electricity.GetCircuit(id).breaker == true){
+	if(electricity->GetCircuit(id).breaker == true){
 		stateWord = "enabled";
 	}
 	else{

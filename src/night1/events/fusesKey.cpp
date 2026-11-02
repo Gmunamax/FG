@@ -21,18 +21,16 @@ import :SomeThings;
 
 using namespace Night1;
 
-void Scene::HandleFusesLockKeyPress(Key key){
+void FusesBoard::HandleFusesLockKeyPress(Key key){
 	switch(key){
 	using enum Key;
 	case Space:
-		if(fusesLock.TryUnlock()){
-			interactionsFocus = InteractionsTarget::FusesBoard;
-		}
+		fusesLock.TryUnlock();
 		DrawSimpleKeyVisualization(fusesLock);
 		break;
 	
 	case Esc:
-		interactionsFocus = InteractionsTarget::World;
+		focus->Leave();
 		break;
 
 	default:
@@ -41,25 +39,25 @@ void Scene::HandleFusesLockKeyPress(Key key){
 	}
 }
 
-void Scene::HandleFuseKeyPress(Key key){
+void FusesBoard::HandleFusesKeyPress(Key key){
 	switch(key){
 	using enum Key;
 	case Esc:
-		interactionsFocus = InteractionsTarget::World;
+		focus->Leave();
 		break;
 	default:
-		HandleFuseNumberKey(key);
+		HandleFusesNumberKey(key);
 		break;
 	}
 }
 
-void Scene::HandleFuseNumberKey(Key key){
+void FusesBoard::HandleFusesNumberKey(Key key){
 	auto number = ConvertNumberKeyToNumber(key);
 	if(number == -1) return;
 	if(number == 0) number = 10;
 	auto id = number-1;
 
-	auto& circuit = electricity.GetCircuit(id);
+	auto& circuit = electricity->GetCircuit(id);
 	if(circuit.breaker == false){
 		circuit.fuse = true;
 		std::println("Fixed fuse {}", number);
