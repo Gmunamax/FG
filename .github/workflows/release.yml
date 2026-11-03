@@ -1,0 +1,68 @@
+name: Create a new release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version (Major.Minor.Patch)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-26.04
+
+    steps:
+      - name: Checkout main project
+        uses: actions/checkout@v4
+        with:
+          path: FG
+          submodules: 'true'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake build-essential libglm-dev libboost-test-dev cppcheck zip patchelf
+
+      - name: Install SDL3
+        uses: libsdl-org/setup-sdl@v1
+        with:
+          version: 3.4.0
+          build-type: "Release"
+
+      - name: Run cppcheck
+        run: |
+          cd FG
+          cppcheck --enable=warning,style,performance,portability --std=c++26 .
+          cd ..
+
+      - name: Configure and Build FG
+        env:
+          CC: clang
+          CXX: clang++
+        run: |
+          cmake FG -B build -DCMAKE_BUILD_TYPE=Release -G Ninja
+          cmake --build build --config Release
+
+      - name: Package Artifacts
+        run: |
+          mkdir -p release
+          cp build/FG release/
+          cp build/deps/FGengine/libFGengine.so release/ 
+          patchelf --set-rpath '$ORIGIN' release/FG
+          zip -r FG-linux-v${{ github.event.inputs.version }}.zip release
+
+      - name: Create GitHub Tag and Release
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: FG ${{ github.event.inputs.version }}
+          tag_name: v${{ github.event.inputs.version }}
+          body_path: ${{ github.workspace }}/CHANGELOG.md
+          prerelease: true
+          draft: true
+          files: |
+            FG-linux-v${{ github.event.inputs.version }}.zip
