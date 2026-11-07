@@ -1,12 +1,9 @@
 name: Create a new release
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version (Major.Minor.Patch)'
-        required: true
-        type: string
+  push:
+    tags:
+      - 'v\d*.\d*.\d*'
 
 permissions:
   contents: write
@@ -35,9 +32,7 @@ jobs:
 
       - name: Run cppcheck
         run: |
-          cd FG
-          cppcheck --enable=warning,style,performance,portability --std=c++26 .
-          cd ..
+          cppcheck --enable=warning,style,performance,portability --std=c++26 FG
 
       - name: Configure and Build FG
         env:
@@ -53,16 +48,37 @@ jobs:
           cp build/FG release/
           cp build/deps/FGengine/libFGengine.so release/ 
           patchelf --set-rpath '$ORIGIN' release/FG
-          zip -r FG-linux-v${{ github.event.inputs.version }}.zip release
+          zip -r FG-linux-v${{ github.ref_name }}.zip release
+
+      - name: Prepare Release
+        id: prepare_release
+        env:
+          PROJECT_NAME: FGengine
+          VERSION: ${{ github.ref_name }}
+        run: |
+          # Remove patch version if it is 0 and letter 'v'
+          VERSION=${VERSION#v}
+          if [[ "$VERSION" == *.0 ]]; then
+            VERSION=${VERSION%.0}
+          fi
+          RELEASE_TITLE="$PROJECT_NAME $VERSION"
+          echo "release_title=$RELEASE_TITLE" >> $GITHUB_OUTPUT
+
+          # Get release changelog from tag message
+          cd FGengine
+          TAG_BODY=$(git for-each-ref --format='%(contents:subject)%0a%0a%(contents:body)' refs/tags/${{ github.ref_name }})
+          cd ..
+          echo "release_message<<EOF" >> $GITHUB_OUTPUT
+          echo "$TAG_BODY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Tag and Release
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
-          name: FG ${{ github.event.inputs.version }}
-          tag_name: v${{ github.event.inputs.version }}
-          body_path: ${{ github.workspace }}/CHANGELOG.md
+          name: ${{ steps.prepare_release.outputs.release_title }}
+          tag_name: ${{ github.ref_name }}
+          body: ${{ steps.prepare_release.outputs.release_message }}
           prerelease: true
-          draft: true
           files: |
-            FG-linux-v${{ github.event.inputs.version }}.zip
+            FG-linux-v${{ github.ref_name }}.zip
