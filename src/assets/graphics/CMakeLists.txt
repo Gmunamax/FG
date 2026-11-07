@@ -21,8 +21,11 @@ target_sources(FG PRIVATE
 		officeGraph.cppm
 		tb1.cppm
 		office.cppm
+		door.cppm
+		basicShader.cppm
 )
 target_sources(FG PRIVATE
 	office.cpp
 	tb1.cpp
+	door.cpp
 )

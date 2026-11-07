@@ -20,12 +20,14 @@ export module Night1:World;
 import :BreakersBoard;
 import :FusesBoard;
 import :FocusManager;
-import Logic;
+import Assets;
 
 using FGengine::VideoOutput::EventsPack;
-using Logic::Electricity, Logic::Door;
+using Logic::Electricity;
 
 namespace Night1{
+
+	using Assets::Door;
 
 	class World final: public EventsPack{
 	public:

@@ -17,21 +17,20 @@ module;
 #include <FGengine/videoOutput/eventsPack.hpp>
 #include <FGengine/videoOutput/window.hpp>
 #include <FGengine/graphics/context.hpp>
-#include <span>
-#include <memory>
-#include <stack>
 
 export module Night1;
 import :FocusManager;
 import :BreakersBoard;
 import :FusesBoard;
 import :World;
-import Logic;
+import Assets;
 
 using FGengine::VideoOutput::Window, FGengine::VideoOutput::EventsPack;
-using namespace Logic;
+using Logic::TB1ai, Logic::Player, Logic::Time, Logic::Electricity;
 
 namespace Night1{
+
+	using Assets::Door;
 
 	export class Scene: public EventsPack{
 
@@ -44,7 +43,8 @@ namespace Night1{
 		}
 
 		virtual void Draw() override{
-			FGengine::Graphics::Context::GetCurrentWindow().Clear();
+			FGengine::Graphics::Context::GetCurrentContext().GetCurrentWindowViewport().Clear();
+			door.Update();
 			tb1.Update();
 			player.Update();
 			focus.Get()->Draw();
@@ -60,9 +60,9 @@ namespace Night1{
 		}
 		
 	private:
-		TB1ai tb1{&door, &time};
-		// Office office;
 		Door door;
+		TB1ai tb1{&door.GetLogic(), &time};
+		// Office office;
 		Player player;
 		Time time{7*60};
 

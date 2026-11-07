@@ -13,7 +13,7 @@
 # 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-target_sources(FG PUBLIC
+target_sources(FG PRIVATE
 	FILE_SET night1
 	TYPE CXX_MODULES
 	FILES
@@ -23,5 +23,13 @@ target_sources(FG PUBLIC
 		breakersBoard.cppm
 		world.cppm
 		someThings.cppm
+)
+target_sources(FG PRIVATE
+	FILE_SET night1Assets
+	TYPE CXX_MODULES
+	BASE_DIRS assets
+	FILES
+		assets/main.cppm
+		assets/door.cppm
 )
 add_subdirectory(events)
