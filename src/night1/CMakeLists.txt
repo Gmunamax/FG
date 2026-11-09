@@ -31,5 +31,6 @@ target_sources(FG PRIVATE
 	FILES
 		assets/main.cppm
 		assets/door.cppm
+		assets/tb1.cppm
 )
 add_subdirectory(events)

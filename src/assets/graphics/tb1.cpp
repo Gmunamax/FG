@@ -13,3 +13,23 @@
 // 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+module;
+#include <span>
+
+module Graphics;
+
+using namespace Graphics;
+
+std::span<float> TB1::GetModel(){
+	static float vertexes[]{
+		1, 0, -1,
+		-1, 0, 1,
+		-1, 0, -1,
+
+		-1, 0, 1,
+		1, 0, -1,
+		1, 0, 1
+	};
+
+	return vertexes;
+}

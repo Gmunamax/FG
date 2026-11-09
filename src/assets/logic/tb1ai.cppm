@@ -28,6 +28,13 @@ namespace Logic{
 
 	export class TB1ai{
 	public:
+		enum class State{
+			Attacking,
+			Waiting,
+			Finished,
+			SomethingElse
+		};
+
 		TB1ai(Door* door, Time* time):
 			door{door},
 			time{time}
@@ -37,6 +44,22 @@ namespace Logic{
 
 		void Update(){
 			(this->*action)();
+		}
+
+		State GetState(){
+			using enum State;
+			if(action == &TB1ai::WaitForAttack){
+				return Waiting;
+			}
+			else if(action == &TB1ai::Attack){
+				return Attacking;
+			}
+			else if(action == &TB1ai::NoopAfterEndTime or action == &TB1ai::EndTime){
+				return Finished;
+			}
+			else{
+				return SomethingElse;
+			}
 		}
 
 	private:

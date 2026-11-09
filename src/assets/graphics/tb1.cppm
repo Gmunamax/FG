@@ -24,26 +24,14 @@ using FGengine::Graphics::Model;
 
 namespace Graphics{
 
-class TB1: public Model{
+export class TB1: public Model{
 public:
 	TB1():
 		Model{GetModel(), GetShader()}
 	{}
 
 private:
-	static std::span<float> GetModel(){
-		static float vertexes[]{
-			1, 0, -1,
-			-1, 0, 1,
-			-1, 0, -1,
-
-			-1, 0, 1,
-			1, 0, -1,
-			1, 0, 1
-		};
-
-		return vertexes;
-	}
+	static std::span<float> GetModel();
 
 	static const std::shared_ptr<BasicShader>& GetShader(){
 		static BasicShader shader{0.5, 0.5, 0.5};

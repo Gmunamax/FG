@@ -26,11 +26,11 @@ import :World;
 import Assets;
 
 using FGengine::VideoOutput::Window, FGengine::VideoOutput::EventsPack;
-using Logic::TB1ai, Logic::Player, Logic::Time, Logic::Electricity;
+using Logic::Player, Logic::Time, Logic::Electricity;
 
 namespace Night1{
 
-	using Assets::Door;
+	using Assets::Door, Assets::TB1;
 
 	export class Scene: public EventsPack{
 
@@ -55,13 +55,12 @@ namespace Night1{
 		Scene(Window* win):
 			win{win}
 		{
-			// tb1.SetPosition({0, 3, 0});
 			player.SetRotation({90, 0, 0});
 		}
 		
 	private:
 		Door door;
-		TB1ai tb1{&door.GetLogic(), &time};
+		TB1 tb1{door, time};
 		// Office office;
 		Player player;
 		Time time{7*60};
