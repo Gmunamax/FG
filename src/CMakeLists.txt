@@ -15,5 +15,6 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 target_sources(FG PRIVATE main.cpp)
 target_link_libraries(FG PRIVATE pathFinder random FGengine)
+add_subdirectory(resources)
 add_subdirectory(assets)
 add_subdirectory(night1)

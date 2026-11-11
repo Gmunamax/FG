@@ -17,10 +17,10 @@ module;
 #include <format>
 #include <FGengine/graphics/shader.hpp>
 
-export module Graphics:BasicShader;
+export module Models:BasicShader;
 using FGengine::Graphics::Shader;
 
-namespace Graphics{
+namespace Models{
 
 	export class BasicShader: public Shader{
 	public:

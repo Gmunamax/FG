@@ -14,31 +14,25 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
-#include <span>
-#include <FGengine/graphics/model.hpp>
 
 export module Graphics:TB1;
-import :BasicShader;
-
-using FGengine::Graphics::Model;
+import Models;
 
 namespace Graphics{
 
-export class TB1: public Model{
-public:
-	TB1():
-		Model{GetModel(), GetShader()}
-	{}
+	export class TB1{
+	public:
+		TB1(){
+			tb1.SetPosition({0, 4, 0});
+		}
 
-private:
-	static std::span<float> GetModel();
+		void Draw(){
+			tb1.Draw();
+		}
 
-	static const std::shared_ptr<BasicShader>& GetShader(){
-		static BasicShader shader{0.5, 0.5, 0.5};
-		static std::shared_ptr<BasicShader> ptr{&shader};
+	private:
+		Models::TB1 tb1;
 
-		return ptr;
-	}
-};
+	};
 
 }

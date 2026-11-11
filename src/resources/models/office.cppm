@@ -14,41 +14,34 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
-#include <span>
-#include <memory>
+#include <FGengine/graphics/model.hpp>
 #include <FGengine/graphics/shader.hpp>
+#include <span>
+#include <vector>
 
-module Graphics;
+export module Models:Office;
+import :BasicShader;
 
-using namespace Graphics;
+using FGengine::Graphics::Model;
 
-std::span<float> Door::GetVertexes(){
-	static float vertexes[]{
-		-0.058659, -0.512704, -0.801170,
-		-0.058659, -0.512704, 0.801170,
-		-0.058659, 0.512704, -0.801170,
-		-0.058659, 0.512704, 0.801170,
-		0.058659, -0.512704, -0.801170,
-		0.058659, -0.512704, 0.801170,
-		0.058659, 0.512704, -0.801170,
-		0.058659, 0.512704, 0.801170,
-	};
+namespace Models{
 
-	static unsigned indices[]{
-		2, 3, 1,
-		4, 7, 3,
-		8, 5, 7,
-		6, 1, 5,
-		7, 1, 3,
-		4, 6, 8,
-		2, 4, 3,
-		4, 8, 7,
-		8, 6, 5,
-		6, 2, 1,
-		7, 5, 1,
-		4, 2, 6,
-	};
+class Office: public Model{
+public:
+	Office():
+		Model{officeVertexes, GetShader()}
+	{}
 
-	static auto mesh = ConvertToVertexArray(vertexes, indices);
-	return mesh;
+private:
+	static std::span<float> GetVertexes();
+	static std::span<unsigned> GetIndices();
+	static std::vector<float> officeVertexes;
+
+	static std::shared_ptr<BasicShader> GetShader(){
+		static BasicShader shader{1, 0, 0};
+		static std::shared_ptr<BasicShader> ptr{&shader};
+		return ptr;
+	}
+};
+
 }

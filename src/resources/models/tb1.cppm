@@ -15,21 +15,30 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
 #include <span>
+#include <FGengine/graphics/model.hpp>
 
-module Graphics;
+export module Models:TB1;
+import :BasicShader;
 
-using namespace Graphics;
+using FGengine::Graphics::Model;
 
-std::span<float> TB1::GetModel(){
-	static float vertexes[]{
-		1, 0, -1,
-		-1, 0, 1,
-		-1, 0, -1,
+namespace Models{
 
-		-1, 0, 1,
-		1, 0, -1,
-		1, 0, 1
-	};
+export class TB1: public Model{
+public:
+	TB1():
+		Model{GetModel(), GetShader()}
+	{}
 
-	return vertexes;
+private:
+	static std::span<float> GetModel();
+
+	static const std::shared_ptr<BasicShader>& GetShader(){
+		static BasicShader shader{0.5, 0.5, 0.5};
+		static std::shared_ptr<BasicShader> ptr{&shader};
+
+		return ptr;
+	}
+};
+
 }

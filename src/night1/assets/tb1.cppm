@@ -26,9 +26,7 @@ namespace Night1::Assets{
 	public:
 		TB1(Door& door, Logic::Time& time):
 			logic{&door.GetLogic(), &time}
-		{
-			model.SetPosition({0, 4, 0});
-		}
+		{}
 
 		Logic::TB1ai& GetLogic(){
 			return logic;

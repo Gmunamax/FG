@@ -17,9 +17,9 @@ module;
 #include <span>
 #include <vector>
 
-module Graphics;
+module Models;
 
-using namespace Graphics;
+using namespace Models;
 
 std::span<float> Office::GetVertexes(){
 	static float officeVertexes[]{

@@ -19,9 +19,9 @@ module;
 #include <vector>
 #include <pathFinder.hpp>
 
-export module Graphics:OfficeGraph;
+export module Models:OfficeGraph;
 
-namespace Graphics{
+namespace Models{
 
 class OfficeGraph{
 public:

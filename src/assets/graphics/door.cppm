@@ -14,28 +14,26 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
-#include <FGengine/graphics/model.hpp>
-#include <span>
+#include <numbers>
 
 export module Graphics:Door;
-import :BasicShader;
-using FGengine::Graphics::Model;
+import Models;
 
 namespace Graphics{
 
-	export class Door: public Model{
+	export class Door{
 	public:
-		Door():
-			Model(GetVertexes(), GetShader())
-		{}
+		Door(){
+			door.SetPosition({0, 3, 0});
+			door.SetRotation({0, 0, 90.0 * std::numbers::pi/180.0});
+		}
+
+		void Draw(){
+			door.Draw();
+		}
 
 	private:
-		static std::span<float> GetVertexes();
-		static std::shared_ptr<BasicShader> GetShader(){
-			static BasicShader shader{1, 1, 0};
-			static std::shared_ptr<BasicShader> ptr {&shader};
-			return ptr;
-		}
+		Models::Door door;
 	};
 
 }

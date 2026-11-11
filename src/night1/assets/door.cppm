@@ -13,9 +13,6 @@
 // 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-module;
-#include <numbers>
-
 export module Assets:Door;
 import Logic;
 import Graphics;
@@ -25,8 +22,6 @@ namespace Night1::Assets{
 	export class Door{
 	public:
 		Door(){
-			model.SetPosition({0, 3, 0});
-			model.SetRotation({0, 0, 90.0 * std::numbers::pi/180.0});
 		}
 
 		Logic::Door& GetLogic(){
