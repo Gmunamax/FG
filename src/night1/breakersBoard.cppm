@@ -15,22 +15,32 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
 #include <FGengine/videoOutput/eventsPack.hpp>
+#include <array>
 
 export module Night1:BreakersBoard;
 import :FocusManager;
 import Logic;
+import Assets;
 
 using FGengine::VideoOutput::EventsPack;
-using Logic::Electricity, Logic::Lock;
+using Logic::Lock;
 
 namespace Night1{
 
 	class BreakersBoard final: public EventsPack{
 	public:
-		BreakersBoard(Electricity& electricity, FocusManager& focusManager):
-			electricity{&electricity},
-			focus{&focusManager}
+		BreakersBoard(FocusManager& focusManager):
+			focus{&focusManager},
+			board{breakers}
 		{}
+
+		bool IsWorking(){
+			bool working = true;
+			for(std::size_t i = 0; i < 10; ++i){
+				working = working & board.GetActivated(i);
+			}
+			return working;
+		}
 
 		void KeyPress(Key key) override{
 			if(breakersLock.IsLocked()){
@@ -48,12 +58,20 @@ namespace Night1{
 		}
 
 	private:
+		static inline constexpr std::array<bool, 10> breakers{
+			true, true,
+			true, true,
+			true, true,
+			true, true,
+			true, true
+		};
+
 		void HandleBreakersLockKeyPress(Key key);
 		void HandleBreakersKeyPress(Key key);
 		void HandleBreakersNumberKey(Key key);
 
 		Lock breakersLock{{90, 35}, true};
-		Electricity* electricity;
+		Assets::BreakersBoard board{breakers};
 		FocusManager* focus;
 	};
 

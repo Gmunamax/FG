@@ -16,3 +16,5 @@
 export module Assets;
 export import :Door;
 export import :TB1;
+export import :BreakersBoard;
+export import :FusesBoard;

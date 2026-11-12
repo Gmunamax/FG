@@ -19,5 +19,5 @@ export import :Door;
 export import :TB1ai;
 export import :Time;
 export import :Player;
-export import :Electricity;
+export import :Board;
 export import :Lock;

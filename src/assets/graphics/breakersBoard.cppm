@@ -23,9 +23,11 @@ namespace Graphics{
 
 	export class BreakersBoard{
 	public:
-		BreakersBoard(std::array<Models::Breaker, 10> breakers):
-			breakers{breakers}
-		{}
+		BreakersBoard(std::array<bool, 10> breakersStates){
+			for(std::size_t i = 0; i < 10; ++i){
+				this->breakers.at(i) = Models::Breaker{breakersStates.at(i)};
+			}
+		}
 
 		void Draw(){
 			for(auto& breaker : breakers){
@@ -38,7 +40,18 @@ namespace Graphics{
 		}
 
 	private:
-		std::array<Models::Breaker, 10> breakers;
+		class Model: public Models::Breaker{
+		public:
+			Model():
+				Models::Breaker(true)
+			{}
+
+			Model(Models::Breaker model):
+				Models::Breaker(std::move(model))
+			{}
+		};
+
+		std::array<Model, 10> breakers;
 	};
 
 }

@@ -57,9 +57,9 @@ void BreakersBoard::HandleBreakersNumberKey(Key key){
 	if(number == 0) number = 10;
 	auto id = number-1;
 	
-	electricity->GetCircuit(id).breaker = !electricity->GetCircuit(id).breaker;
+	board.SetActivated(id, !board.GetActivated(id));
 	const char* stateWord;
-	if(electricity->GetCircuit(id).breaker == true){
+	if(board.GetActivated(id) == true){
 		stateWord = "enabled";
 	}
 	else{

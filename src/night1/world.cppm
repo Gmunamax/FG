@@ -23,7 +23,6 @@ import :FocusManager;
 import Assets;
 
 using FGengine::VideoOutput::EventsPack;
-using Logic::Electricity;
 
 namespace Night1{
 
@@ -31,9 +30,8 @@ namespace Night1{
 
 	class World final: public EventsPack{
 	public:
-		World(Door& door, Electricity& electricity, BreakersBoard& breakersBoard, FusesBoard& fusesBoard, FocusManager& focusManager):
+		World(Door& door, BreakersBoard& breakersBoard, FusesBoard& fusesBoard, FocusManager& focusManager):
 			door{&door},
-			electricity{&electricity},
 			breakersBoard{&breakersBoard},
 			fusesBoard{&fusesBoard},
 			focus{&focusManager}
@@ -54,7 +52,6 @@ namespace Night1{
 		void HandleWorldKeyRelease(Key key);
 
 		Door* door;
-		Electricity* electricity;
 		BreakersBoard* breakersBoard;
 		FusesBoard* fusesBoard;
 		FocusManager* focus;

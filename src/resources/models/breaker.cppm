@@ -26,7 +26,7 @@ namespace Models{
 	export class Breaker: public Model{
 	public:
 		Breaker(bool activated):
-			Model(GetMesh(), sharedPtr)
+			Model(GetMesh(), GenShader())
 		{
 			SetActivated(activated);
 		}
@@ -48,34 +48,36 @@ namespace Models{
 	private:
 		std::span<float> GetMesh();
 
-		static inline const char* vertex = "\
-			#version 330\n\
-			\n\
-			layout (location = 0) in vec3 pos;\n\
-			\n\
-			uniform mat4 model;\n\
-			layout(std140) uniform camera{\n\
-				mat4 projection;\n\
-				mat4 view;\n\
-			};\n\
-			\
-			void main(){\n\
-			\t	gl_Position = projection * view * model * vec4(pos, 1.0);\n\
-			}\
-		";
+		static std::shared_ptr<Shader> GenShader(){
+			static const char* vertex = "\
+				#version 330\n\
+				\n\
+				layout (location = 0) in vec3 pos;\n\
+				\n\
+				uniform mat4 model;\n\
+				layout(std140) uniform camera{\n\
+					mat4 projection;\n\
+					mat4 view;\n\
+				};\n\
+				\
+				void main(){\n\
+				\t	gl_Position = projection * view * model * vec4(pos, 1.0);\n\
+				}\
+			";
 
-		static inline const char* fragment = "\
-			#version 330\n\
-			\n\
-			out vec4 fragColor;\n\
-			uniform vec4 color;\n\
-			\n\
-			void main(){\n\
-			\t	fragColor = color;\n\
-			}\n\
-		";
-		Shader shader{vertex, fragment};
-		std::shared_ptr<Shader> sharedPtr{&shader};
+			static const char* fragment = "\
+				#version 330\n\
+				\n\
+				out vec4 fragColor;\n\
+				uniform vec4 color;\n\
+				\n\
+				void main(){\n\
+				\t	fragColor = color;\n\
+				}\n\
+			";
+			std::shared_ptr<Shader> sharedPtr{std::make_shared<Shader>(vertex, fragment)};
+			return sharedPtr;
+		}
 		Uvec4f color{"color"};
 
 		bool activated;

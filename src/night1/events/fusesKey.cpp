@@ -57,9 +57,8 @@ void FusesBoard::HandleFusesNumberKey(Key key){
 	if(number == 0) number = 10;
 	auto id = number-1;
 
-	auto& circuit = electricity->GetCircuit(id);
-	if(circuit.breaker == false){
-		circuit.fuse = true;
+	if(board.GetActivated(id) == false){
+		board.SetActivated(id, true);
 		std::println("Fixed fuse {}", number);
 	}
 	else{

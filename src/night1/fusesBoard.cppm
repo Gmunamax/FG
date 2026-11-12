@@ -15,21 +15,30 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
 #include <FGengine/videoOutput/eventsPack.hpp>
+#include <array>
 
 export module Night1:FusesBoard;
 import :FocusManager;
 import Logic;
+import Assets;
 
-using Logic::Electricity, Logic::Lock;
+using Logic::Lock;
 
 namespace Night1{
 
 	class FusesBoard final: public EventsPack{
 	public:
-		FusesBoard(Electricity& electricity, FocusManager& focusManager):
-			electricity{&electricity},
+		FusesBoard(FocusManager& focusManager):
 			focus{&focusManager}
 		{}
+
+		bool IsWorking(){
+			bool working = true;
+			for(std::size_t i = 0; i < 10; ++i){
+				working = working && board.GetActivated(i);
+			}
+			return working;
+		}
 
 		void KeyPress(Key key) override{
 			if(fusesLock.IsLocked()){
@@ -47,12 +56,20 @@ namespace Night1{
 		}
 
 	private:
+		static inline constexpr std::array<bool, 10> fuses{
+			false, false,
+			false, false,
+			true, false,
+			false, false,
+			false, false
+		};
+
 		void HandleFusesLockKeyPress(Key key);
 		void HandleFusesKeyPress(Key key);
 		void HandleFusesNumberKey(Key key);
 
 		Lock fusesLock{{90, 45}, true};
-		Electricity* electricity;
+		Assets::FusesBoard board{fuses};
 		FocusManager* focus;
 	};
 

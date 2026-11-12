@@ -32,5 +32,7 @@ target_sources(FG PRIVATE
 		assets/main.cppm
 		assets/door.cppm
 		assets/tb1.cppm
+		assets/breakersBoard.cppm
+		assets/fusesBoard.cppm
 )
 add_subdirectory(events)

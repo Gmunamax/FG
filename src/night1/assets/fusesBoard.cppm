@@ -15,45 +15,28 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
 #include <array>
-#include <span>
 
-export module Logic:Electricity;
+export module Assets:FusesBoard;
+import Logic;
 
-namespace Logic{
+namespace Night1::Assets{
 
-	export class Electricity{
+	export class FusesBoard{
 	public:
-		struct Circuit{
-			bool breaker :1;
-			bool fuse :1;
+		FusesBoard(std::array<bool, 10> fuses):
+			logic{fuses}
+		{}
 
-			bool IsWorking(){
-				return breaker && fuse;
-			}
-		};
-
-		Electricity(std::span<const bool, 10> breakers, std::span<const bool, 10> fuses){
-			for(unsigned i = 0; i < 10; ++i){
-				circuits.at(i).breaker = breakers.at(i);
-				circuits.at(i).fuse = fuses.at(i);
-			}
+		void SetActivated(unsigned breaker, bool newState){
+			logic.SetElement(breaker, newState);
 		}
 
-		bool IsWorking(){
-			bool working = true;
-			for(auto& circuit : circuits){
-				working = working && circuit.IsWorking();
-			}
-			return working;
-		}
-
-		Circuit& GetCircuit(unsigned id){
-			return circuits.at(id);
+		bool GetActivated(unsigned breaker){
+			return logic.GetElement(breaker);
 		}
 
 	private:
-		std::array<Circuit, 10> circuits;
-
+		Logic::Board logic;
 	};
 
 }

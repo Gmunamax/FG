@@ -26,7 +26,7 @@ import :World;
 import Assets;
 
 using FGengine::VideoOutput::Window, FGengine::VideoOutput::EventsPack;
-using Logic::Player, Logic::Time, Logic::Electricity;
+using Logic::Player, Logic::Time;
 
 namespace Night1{
 
@@ -65,24 +65,9 @@ namespace Night1{
 		Player player;
 		Time time{7*60};
 
-		static inline constexpr bool breakers[]{
-			true, true,
-			true, true,
-			true, true,
-			true, true,
-			true, true
-		};
-		static inline constexpr bool fuses[]{
-			false, false,
-			false, false,
-			true, false,
-			false, false,
-			false, false
-		};
-		Electricity electricity{breakers, fuses};
-		BreakersBoard breakersBoard{electricity, focus};
-		FusesBoard fusesBoard{electricity, focus};
-		World world{door, electricity, breakersBoard, fusesBoard, focus};
+		BreakersBoard breakersBoard{focus};
+		FusesBoard fusesBoard{focus};
+		World world{door, breakersBoard, fusesBoard, focus};
 
 		FocusManager focus{&world};
 		Window* win;

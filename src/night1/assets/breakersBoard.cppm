@@ -16,7 +16,7 @@
 module;
 #include <array>
 
-export module Assets:Breaker;
+export module Assets:BreakersBoard;
 import Graphics;
 import Logic;
 
@@ -24,20 +24,23 @@ namespace Night1::Assets{
 
 	export class BreakersBoard{
 	public:
-		BreakersBoard(Logic::Electricity& electricity):
-			electricity{&electricity},
-			breakers{electricity.GetCircuit(0).breaker}
+		BreakersBoard(std::array<bool, 10> breakers):
+			logic{breakers},
+			graphics{breakers}
 		{}
 
 		void SetActivated(unsigned breaker, bool newState){
-			breakers.at(breaker).SetActivated(newState);
-			electricity.GetCircuit(breaker).breaker = newState;
+			graphics.SetActivated(breaker, newState);
+			logic.SetElement(breaker, newState);
+		}
+
+		bool GetActivated(unsigned breaker){
+			return logic.GetElement(breaker);
 		}
 
 	private:
-		Logic::Electricity* electricity;
-		std::array<Graphics::Breaker, 10> breakers;
-
+		Logic::Board logic;
+		Graphics::BreakersBoard graphics;
 	};
 
 }

@@ -17,6 +17,7 @@ module;
 #include <print>
 
 module Night1;
+import Logic;
 
 using namespace Night1;
 
@@ -40,6 +41,12 @@ void World::HandleWorldKeyPress(Key key){
 	}
 }
 
+namespace {
+	bool IsAllElectricityWorking(BreakersBoard& breakersBoard, FusesBoard& fusesBoard){
+		return breakersBoard.IsWorking() && fusesBoard.IsWorking();
+	}
+}
+
 void World::HandleWorldKeyRelease(Key key){
 	switch(key){
 	using enum Key;
@@ -48,7 +55,7 @@ void World::HandleWorldKeyRelease(Key key){
 		break;
 
 	case B:
-		if(electricity->IsWorking()){
+		if(IsAllElectricityWorking(*this->breakersBoard, *this->fusesBoard)){
 			std::println("Congratulations");
 		}
 		else{
