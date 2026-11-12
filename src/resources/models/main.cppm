@@ -24,6 +24,7 @@ export import :OfficeGraph;
 export import :Office;
 export import :Door;
 export import :BasicShader;
+export import :Breaker;
 
 std::vector<float> ConvertToVertexArray(const std::span<float> vertexes, const std::span<unsigned> indices){
 	constexpr unsigned vertexLength = 3;

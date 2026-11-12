@@ -20,4 +20,5 @@ target_sources(FG PRIVATE
 		main.cppm
 		door.cppm
 		tb1.cppm
+		breakersBoard.cppm
 )

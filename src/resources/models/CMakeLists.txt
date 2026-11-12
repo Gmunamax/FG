@@ -23,9 +23,11 @@ target_sources(FG PRIVATE
 		office.cppm
 		door.cppm
 		basicShader.cppm
+		breaker.cppm
 )
 target_sources(FG PRIVATE
 	office.cpp
 	tb1.cpp
 	door.cpp
+	breaker.cpp
 )
