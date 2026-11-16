@@ -17,59 +17,54 @@ module;
 #include <FGengine/videoOutput/eventsPack.hpp>
 #include <array>
 
-export module Night1:FusesBoard;
+export module Night1:BreakersBoard;
 import :FocusManager;
-import Logic;
+import :World;
 import Assets;
+import Logic;
 
+using FGengine::VideoOutput::EventsPack;
 using Logic::Lock;
 
-namespace Night1{
+namespace Night1::Focus{
 
-	class FusesBoard final: public EventsPack{
+	class BreakersBoard final: public EventsPack{
 	public:
-		FusesBoard(FocusManager& focusManager):
-			focus{&focusManager}
+		BreakersBoard(::Night1::World& world, FocusManager& focusManager):
+			focus{&focusManager},
+			world{&world}
 		{}
 
 		bool IsWorking(){
 			bool working = true;
 			for(std::size_t i = 0; i < 10; ++i){
-				working = working && board.GetActivated(i);
+				working = working & world->breakersBoard.GetActivated(i);
 			}
 			return working;
 		}
 
 		void KeyPress(Key key) override{
-			if(fusesLock.IsLocked()){
-				HandleFusesLockKeyPress(key);
+			if(breakersLock.IsLocked()){
+				HandleBreakersLockKeyPress(key);
 			}
 			else{
-				HandleFusesKeyPress(key);
+				HandleBreakersKeyPress(key);
 			}
 		}
 
 		void KeyRelease(Key key) override{}
 
 		void Draw() override{
-			fusesLock.Update();
+			breakersLock.Update();
 		}
 
 	private:
-		static inline constexpr std::array<bool, 10> fuses{
-			false, false,
-			false, false,
-			true, false,
-			false, false,
-			false, false
-		};
+		void HandleBreakersLockKeyPress(Key key);
+		void HandleBreakersKeyPress(Key key);
+		void HandleBreakersNumberKey(Key key);
 
-		void HandleFusesLockKeyPress(Key key);
-		void HandleFusesKeyPress(Key key);
-		void HandleFusesNumberKey(Key key);
-
-		Lock fusesLock{{90, 45}, true};
-		Assets::FusesBoard board{fuses};
+		Lock breakersLock{{90, 35}, true};
+		::Night1::World* world;
 		FocusManager* focus;
 	};
 

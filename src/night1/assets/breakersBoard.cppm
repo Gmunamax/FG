@@ -24,11 +24,6 @@ namespace Night1::Assets{
 
 	export class BreakersBoard{
 	public:
-		BreakersBoard(std::array<bool, 10> breakers):
-			logic{breakers},
-			graphics{breakers}
-		{}
-
 		void SetActivated(unsigned breaker, bool newState){
 			graphics.SetActivated(breaker, newState);
 			logic.SetElement(breaker, newState);
@@ -39,8 +34,16 @@ namespace Night1::Assets{
 		}
 
 	private:
-		Logic::Board logic;
-		Graphics::BreakersBoard graphics;
+		static inline constexpr std::array<bool, 10> breakers{
+			true, true,
+			true, true,
+			true, true,
+			true, true,
+			true, true
+		};
+
+		Logic::Board logic{breakers};
+		Graphics::BreakersBoard graphics{breakers};
 	};
 
 }

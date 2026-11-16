@@ -22,15 +22,12 @@ export module Night1;
 import :FocusManager;
 import :BreakersBoard;
 import :FusesBoard;
+import :WorldFocus;
 import :World;
-import Assets;
 
 using FGengine::VideoOutput::Window, FGengine::VideoOutput::EventsPack;
-using Logic::Player, Logic::Time;
 
 namespace Night1{
-
-	using Assets::Door, Assets::TB1;
 
 	export class Scene: public EventsPack{
 
@@ -44,9 +41,9 @@ namespace Night1{
 
 		virtual void Draw() override{
 			FGengine::Graphics::Context::GetCurrentContext().GetCurrentWindowViewport().Clear();
-			door.Update();
-			tb1.Update();
-			player.Update();
+			world.door.Update();
+			world.tb1.Update();
+			world.player.Update();
 			focus.Get()->Draw();
 			win->Update();
 		}
@@ -54,22 +51,16 @@ namespace Night1{
 	public:
 		Scene(Window* win):
 			win{win}
-		{
-			player.SetRotation({90, 0, 0});
-		}
+		{}
 		
 	private:
-		Door door;
-		TB1 tb1{door, time};
-		// Office office;
-		Player player;
-		Time time{7*60};
+		World world;
 
-		BreakersBoard breakersBoard{focus};
-		FusesBoard fusesBoard{focus};
-		World world{door, breakersBoard, fusesBoard, focus};
+		Focus::BreakersBoard breakersBoard{world, focus};
+		Focus::FusesBoard fusesBoard{world, focus};
+		Focus::World worldFocus{world, breakersBoard, fusesBoard, focus};
 
-		FocusManager focus{&world};
+		FocusManager focus{&worldFocus};
 		Window* win;
 	};
 

@@ -17,7 +17,6 @@ target_sources(FG PUBLIC
 	FILE_SET logic
 	TYPE CXX_MODULES
 	FILES
-		player.cppm 
 		tb1ai.cppm
 		door.cppm
 		time.cppm

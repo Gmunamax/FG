@@ -14,47 +14,23 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
-#include <FGengine/videoOutput/eventsPack.hpp>
-
 export module Night1:World;
-import :BreakersBoard;
-import :FusesBoard;
-import :FocusManager;
 import Assets;
-
-using FGengine::VideoOutput::EventsPack;
+import Logic;
 
 namespace Night1{
 
-	using Assets::Door;
+	using Assets::Door, Assets::TB1, Assets::Player;
+	using Logic::Time;
 
-	class World final: public EventsPack{
-	public:
-		World(Door& door, BreakersBoard& breakersBoard, FusesBoard& fusesBoard, FocusManager& focusManager):
-			door{&door},
-			breakersBoard{&breakersBoard},
-			fusesBoard{&fusesBoard},
-			focus{&focusManager}
-		{}
-
-		void KeyPress(Key key) override{
-			HandleWorldKeyPress(key);
-		}
-
-		void KeyRelease(Key key) override{
-			HandleWorldKeyRelease(key);
-		}
-
-		void Draw() override{}
-		
-	private:
-		void HandleWorldKeyPress(Key key);
-		void HandleWorldKeyRelease(Key key);
-
-		Door* door;
-		BreakersBoard* breakersBoard;
-		FusesBoard* fusesBoard;
-		FocusManager* focus;
+	export struct World{
+		Door door;
+		Time time{7*60};
+		TB1 tb1{door, time};
+		// Office office;
+		Player player;
+		Assets::BreakersBoard breakersBoard;
+		Assets::FusesBoard fusesBoard;
 	};
 
 }

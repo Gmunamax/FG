@@ -21,11 +21,11 @@ import Logic;
 
 using namespace Night1;
 
-void World::HandleWorldKeyPress(Key key){
+void Focus::World::HandleWorldKeyPress(Key key){
 	switch(key){
 	using enum Key;
 	case Space:
-		door->SetClosed(true);
+		world->door.SetClosed(true);
 		break;
 
 	case Num1:
@@ -42,16 +42,16 @@ void World::HandleWorldKeyPress(Key key){
 }
 
 namespace {
-	bool IsAllElectricityWorking(BreakersBoard& breakersBoard, FusesBoard& fusesBoard){
+	bool IsAllElectricityWorking(Focus::BreakersBoard& breakersBoard, Focus::FusesBoard& fusesBoard){
 		return breakersBoard.IsWorking() && fusesBoard.IsWorking();
 	}
 }
 
-void World::HandleWorldKeyRelease(Key key){
+void Focus::World::HandleWorldKeyRelease(Key key){
 	switch(key){
 	using enum Key;
 	case Space:
-		door->SetClosed(false);
+		world->door.SetClosed(false);
 		break;
 
 	case B:

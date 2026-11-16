@@ -14,38 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
-#include <FGengine/graphics/camera.hpp>
 
-export module Logic:Player;
+export module Assets:Player;
+import Graphics;
 
-using FGengine::Graphics::Camera;
+namespace Night1::Assets{
 
-namespace Logic{
-
-	export class Player{
-	public:
-		void Update(){
-			camera.Update();
-		}
-
-		void SetPosition(const glm::vec3& newPosition){
-			camera.SetPosition(newPosition);
-		}
-
-		glm::vec3 GetPosition(){
-			return camera.GetPosition();
-		}
-
-		void SetRotation(const glm::vec3& newRotation){
-			camera.SetRotation(newRotation);
-		}
-
-		glm::vec3 GetRotation(){
-			return camera.GetRotation();
-		}
-
-	private:
-		Camera camera;
-	};
+	export using Player = Graphics::Player;
 
 }

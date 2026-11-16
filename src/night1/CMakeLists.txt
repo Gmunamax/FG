@@ -19,10 +19,11 @@ target_sources(FG PRIVATE
 	FILES
 		main.cppm
 		focusManager.cppm
-		fusesBoard.cppm
-		breakersBoard.cppm
-		world.cppm
+		focuses/fusesBoard.cppm
+		focuses/breakersBoard.cppm
+		focuses/world.cppm
 		someThings.cppm
+		world.cppm
 )
 target_sources(FG PRIVATE
 	FILE_SET night1Assets
@@ -34,5 +35,6 @@ target_sources(FG PRIVATE
 		assets/tb1.cppm
 		assets/breakersBoard.cppm
 		assets/fusesBoard.cppm
+		assets/player.cppm
 )
 add_subdirectory(events)

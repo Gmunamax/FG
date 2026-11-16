@@ -23,10 +23,6 @@ namespace Night1::Assets{
 
 	export class FusesBoard{
 	public:
-		FusesBoard(std::array<bool, 10> fuses):
-			logic{fuses}
-		{}
-
 		void SetActivated(unsigned breaker, bool newState){
 			logic.SetElement(breaker, newState);
 		}
@@ -36,7 +32,15 @@ namespace Night1::Assets{
 		}
 
 	private:
-		Logic::Board logic;
+		static inline constexpr std::array<bool, 10> fuses{
+			false, false,
+			false, false,
+			true, false,
+			false, false,
+			false, false
+		};
+
+		Logic::Board logic{fuses};
 	};
 
 }

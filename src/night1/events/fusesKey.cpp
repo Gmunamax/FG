@@ -21,7 +21,7 @@ import :SomeThings;
 
 using namespace Night1;
 
-void FusesBoard::HandleFusesLockKeyPress(Key key){
+void Focus::FusesBoard::HandleFusesLockKeyPress(Key key){
 	switch(key){
 	using enum Key;
 	case Space:
@@ -39,7 +39,7 @@ void FusesBoard::HandleFusesLockKeyPress(Key key){
 	}
 }
 
-void FusesBoard::HandleFusesKeyPress(Key key){
+void Focus::FusesBoard::HandleFusesKeyPress(Key key){
 	switch(key){
 	using enum Key;
 	case Esc:
@@ -51,14 +51,14 @@ void FusesBoard::HandleFusesKeyPress(Key key){
 	}
 }
 
-void FusesBoard::HandleFusesNumberKey(Key key){
+void Focus::FusesBoard::HandleFusesNumberKey(Key key){
 	auto number = ConvertNumberKeyToNumber(key);
 	if(number == -1) return;
 	if(number == 0) number = 10;
 	auto id = number-1;
 
-	if(board.GetActivated(id) == false){
-		board.SetActivated(id, true);
+	if(world->breakersBoard.GetActivated(id) == false){
+		world->fusesBoard.SetActivated(id, true);
 		std::println("Fixed fuse {}", number);
 	}
 	else{

@@ -21,4 +21,5 @@ target_sources(FG PRIVATE
 		door.cppm
 		tb1.cppm
 		breakersBoard.cppm
+		player.cppm 
 )

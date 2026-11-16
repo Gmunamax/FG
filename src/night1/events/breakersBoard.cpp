@@ -21,7 +21,7 @@ import :SomeThings;
 
 using namespace Night1;
 
-void BreakersBoard::HandleBreakersLockKeyPress(Key key){
+void Focus::BreakersBoard::HandleBreakersLockKeyPress(Key key){
 	switch(key){
 	using enum Key;
 	case Space:
@@ -39,7 +39,7 @@ void BreakersBoard::HandleBreakersLockKeyPress(Key key){
 	}
 }
 
-void BreakersBoard::HandleBreakersKeyPress(Key key){
+void Focus::BreakersBoard::HandleBreakersKeyPress(Key key){
 	switch(key){
 	using enum Key;
 	case Esc:
@@ -51,15 +51,15 @@ void BreakersBoard::HandleBreakersKeyPress(Key key){
 	}
 }
 
-void BreakersBoard::HandleBreakersNumberKey(Key key){
+void Focus::BreakersBoard::HandleBreakersNumberKey(Key key){
 	auto number = ConvertNumberKeyToNumber(key);
 	if(number == -1) return;
 	if(number == 0) number = 10;
 	auto id = number-1;
 	
-	board.SetActivated(id, !board.GetActivated(id));
+	world->breakersBoard.SetActivated(id, !world->breakersBoard.GetActivated(id));
 	const char* stateWord;
-	if(board.GetActivated(id) == true){
+	if(world->breakersBoard.GetActivated(id) == true){
 		stateWord = "enabled";
 	}
 	else{
