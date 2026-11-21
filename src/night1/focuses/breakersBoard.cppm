@@ -55,7 +55,12 @@ namespace Night1::Focus{
 		void KeyRelease(Key key) override{}
 
 		void Draw() override{
-			breakersLock.Update();
+			if(breakersLock.IsLocked()){
+				breakersLock.Update();
+			}
+			else{
+				world->breakersBoard.Update();
+			}
 		}
 
 	private:

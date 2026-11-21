@@ -28,6 +28,7 @@ namespace Models{
 		Breaker(bool activated):
 			Model(GetMesh(), GenShader())
 		{
+			color.SetShader(GetShader()->GetHandle());
 			SetActivated(activated);
 		}
 
@@ -39,6 +40,7 @@ namespace Models{
 			else{
 				color = {1, 0, 0, 0};
 			}
+			color.Send();
 		}
 
 		bool GetActivated(bool newState){

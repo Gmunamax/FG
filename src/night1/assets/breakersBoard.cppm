@@ -33,6 +33,10 @@ namespace Night1::Assets{
 			return logic.GetElement(breaker);
 		}
 
+		void Update(){
+			graphics.Draw();
+		}
+
 	private:
 		static inline constexpr std::array<bool, 10> breakers{
 			true, true,

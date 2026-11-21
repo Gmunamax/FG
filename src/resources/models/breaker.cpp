@@ -15,6 +15,9 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
 #include <span>
+#include <vector>
+#include <glm/mat3x3.hpp>
+#include <glm/ext/matrix_transform.hpp>
 
 module Models;
 
@@ -33,12 +36,18 @@ std::span<float> Breaker::GetMesh(){
 	};
 
 	static unsigned indices[]{
-		1, 2, 4, 3,
-		3, 4, 8, 7,
-		7, 8, 6, 5,
-		5, 6, 2, 1,
-		3, 7, 5, 1,
-		8, 4, 2, 6,
+		2, 3, 1,
+		4, 7, 3,
+		8, 5, 7,
+		6, 1, 5,
+		7, 1, 3,
+		4, 6, 8,
+		2, 4, 3,
+		4, 8, 7,
+		8, 6, 5,
+		6, 2, 1,
+		7, 5, 1,
+		4, 2, 6,
 	};
 
 	static auto mesh = ConvertToVertexArray(vertexes, indices);
