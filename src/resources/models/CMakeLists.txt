@@ -29,5 +29,4 @@ target_sources(FG PRIVATE
 	office.cpp
 	tb1.cpp
 	door.cpp
-	breaker.cpp
 )

@@ -17,28 +17,34 @@ module;
 #include <array>
 #include <span>
 #include <glm/vec3.hpp>
+#include <FGengine/graphics/properties/objectTransform.hpp>
+#include <memory>
 
 export module Graphics:BreakersBoard;
 import Models;
 
+using FGengine::Graphics::ObjectTransform;
+
 namespace Graphics{
 
-	class BreakersSet{
+	class BreakersArray{
 	public:
-		BreakersSet(std::array<bool, 10> breakersStates){
+		BreakersArray(std::array<bool, 10> breakersStates){
 			for(std::size_t i = 0; i < 10; ++i){
-				this->breakers.at(i) = Models::Breaker{breakersStates.at(i)};
+				this->breakers.at(i).SetActivated(breakersStates.at(i));
 			}
+			FillWithModels({0,0,0}, 5, 2, 0.3, 0.8, breakers);
 		}
 
-		void SetPosition(const glm::vec3& newPosition){
-			FillWithModels(newPosition, 5, 2, 0.3, 0.8, breakers);
-		}
-
-		void Draw(){
+		void Update(){
+			transformMatrix = transform.Calculate();
 			for(auto& breaker : breakers){
-				breaker.Draw();
+				breaker.Update(transformMatrix);
 			}
+		}
+
+		ObjectTransform& GetTransform(){
+			return transform;
 		}
 
 		void SetActivated(unsigned breaker, bool newState){
@@ -46,30 +52,29 @@ namespace Graphics{
 		}
 
 	private:
-		class Model: public Models::Breaker{
+		class DefaultedModel: public Models::Breaker{
 		public:
-			Model():
+			DefaultedModel():
 				Models::Breaker(true)
 			{}
 
-			Model(Models::Breaker model):
-				Models::Breaker(std::move(model))
-			{}
 		};
 
-		static void FillWithModels(glm::vec3 center, std::size_t width, std::size_t height, float xStep, float yStep, std::span<Model> models){
+		static void FillWithModels(glm::vec3 center, std::size_t width, std::size_t height, float xStep, float yStep, std::span<DefaultedModel> models){
 			float xCenter = (xStep*(width-1))/2;
 			float yCenter = (yStep*(height-1))/2;
 			center -= glm::vec3{xCenter, 0, yCenter};
 			for(std::size_t i = 0; i < height; ++i){
 				for(std::size_t j = 0; j < width; ++j){
 					auto& breaker = models.at(5*i+j);
-					breaker.SetPosition(center + glm::vec3{xStep*j, 0, yStep*i});
+					breaker.GetTransform().SetPosition(center + glm::vec3{xStep*j, 0, yStep*i});
 				}
 			}
 		}
 
-		std::array<Model, 10> breakers;
+		std::array<DefaultedModel, 10> breakers;
+		ObjectTransform transform;
+		glm::mat4 transformMatrix{1};
 	};
 
 	export class BreakersBoard{
@@ -77,11 +82,11 @@ namespace Graphics{
 		BreakersBoard(std::array<bool, 10> breakersStates):
 			breakers{breakersStates}
 		{
-			breakers.SetPosition({0, 5, 0});
+			breakers.GetTransform().SetPosition({0, 5, 0});
 		}
 
 		void Draw(){
-			breakers.Draw();
+			breakers.Update();
 		}
 
 		void SetActivated(unsigned breaker, bool newState){
@@ -89,7 +94,7 @@ namespace Graphics{
 		}
 
 	private:
-		BreakersSet breakers;
+		BreakersArray breakers;
 	};
 
 }

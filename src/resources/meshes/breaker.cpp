@@ -19,9 +19,9 @@ module;
 #include <glm/mat3x3.hpp>
 #include <glm/ext/matrix_transform.hpp>
 
-module Models;
+module Meshes;
 
-using namespace Models;
+using namespace Meshes;
 
 std::span<float> Breaker::GetMesh(){
 	static float vertexes[]{

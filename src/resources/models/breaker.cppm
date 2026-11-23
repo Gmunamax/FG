@@ -14,22 +14,32 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
-#include <FGengine/graphics/model.hpp>
-#include <FGengine/graphics/structures/uniform.hpp>
+#include <FGengine/graphics/properties/objectMatrix.hpp>
+#include <FGengine/graphics/properties/objectTransform.hpp>
+#include <FGengine/graphics/shader.hpp>
 
 export module Models:Breaker;
-
-using FGengine::Graphics::Model, FGengine::Graphics::Shader, FGengine::Uvec4f;
+import Meshes;
+import Shaders;
 
 namespace Models{
 
-	export class Breaker: public Model{
+	export class Breaker{
 	public:
-		Breaker(bool activated):
-			Model(GetMesh(), GenShader())
+		Breaker(bool state)
 		{
-			color.SetShader(GetShader()->GetHandle());
-			SetActivated(activated);
+			SetActivated(state);
+		};
+
+		void Update(const glm::mat4& boardMatrix){
+			shader->Use();
+			matrix.SetValue(transform.Calculate(boardMatrix));
+			matrix.Send();
+			mesh.Draw();
+		}
+
+		FGengine::Graphics::ObjectTransform& GetTransform(){
+			return transform;
 		}
 
 		void SetActivated(bool newState){
@@ -48,39 +58,19 @@ namespace Models{
 		}
 
 	private:
-		std::span<float> GetMesh();
+		class TransformInBoard: public FGengine::Graphics::ObjectTransform{
+		public:
+			glm::mat4 Calculate(const glm::mat4& boardMatrix){
+				return boardMatrix * ObjectTransform::Calculate();
+			}
+		};
 
-		static std::shared_ptr<Shader> GenShader(){
-			static const char* vertex = "\
-				#version 330\n\
-				\n\
-				layout (location = 0) in vec3 pos;\n\
-				\n\
-				uniform mat4 model;\n\
-				layout(std140) uniform camera{\n\
-					mat4 projection;\n\
-					mat4 view;\n\
-				};\n\
-				\
-				void main(){\n\
-				\t	gl_Position = projection * view * model * vec4(pos, 1.0);\n\
-				}\
-			";
+		Meshes::Breaker mesh;
+		TransformInBoard transform;
+		Shaders::Breaker shader;
+		FGengine::Graphics::ObjectMatrix matrix{shader->GetHandle()};
 
-			static const char* fragment = "\
-				#version 330\n\
-				\n\
-				out vec4 fragColor;\n\
-				uniform vec4 color;\n\
-				\n\
-				void main(){\n\
-				\t	fragColor = color;\n\
-				}\n\
-			";
-			std::shared_ptr<Shader> sharedPtr{std::make_shared<Shader>(vertex, fragment)};
-			return sharedPtr;
-		}
-		Uvec4f color{"color"};
+		FGengine::Uvec4f color{"color", shader->GetHandle()};
 
 		bool activated;
 	};
