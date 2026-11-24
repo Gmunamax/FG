@@ -18,6 +18,7 @@ module;
 
 export module Assets:FusesBoard;
 import Logic;
+import Graphics;
 
 namespace Night1::Assets{
 
@@ -25,10 +26,15 @@ namespace Night1::Assets{
 	public:
 		void SetActivated(unsigned breaker, bool newState){
 			logic.SetElement(breaker, newState);
+			graphics.SetFixed(breaker, newState);
 		}
 
 		bool GetActivated(unsigned breaker){
 			return logic.GetElement(breaker);
+		}
+
+		void Update(){
+			graphics.Draw();
 		}
 
 	private:
@@ -41,6 +47,7 @@ namespace Night1::Assets{
 		};
 
 		Logic::Board logic{fuses};
+		Graphics::FusesBoard graphics{fuses};
 	};
 
 }

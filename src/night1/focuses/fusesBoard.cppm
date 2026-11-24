@@ -54,7 +54,12 @@ namespace Night1::Focus{
 		void KeyRelease(Key key) override{}
 
 		void Draw() override{
-			fusesLock.Update();
+			if(fusesLock.IsLocked()){
+				fusesLock.Update();
+			}
+			else{
+				world->fusesBoard.Update();
+			}
 		}
 
 	private:

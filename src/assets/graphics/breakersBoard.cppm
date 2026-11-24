@@ -15,67 +15,11 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
 #include <array>
-#include <span>
-#include <glm/vec3.hpp>
-#include <FGengine/graphics/properties/objectTransform.hpp>
-#include <memory>
 
 export module Graphics:BreakersBoard;
 import Models;
 
-using FGengine::Graphics::ObjectTransform;
-
 namespace Graphics{
-
-	class BreakersArray{
-	public:
-		BreakersArray(std::array<bool, 10> breakersStates){
-			for(std::size_t i = 0; i < 10; ++i){
-				this->breakers.at(i).SetActivated(breakersStates.at(i));
-			}
-			FillWithModels({0,0,0}, 5, 2, 0.3, 0.8, breakers);
-		}
-
-		void Update(){
-			transformMatrix = transform.Calculate();
-			for(auto& breaker : breakers){
-				breaker.Update(transformMatrix);
-			}
-		}
-
-		ObjectTransform& GetTransform(){
-			return transform;
-		}
-
-		void SetActivated(unsigned breaker, bool newState){
-			breakers.at(breaker).SetActivated(newState);
-		}
-
-	private:
-		class DefaultedModel: public Models::Breaker{
-		public:
-			DefaultedModel():
-				Models::Breaker(true)
-			{}
-
-		};
-
-		static void FillWithModels(glm::vec3 center, std::size_t width, std::size_t height, float xStep, float yStep, std::span<DefaultedModel> models){
-			float xCenter = (xStep*(width-1))/2;
-			float yCenter = (yStep*(height-1))/2;
-			center -= glm::vec3{xCenter, 0, yCenter};
-			for(std::size_t i = 0; i < height; ++i){
-				for(std::size_t j = 0; j < width; ++j){
-					auto& breaker = models.at(5*i+j);
-					breaker.GetTransform().SetPosition(center + glm::vec3{xStep*j, 0, yStep*i});
-				}
-			}
-		}
-
-		std::array<DefaultedModel, 10> breakers;
-		ObjectTransform transform;
-		glm::mat4 transformMatrix{1};
-	};
 
 	export class BreakersBoard{
 	public:
@@ -94,7 +38,7 @@ namespace Graphics{
 		}
 
 	private:
-		BreakersArray breakers;
+		Models::BreakersArray breakers;
 	};
 
 }
