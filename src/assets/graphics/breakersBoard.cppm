@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
 #include <array>
+#include <span>
 
 export module Graphics:BreakersBoard;
 import Models;
@@ -23,7 +24,7 @@ namespace Graphics{
 
 	export class BreakersBoard{
 	public:
-		BreakersBoard(std::array<bool, 10> breakersStates):
+		BreakersBoard(std::span<const bool, 10> breakersStates):
 			breakers{breakersStates}
 		{
 			breakers.GetTransform().SetPosition({0, 5, 0});

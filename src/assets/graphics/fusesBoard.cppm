@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
 #include <array>
+#include <span>
 
 export module Graphics:FusesBoard;
 import Models;
@@ -23,7 +24,7 @@ namespace Graphics{
 
 	export class FusesBoard{
 	public:
-		FusesBoard(std::array<bool, 10> fusesStates):
+		FusesBoard(std::span<const bool, 10> fusesStates):
 			fuses{fusesStates}
 		{
 			fuses.GetTransform().SetPosition({0, 5, 0});

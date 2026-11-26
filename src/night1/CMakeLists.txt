@@ -24,17 +24,6 @@ target_sources(FG PRIVATE
 		focuses/world.cppm
 		someThings.cppm
 		world.cppm
-)
-target_sources(FG PRIVATE
-	FILE_SET night1Assets
-	TYPE CXX_MODULES
-	BASE_DIRS assets
-	FILES
-		assets/main.cppm
-		assets/door.cppm
-		assets/tb1.cppm
-		assets/breakersBoard.cppm
-		assets/fusesBoard.cppm
-		assets/player.cppm
+		assets.cppm
 )
 add_subdirectory(events)

@@ -14,9 +14,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 target_sources(FG PRIVATE
-	FILE_SET shaders
+	FILE_SET resources
 	TYPE CXX_MODULES
 	FILES
 		main.cppm
+		officeGraph.cppm
+		tb1.cppm
+		office.cppm
+		door.cppm
 		breaker.cppm
+		breakersArray.cppm
+		fusesArray.cppm
+)
+target_sources(FG PRIVATE
+	office.cpp
+	tb1.cpp
+	door.cpp
 )

@@ -21,7 +21,6 @@ import :BreakersBoard;
 import :FusesBoard;
 import :FocusManager;
 import :World;
-import Assets;
 
 using FGengine::VideoOutput::EventsPack;
 

@@ -14,38 +14,41 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
+#include <array>
 
-export module Assets:TB1;
-import :Door;
-import Logic;
-import Graphics;
+export module Night1:Assets;
+import Assets;
 
 namespace Night1::Assets{
 
-	export class TB1{
+	export class BreakersBoard: public ::Assets::BreakersBoard{
 	public:
-		TB1(Door& door, Logic::Time& time):
-			logic{&door.GetLogic(), &time}
-		{}
+		static inline constexpr std::array<bool, 10> breakers{
+			true, true,
+			true, true,
+			true, true,
+			true, true,
+			true, true
+		};
 
-		Logic::TB1ai& GetLogic(){
-			return logic;
-		}
-
-		Graphics::TB1& GetGraphics(){
-			return model;
-		}
-
-		void Update(){
-			logic.Update();
-			if(logic.GetState() == Logic::TB1ai::State::Attacking){
-				model.Draw();
-			}
-		}
-
-	private:
-		Logic::TB1ai logic;
-		Graphics::TB1 model;
+		BreakersBoard(): ::Assets::BreakersBoard(breakers) {}
 	};
+
+	export class FusesBoard: public ::Assets::FusesBoard{
+	public:
+		static inline constexpr std::array<bool, 10> fuses{
+			false, false,
+			false, false,
+			true, false,
+			false, false,
+			false, false
+		};
+
+		FusesBoard(): ::Assets::FusesBoard(fuses) {}
+	};
+
+	export using ::Assets::Door;
+	export using ::Assets::Player;
+	export using ::Assets::TB1;
 
 }

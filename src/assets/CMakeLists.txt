@@ -15,3 +15,15 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 add_subdirectory(graphics)
 add_subdirectory(logic)
+add_subdirectory(resources)
+target_sources(FG PRIVATE
+	FILE_SET assets
+	TYPE CXX_MODULES
+	FILES
+		main.cppm
+		door.cppm
+		tb1.cppm
+		breakersBoard.cppm
+		fusesBoard.cppm
+		player.cppm
+)

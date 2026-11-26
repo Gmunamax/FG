@@ -15,18 +15,24 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
 #include <array>
+#include <span>
 
-export module Assets:BreakersBoard;
-import Graphics;
+export module Assets:FusesBoard;
 import Logic;
+import Graphics;
 
-namespace Night1::Assets{
+namespace Assets{
 
-	export class BreakersBoard{
+	export class FusesBoard{
 	public:
+		FusesBoard(std::span<const bool, 10> fuses):
+			logic{fuses},
+			graphics{fuses}
+		{}
+
 		void SetActivated(unsigned breaker, bool newState){
-			graphics.SetActivated(breaker, newState);
 			logic.SetElement(breaker, newState);
+			graphics.SetFixed(breaker, newState);
 		}
 
 		bool GetActivated(unsigned breaker){
@@ -38,16 +44,8 @@ namespace Night1::Assets{
 		}
 
 	private:
-		static inline constexpr std::array<bool, 10> breakers{
-			true, true,
-			true, true,
-			true, true,
-			true, true,
-			true, true
-		};
-
-		Logic::Board logic{breakers};
-		Graphics::BreakersBoard graphics{breakers};
+		Logic::Board logic;
+		Graphics::FusesBoard graphics;
 	};
 
 }

@@ -21,7 +21,6 @@ export module Night1:FusesBoard;
 import :FocusManager;
 import :World;
 import Logic;
-import Assets;
 
 using Logic::Lock;
 

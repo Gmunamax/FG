@@ -18,7 +18,7 @@ module;
 #include <FGengine/graphics/model.hpp>
 
 export module Models:TB1;
-import :BasicShader;
+import Shaders;
 
 using FGengine::Graphics::Model;
 
@@ -33,11 +33,8 @@ public:
 private:
 	static std::span<float> GetModel();
 
-	static const std::shared_ptr<BasicShader>& GetShader(){
-		static BasicShader shader{0.5, 0.5, 0.5};
-		static std::shared_ptr<BasicShader> ptr{&shader};
-
-		return ptr;
+	Shaders::BasicShader GetShader(){
+		return {0.5, 0.5, 0.5};
 	}
 };
 

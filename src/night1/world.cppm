@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
 export module Night1:World;
-import Assets;
+import :Assets;
 import Logic;
 
 namespace Night1{

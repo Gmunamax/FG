@@ -13,46 +13,39 @@
 // 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-export module Assets:Door;
+module;
+
+export module Assets:TB1;
+import :Door;
 import Logic;
 import Graphics;
 
-namespace Night1::Assets{
+namespace Assets{
 
-	export class Door{
+	export class TB1{
 	public:
-		Door(){
-		}
+		TB1(Door& door, Logic::Time& time):
+			logic{&door.GetLogic(), &time}
+		{}
 
-		Logic::Door& GetLogic(){
+		Logic::TB1ai& GetLogic(){
 			return logic;
 		}
 
-		Graphics::Door& GetGraphics(){
+		Graphics::TB1& GetGraphics(){
 			return model;
 		}
 
-		void SetClosed(bool newState){
-			if(newState == true){
-				logic.SetClosed(true);
-				visible = true;
-			}
-			else{
-				logic.SetClosed(false);
-				visible = false;
-			}
-		}
-
 		void Update(){
-			if(visible){
+			logic.Update();
+			if(logic.GetState() == Logic::TB1ai::State::Attacking){
 				model.Draw();
 			}
 		}
 
 	private:
-		Logic::Door logic;
-		Graphics::Door model;
-		bool visible = logic.GetClosed();
+		Logic::TB1ai logic;
+		Graphics::TB1 model;
 	};
 
 }

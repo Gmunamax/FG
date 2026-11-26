@@ -13,31 +13,43 @@
 // 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-module;
-#include <vector>
-#include <span>
+export module Assets:Door;
+import Logic;
+import Graphics;
 
-export module Models;
+namespace Assets{
 
-export import :TB1;
-export import :OfficeGraph;
-export import :Office;
-export import :Door;
-export import :BasicShader;
-export import :Breaker;
-export import :BreakersArray;
-export import :FusesArray;
-
-std::vector<float> ConvertToVertexArray(const std::span<float> vertexes, const std::span<unsigned> indices){
-	constexpr unsigned vertexLength = 3;
-	std::vector<float> vertexArray;
-
-	for(auto index : indices){
-		index = (index-1)*3;
-		for(unsigned int i = 0; i < vertexLength; ++i){
-			vertexArray.push_back(vertexes[index+i]);
+	export class Door{
+	public:
+		Logic::Door& GetLogic(){
+			return logic;
 		}
-	}
 
-	return vertexArray;
+		Graphics::Door& GetGraphics(){
+			return model;
+		}
+
+		void SetClosed(bool newState){
+			if(newState == true){
+				logic.SetClosed(true);
+				visible = true;
+			}
+			else{
+				logic.SetClosed(false);
+				visible = false;
+			}
+		}
+
+		void Update(){
+			if(visible){
+				model.Draw();
+			}
+		}
+
+	private:
+		Logic::Door logic;
+		Graphics::Door model;
+		bool visible = logic.GetClosed();
+	};
+
 }

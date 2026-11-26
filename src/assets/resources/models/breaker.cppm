@@ -32,7 +32,7 @@ namespace Models{
 		};
 
 		void Update(const glm::mat4& boardMatrix){
-			shader->Use();
+			shader.Use();
 			matrix.SetValue(transform.Calculate(boardMatrix));
 			matrix.Send();
 			mesh.Draw();
@@ -68,9 +68,9 @@ namespace Models{
 		Meshes::Breaker mesh;
 		TransformInBoard transform;
 		Shaders::Breaker shader;
-		FGengine::Graphics::ObjectMatrix matrix{shader->GetHandle()};
+		FGengine::Graphics::ObjectMatrix matrix{shader.GetHandle()};
 
-		FGengine::Uvec4f color{"color", shader->GetHandle()};
+		FGengine::Uvec4f color{"color", shader.GetHandle()};
 
 		bool activated;
 	};

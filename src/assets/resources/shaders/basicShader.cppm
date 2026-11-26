@@ -14,52 +14,25 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
+#include <string>
+#include <string_view>
 #include <FGengine/graphics/shader.hpp>
-#include <memory>
 
-export module Shaders:Breaker;
-
+export module Shaders:BasicShader;
 using FGengine::Graphics::Shader;
 
 namespace Shaders{
 
-	export class Breaker: public std::shared_ptr<Shader>{
+	export class BasicShader: public Shader{
 	public:
-		Breaker():
-			shared_ptr<Shader>(GenShader())
+		BasicShader(float r, float g, float b):
+			Shader(GenVertexShader(), GenFragmentShader(r, g, b))
 		{}
 
 	private:
-		static std::shared_ptr<Shader> GenShader(){
-			static const char* vertex = "\
-				#version 330\n\
-				\n\
-				layout (location = 0) in vec3 pos;\n\
-				\n\
-				uniform mat4 model;\n\
-				layout(std140) uniform camera{\n\
-					mat4 projection;\n\
-					mat4 view;\n\
-				};\n\
-				\
-				void main(){\n\
-				\t	gl_Position = projection * view * model * vec4(pos, 1.0);\n\
-				}\
-			";
+		static std::string_view GenVertexShader();
 
-			static const char* fragment = "\
-				#version 330\n\
-				\n\
-				out vec4 fragColor;\n\
-				uniform vec4 color;\n\
-				\n\
-				void main(){\n\
-				\t	fragColor = color;\n\
-				}\n\
-			";
-			std::shared_ptr<Shader> sharedPtr{std::make_shared<Shader>(vertex, fragment)};
-			return sharedPtr;
-		}
+		static std::string GenFragmentShader(float r, float g, float b);
 
 	};
 

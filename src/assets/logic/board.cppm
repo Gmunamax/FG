@@ -16,6 +16,7 @@
 module;
 #include <array>
 #include <span>
+#include <ranges>
 
 export module Logic:Board;
 
@@ -23,9 +24,9 @@ namespace Logic{
 
 	export class Board{
 	public:
-		Board(std::array<bool, 10> breakers):
-			breakers{breakers}
-		{}
+		Board(std::span<const bool, 10> breakers){
+			std::ranges::copy(breakers, this->breakers.begin());
+		}
 
 		bool GetElement(unsigned id){
 			return breakers.at(id);

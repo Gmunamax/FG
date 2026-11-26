@@ -29,7 +29,7 @@ namespace Models{
 
 	export class BreakersArray{
 	public:
-		BreakersArray(std::array<bool, 10> breakersStates){
+		BreakersArray(std::span<const bool, 10> breakersStates){
 			for(std::size_t i = 0; i < 10; ++i){
 				this->breakers.at(i).SetActivated(breakersStates.at(i));
 			}

@@ -15,33 +15,25 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
 #include <FGengine/graphics/model.hpp>
-#include <FGengine/graphics/shader.hpp>
 #include <span>
-#include <vector>
 
-export module Models:Office;
-import :BasicShader;
-
+export module Models:Door;
+import Shaders;
 using FGengine::Graphics::Model;
 
 namespace Models{
 
-class Office: public Model{
-public:
-	Office():
-		Model{officeVertexes, GetShader()}
-	{}
+	export class Door: public Model{
+	public:
+		Door():
+			Model(GetVertexes(), GetShader())
+		{}
 
-private:
-	static std::span<float> GetVertexes();
-	static std::span<unsigned> GetIndices();
-	static std::vector<float> officeVertexes;
-
-	static std::shared_ptr<BasicShader> GetShader(){
-		static BasicShader shader{1, 0, 0};
-		static std::shared_ptr<BasicShader> ptr{&shader};
-		return ptr;
-	}
-};
+	private:
+		static std::span<float> GetVertexes();
+		Shaders::BasicShader GetShader(){
+			return {1, 1, 0};
+		}
+	};
 
 }

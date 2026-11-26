@@ -14,12 +14,32 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 module;
+#include <FGengine/graphics/model.hpp>
+#include <FGengine/graphics/shader.hpp>
+#include <span>
+#include <vector>
 
-export module Assets:Player;
-import Graphics;
+export module Models:Office;
+import Shaders;
 
-namespace Night1::Assets{
+using FGengine::Graphics::Model;
 
-	export using Player = Graphics::Player;
+namespace Models{
+
+class Office: public Model{
+public:
+	Office():
+		Model{officeVertexes, GetShader()}
+	{}
+
+private:
+	static std::span<float> GetVertexes();
+	static std::span<unsigned> GetIndices();
+	static std::vector<float> officeVertexes;
+
+	Shaders::BasicShader GetShader(){
+		return {1, 0, 0};
+	}
+};
 
 }

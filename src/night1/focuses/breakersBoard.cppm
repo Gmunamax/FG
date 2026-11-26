@@ -20,7 +20,6 @@ module;
 export module Night1:BreakersBoard;
 import :FocusManager;
 import :World;
-import Assets;
 import Logic;
 
 using FGengine::VideoOutput::EventsPack;

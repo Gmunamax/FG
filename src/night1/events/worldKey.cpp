@@ -17,7 +17,6 @@ module;
 #include <print>
 
 module Night1;
-import Logic;
 
 using namespace Night1;
 
