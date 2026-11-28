@@ -13,6 +13,7 @@
 # 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+set(Boost_USE_STATIC_LIBS OFF)
 find_package(Boost REQUIRED COMPONENTS unit_test_framework)
 add_subdirectory(shared)
 add_subdirectory(pathFinder)

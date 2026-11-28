@@ -16,6 +16,7 @@
 #include <pathFinder.hpp>
 #include "algorithm.hpp"
 #include <algorithm>
+#include <span>
 
 namespace PathFinder{
 
