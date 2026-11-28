@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  build-and-release:
+  build-linux:
     runs-on: ubuntu-26.04
 
     steps:
@@ -22,17 +22,13 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake build-essential libglm-dev libboost-test-dev cppcheck zip patchelf
+          sudo apt-get install -y cmake build-essential libglm-dev libboost-test-dev zip patchelf
 
       - name: Install SDL3
         uses: libsdl-org/setup-sdl@v1
         with:
           version: 3.4.0
           build-type: "Release"
-
-      - name: Run cppcheck
-        run: |
-          cppcheck --enable=warning,style,performance,portability --std=c++26 FG
 
       - name: Configure and Build FG
         env:
@@ -48,12 +44,82 @@ jobs:
           cp build/FG release/
           cp build/deps/FGengine/libFGengine.so release/ 
           patchelf --set-rpath '$ORIGIN' release/FG
-          zip -r FG-linux-v${{ github.ref_name }}.zip release
+          zip -r FG-linux-${{ github.ref_name }}.zip release
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: FG-linux-${{ github.ref_name }}.zip
+          path: FG-linux-${{ github.ref_name }}.zip
+          if-no-files-found: error
+
+  build-windows:
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          path: FG
+          submodules: 'true'
+      
+      - name: Setup environment, tools and dependencies
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: CLANG64
+          update: true
+          install: >-
+            mingw-w64-clang-x86_64-clang
+            mingw-w64-clang-x86_64-cmake
+            mingw-w64-clang-x86_64-ninja
+            mingw-w64-clang-x86_64-sdl3
+            mingw-w64-clang-x86_64-glm
+            mingw-w64-clang-x86_64-boost
+            zip
+
+      - name: Build project
+        shell: msys2 {0}
+        run: |
+          cmake FG -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --config Release
+
+      - name: Package artifact
+        shell: msys2 {0}
+        run: |
+          mkdir -p release
+          cp build/FG.exe release
+          cp build/deps/FGengine/libFGengine.dll release
+          ldd release/FG.exe release/libFGengine.dll | grep '/clang64/bin/' | awk '{print $3}' | sort -u | xargs -I {} cp -v {} release/
+          zip -r FG-windows-${{ github.ref_name }}.zip release
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: FG-windows-${{ github.ref_name }}.zip
+          path: FG-windows-${{ github.ref_name }}.zip
+          if-no-files-found: error
+
+  release:
+    needs: [build-linux, build-windows]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          path: FG
+          ref: ${{ github.ref_name }}
 
       - name: Prepare Release
         id: prepare_release
         env:
-          PROJECT_NAME: FGengine
+          PROJECT_NAME: FG
           VERSION: ${{ github.ref_name }}
         run: |
           # Remove patch version if it is 0 and letter 'v'
@@ -65,8 +131,8 @@ jobs:
           echo "release_title=$RELEASE_TITLE" >> $GITHUB_OUTPUT
 
           # Get release changelog from tag message
-          cd FGengine
-          TAG_BODY=$(git for-each-ref --format='%(contents:subject)%0a%0a%(contents:body)' refs/tags/${{ github.ref_name }})
+          cd FG
+          TAG_BODY=$(git tag -l --format='%(contents:subject)%0a%0a%(contents:body)' ${{ github.ref_name }})
           cd ..
           echo "release_message<<EOF" >> $GITHUB_OUTPUT
           echo "$TAG_BODY" >> $GITHUB_OUTPUT
@@ -81,4 +147,4 @@ jobs:
           body: ${{ steps.prepare_release.outputs.release_message }}
           prerelease: true
           files: |
-            FG-linux-v${{ github.ref_name }}.zip
+            artifacts/*
